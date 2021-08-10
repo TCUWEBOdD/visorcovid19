@@ -1,0 +1,342 @@
+{% load static%}
+<!DOCTYPE html>
+<html>
+    <head>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-188442846-1"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'UA-188442846-1');
+		</script>
+		{% load bootstrap4 %}
+		{# CSS Bootstrap #}
+		{% bootstrap_css %}
+		{% load static %}
+
+		<link rel="shortcut icon" href="{% static 'mapa/images/favicon.ico' %}" />
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="  crossorigin=""/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+		<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+		<link href='https://fonts.googleapis.com/css2?family=Roboto&display=swap' rel='stylesheet'>
+		<link href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css' rel='stylesheet'>
+		<link rel='stylesheet' type='text/css' href="{% static 'mapa/style.css'%}">
+		<link rel='stylesheet' type='text/css' href="{% static 'mapa/bubble.css'%}">
+		<link rel='stylesheet' type='text/css' href="{% static 'datepicker/daterangepicker.css'%}">
+		<script  src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+		<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.2/split.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+		<script src="{% static 'mapa/browser.js' %}"></script>
+		<script type= "text/javascript" src="{% static 'mapa/bubble.js' %}"></script>
+		<script type= "text/javascript" src="{% static 'datepicker/moment.min.js' %}"></script>
+		<script type= "text/javascript" src="{% static 'datepicker/daterangepicker.js' %}"></script>
+		<script src="{% static 'mapa/ResizeSensor.js' %}"></script>
+		<script src="{% static 'mapa/ElementQueries.js' %}"></script>
+		<script  src="{% static 'js/loadingoverlay.min.js'%}"></script>
+		<script  src="{% static 'js/paradas.js'%}"></script>
+		<script  src="{% static 'js/fuentesRadiactivas.js'%}"></script>
+		<script  src="{% static 'js/geo.js'%}"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" type="text/css"/>
+		
+        <title>Sala Situación COVID-19</title>	
+		<style>
+			.nobr { white-space: nowrap }
+		</style>
+    </head>
+    <body>
+		<div class="completo">
+			<div class="container-fluid">
+			  <div class="row fila1">
+				<div class="col-4">
+					<img src="{% static 'mapa/images/salud.png' %}" width="130px" height="60px" class="mx-1 my-1">
+					<img src="{% static 'mapa/images/ccss.png' %}" width="55px" height="55px" class="mx-1 my-1">
+					<img src="{% static 'mapa/images/ops.png' %}" width="80px" height="40px" class="mx-1 my-1">
+					<img src="{% static 'mapa/images/mideplan.png' %}" width="125px" height="50px" class="mx-1 my-1">
+					<img src="{% static 'mapa/images/emergencias.png' %}" width="45px" height="45px" class="mx-1 my-1">
+				</div>
+				<div class="col-4 text-center">
+					
+				  <h2>PANEL CONTROL SALA SITUACION</h2>
+				  </br>
+				  <h5>Plataforma Nacional | Situación COVID-19</h5>
+				</div>
+				<div class="col-4">
+					<div class="flotar-der">
+						<img src="{% static 'mapa/images/UCR_h.png' %}" width="200px" height="70">
+					</div>
+				</div>
+			  </div>
+			  <div class="row fila2">
+				<!-----------------------FILA 2 COL 1 MAPA------------------------>
+				<div id="col-mapa" class="col-12 pb-5 pb-lg-0">
+					<div class="row mx-0">
+						<div id="cases-dashboard" class="col mx-3 mb-5">
+							<div id="selectorFecha" class="row mb-5">
+								<p class="label text-center d-block mx-auto mb-2 font-weight-bold">Buscar por fecha</p>
+								<input type="text" name="datepicker" class="form-control border border-primary btn btn-light"/>
+							</div> 
+							<div id="activos" class="row data-square mt-5">
+								<p class="label">Casos activos</p>
+								<p class="data ml-3">--</p>
+							</div>
+							<div id="nuevos" class="row data-square">
+								<p class="label">Casos Nuevos</p>
+								<p class="data ml-3">--</p>
+							</div>
+							<div id="recuperados" class="row data-square">
+								<p class="label">Recuperados</p>
+								<p class="data ml-3">--</p>
+							</div>
+							<div id="fallecidos" class="row data-square">
+								<p class="label">Fallecidos</p>
+								<p class="data ml-3">--</p>
+							</div>
+							<div id="ataque" class="row data-square">
+								<p class="label">Tasa de ataque</p>
+								<p class="data ml-3">--</p>
+							</div>
+							<!-- Se quita temporalmente por falta de claridad en la fórmula -->
+							<!-- <div id="pendientes" class="row data-square">
+								<p class="label">Pendiente</p>
+								<p class="data ml-3">--</p>
+							</div>  -->
+							<div id="r" class="row data-square">
+								<p class="label">Coef. variación</p>
+								<p class="data ml-3">--</p>
+							</div> 
+							<div class="mx-auto d-block">
+								<button class="btn btn-primary" title="Tutorial sobre la plataforma"><a class="text-light" href="https://www.youtube.com/watch?v=rNlhLEN1ElM&t=1s" target="blank">Ayuda <span class="fa fa-question-circle fa-lg text-light d-inline my-auto"></span></a></button>
+							</div>						
+						</div>
+						<div class="col">
+							<div>
+								<form>
+									<div class="row mb-1 selectores">
+										<div id='info' class="col mx-3 my-1 alert alert-primary">
+											<div class="row">
+												<div class="col-3">
+													Provincia
+												</div>
+												<div class="col-3">
+													Cantón
+												</div>
+												<div class="col-3">
+													Distrito
+												</div>
+												<div class="col-3">
+													Índice S.S
+												</div>
+											</div>
+											<div class="row mt-2 pb-3">
+												<div class="col-3">
+													<span id ="pro_info" class="mx-auto font-weight-bold">--</span>
+												</div>
+												<div class="col-3">
+													<span id ="cant_info" class="mx-auto font-weight-bold">--</span>
+												</div>
+												<div class="col-3">
+													<span id ="dis_info" class="mx-auto font-weight-bold">--</span>
+												</div>
+												<div class="col-3">
+													<span id ="socio" class="mx-auto font-weight-bold">--</span>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row cases-info mb-3 mx-1">
+										<div class="col">
+											<div id="pob_div" class="col-12">
+												<div class="row">
+													<div class="col">
+														<p class="label d-block text-center mx-auto">Población</p>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col">
+														<p id="pob_info" class="data text-center">--</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col">
+											<div id="pam_div" class="col-12">
+												<div class="row">
+													<div class="col">
+														<p class="label d-block text-center mx-auto">% PAM</p>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col">
+														<p id="pam_info" class="data text-center">--</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col">
+											<div id="den_div" class="col-12">
+												<div class="row">
+													<div class="col">
+														<p class="label d-block text-center mx-auto">Denuncias</p>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col">
+														<p id="den_info" class="data text-center">--</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>								
+							</div>							
+							<div id="my_map"></div>		
+							<div class='eleccion'>
+								Semana actual o predicción: 
+								<input type='radio' value='sem0' name='radio_sems' id='radio_sem0' class='checkbox-selected-backbground' checked >
+								<label for='radio_sem0' >Actual</label >
+								<input type='radio' value='I' name='radio_sems' id='radio_sem1' class='checkbox-selected-backbground' >
+								<label for='radio_sem1' >I</label >
+								<input type='radio' value='II' name='radio_sems' id='radio_sem2' class='checkbox-selected-backbground' >
+								<label for='radio_sem2' >II</label >
+								<input type='radio' value='III' name='radio_sems' id='radio_sem3' class='checkbox-selected-backbground' >
+								<label for='radio_sem3' >III</label >
+								<input type='radio' value='IV' name='radio_sems' id='radio_sem4' class='checkbox-selected-backbground' >
+								<label for='radio_sem4' >IV</label >
+								<input type='radio' value='V' name='radio_sems' id='radio_sem5' class='checkbox-selected-backbground' >
+								<label for='radio_sem5' >V</label >
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-----------------------FILA 2 COL 2 Graficos------------------------>
+				<div id="col-graficos" class="col-12 pb-5 pb-lg-0">
+					<div class="row">
+						<div class="col-4">
+							<label class="text-center text-bg d-block">Provincia</label>
+							<select class="form-control entrada mx-auto" id="provincias" >
+									<option value="none">Todas</option>
+									<option value="Cartago">Cartago</option>
+									<option value="Guanacaste">Guanacaste</option>
+									<option value="Limón">Limón</option>
+									<option value="Alajuela">Alajuela</option>
+									<option value="Heredia">Heredia</option>
+									<option value="San José">San José</option>
+									<option value="Puntarenas">Puntarenas</option>
+							</select>
+						</div>						
+						<div class="col-4">
+							<label class="text-center text-bg d-block">Cantón</label>
+							<select class="form-control entrada mx-auto" id="cantones" >
+								<option value="none">-- Seleccione provincia --</option>
+							</select>
+						</div>
+						<div class="col-4">
+							<label class="text-center text-bg d-block">Distrito</label>
+							<select class="form-control entrada mx-auto" id="distritos" >
+								<option value="none">-- Seleccione cantón --</option>
+							</select>
+						</div>
+					</div>
+					<div class="row my-3">
+						<div class="col-4">
+							<label class="text-center text-bg d-block">Vista</label>
+							<select class="form-control entrada" id="mapas" multiple="multiple">
+									<option value="0">Claro</option>
+									<option value="3">Nivel Alerta</option>
+									<option value="4">Indice S.S.</option>
+									<option value="5">Sedes</option>
+									<option value="6">Paradas</option>
+									<option value="7">Hogares</option>
+									<option value="8">Indígenas</option>
+									<option value="9">Fuentes Radioactivas</option>
+									<option value="10">Tasa de morbilidad</option>
+									<option value="11">Proyecciones 15 dist.</option>
+									<option value="12">Proyecciones 20 dist.</option>
+									<option value="13">Proyecciones 40 dist.</option>
+									<option value="14">Proyecciones 50 dist.</option>
+							</select>
+						</div>
+					</div>
+					<div id="gauge-container" class="donas">
+						<div id="gauge1">
+							{% autoescape off %}
+							{{ plot4 }}
+							{% endautoescape %}
+						</div>
+						<p class="text-center d-none" id="fuente-vac">Fuente: <a href="https://www.ccss.sa.cr/web/coronavirus/vacunacion" target="blank">CCSS</a>.</p>
+					</div>
+					<div class='eleccion' >
+						<input type='radio' value='orden' name='radio-group-1-bg' id='my-radio1-bg' class='checkbox-selected-backbground' checked >
+						<label for='my-radio1-bg' >Órdenes sanitarias</label >
+						<input type='radio' value='animado' name='radio-group-1-bg' id='my-radio2-bg' class='checkbox-selected-backbground' >
+						<label for='my-radio2-bg' >Estadísticas de vacunación</label >
+					</div>
+				</div>
+				<!-----------------------FILA 2 COL 3 Indicadores------------------------>
+				<div id="col-indicadores" class="col-12 pb-5 pb-lg-0">
+					<div class="row">
+						<div class="col">
+							<h2 class="text-center d-block">Indicadores nacionales</h2>
+							<div id="grafico2" class="graficos">
+							</div>
+						</div>
+					</div>
+					<div id="dashboard-nacionales" class="row mt-5">
+						<div class="col-4 px-1">
+							<div id="pms" class="col-12 data-square">
+								<p class="label">Índice de Positividad MS</p>
+								<p class="data pais ml-3">--</p>
+							</div>
+						</div>
+						<div class="col-4 px-1">
+							<div id="hccss" class="col-12 data-square">
+								<p class="label">Hospitalización CCSS</p>
+								<p class="data pais ml-3">--</p>
+							</div>
+						</div>
+						<div class="col-4 px-1">
+							<div id="ouci" class="col-12 data-square">
+								<p class="label">Ocupación UCI CCSS</p>
+								<p class="data pais ml-3">--</p>
+							</div>
+						</div>
+					</div>
+					<div id="graficoVacunas" class="graficos"></div>
+			  </div>			
+			</div>
+			<div id="hora" class="mb-3 mb-lg-0"> </div>
+			<div id="creditos"> Desarrollado por
+				<a id="ucr-credits" data-bubbleid="ucr-bubble" href="https://www.ucr.ac.cr/"> Universidad de Costa Rica | </a>
+				<a id="od-credits"  data-bubbleid="od-bubble"  href="">Observatorio del Desarrollo</a>
+			</div>
+		</div>
+		<div id="ucr-bubble" class="BubbleDiv" style="display:none;z-index:99999">
+			<div class="BubbleShadow">
+			  <div class="Bubble">
+				<div class="BubbleHeader">
+				  <div class="BubbleTitle">Colaboradores</div>
+				  <div class="BubbleCloseBtn"></div>
+				</div>
+				<div class="BubbleContent">
+				  <p>Diego Quirós M. </br><a href="mailto:diegodavid.quiros@ucr.ac.cr" target="blank">Docente UCR </a>/
+							<a href="mailto:diego123cr@gmail.com" target="blank">Consultor ANT</a></p>
+				  <p>Sebastián Cruz Ch.</br><a href="mailto:sebastian.cruzchavarria@ucr.ac.cr" target="blank">Ingeniero de software</a></p>
+				  <p>Ricardo Huapaya R.</br><a href="mailto:ricardo.huapaya@ucr.ac.cr" target="blank">Estudiante UCR</a></p>
+				</div>
+				<div class="bottomLeftArrow"></div>
+				<div class="bottomRightArrow"></div>
+				<div class="topLeftArrow"></div>
+				<div class="topRightArrow"></div>
+			  </div>
+			</div>
+		  </div>
+    {% bootstrap_javascript jquery='full' %}
+    </body>
+</html>

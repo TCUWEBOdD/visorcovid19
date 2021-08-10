@@ -1,0 +1,305 @@
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  font-size:1.2em;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #fff;
+  border: 1px solid white;
+}
+
+#my_map {
+  height: 70%;
+  width: 100%;
+}
+
+.completo {
+  border: 1px solid #a8a8a8;
+  margin: 5px;
+  padding-top: 5px;
+  padding-bottom: 12px;
+}
+
+.container-fluid {
+  max-height: 99%;
+  overflow: auto;
+  overflow-y: hidden;
+}
+.fila1 {
+  border-bottom: 5px solid #0d47a1;
+  padding-bottom: 5px;
+}
+
+.row .fila1 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.fila2 {
+  padding-top: 1%;
+}
+
+#dona1 {
+  border: 1px solid black;
+}
+#dona2 {
+  border: 1px solid red;
+}
+#dona3 {
+  border: 1px solid green;
+}
+#dona4 {
+  border: 1px solid blue;
+}
+
+.donas {
+  overflow: hidden;
+  background: #ffffff00 !important;
+}
+
+.flotar-der {
+  margin-right: 1%;
+  width: 100%;
+}
+.flotar-der img {
+  float: right;
+}
+
+.centrado {
+  justify-content: center;
+}
+
+#creditos {
+  position: fixed;
+  bottom: 0;
+  font-size: 80%;
+  width: 100%;
+  padding-bottom: 5px;
+  background-color: whitesmoke;
+}
+
+#credito a:link {
+  color: #d4d4d4;
+}
+
+.modebar {
+  display: none !important;
+}
+
+#pais svg {
+  background-color: SkyBlue;
+}
+
+.selectores .col-6 {
+  max-width: 140px !important;
+  padding-right: 0px;
+}
+
+#provincias,
+#cantones,
+#mapas {
+  max-width: 120px !important;
+}
+
+.info {
+  font-size: 200%;
+}
+
+#mapid {
+  height: 380px;
+  width: 380px;
+}
+
+.gutter {
+  border: solid #0d47a1;
+  pointer-events: auto;
+  margin: 5px;
+}
+
+.gutter:hover {
+  cursor: pointer;
+}
+
+.fila2 .flex {
+  overflow-x: auto;
+}
+
+#cases-dashboard .label {
+  width: 100%;
+  word-break: break-word;
+}
+
+#cases-dashboard2 .col {
+  width: 50%;
+}
+
+#cases-dashboard .col-4 {
+  border: 2px solid #25669c;
+  text-align: center;
+  padding: 5px;
+}
+
+.data-square{
+  margin-bottom: 1rem;
+  padding-bottom: 1px;
+  padding-top: 1px;
+  padding-left: 5px;
+  min-height:80px;
+}
+
+#activos,
+#fallecidos,
+#pms,
+#ouci{
+  background-color: #fea4a4;
+}
+
+#selectorFecha {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  padding-top: 15px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pendientes,
+#nuevos,
+#r,
+#hccss {
+  background-color: #b4c7e7;
+}
+
+#recuperados, #pam_div {
+  background-color: #a8d18d;
+}
+
+#otros_creditos {
+  position: absolute;
+  bottom: 30px;
+  height: 100px;
+  width: 300px;
+}
+#ataque,
+#variacion,
+#pob_div,
+#den_div
+{
+  background-color: #f8cbac;
+}
+
+#cases-dashboard .label {
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+.cases-info .label {
+  font-size: 1.2rem;
+  margin-bottom: 0 !important;
+  width: 100%;
+  text-align: center;
+}
+
+#cases-dashboard .data {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+#cases-dashboard {
+  max-width: 120px;
+}
+
+#dashboard-nacionales .label{
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+#dashboard-nacionales .data{
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.cases-info .data {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.cases-info{
+  padding-top: 2px;
+}
+
+#cases-dashboard .row .col-4 {
+  width: 100px !important;
+  min-width: 60px !important;
+  max-height: 60px !important;
+}
+
+.BubbleContent {
+  font-size: 1.5rem;
+  color: black;
+}
+
+#info {
+  word-break: break-word;
+  font-size: 1.2em;
+}
+
+#cases-dashbdashboard .col {
+  max-width: 120px;
+}
+
+.plotly-graph-div {
+  margin: auto !important;
+}
+
+.eleccion label {
+  font-size: 1rem;
+  margin: 0.5rem;
+}
+
+.eleccion {
+  border: 1px solid #0d47a1;
+  border-radius: 10px;
+  padding: 0.1rem;
+  width: 100%;
+  text-align: center;
+}
+
+ul.multiselect-container {
+  z-index: 9999 !important;
+}
+
+.multiselect-container li a label {
+  padding: 3px 5px 3px 10px !important;
+  color: black;
+}
+
+.multiselect-container li.active {
+  background-color: lightsteelblue;
+}
+
+.toast{
+  opacity: 1 !important;
+  font-size: 1rem;
+}
+
+#selectorFecha > *{
+  font-size: 1.3rem;
+}
+
+@media screen and (max-width: 1700px) {
+  #col-mapa, #col-graficos, #col-indicadores {
+    border-bottom: 3px solid #0d47a1;
+    padding-bottom: 5px;
+    padding-top: 5px;
+  }
+}
+
+@media screen and (min-width: 1701px){
+  html, body{
+    font-size: 0.8rem;
+  }
+}

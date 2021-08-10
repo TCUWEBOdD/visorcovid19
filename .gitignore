@@ -1,0 +1,14 @@
+__pycache__
+stats
+db.sqlite3
+.cache
+.config
+.local
+.sudo*
+.git2
+.git3
+Datos/datos_log.txt
+covid_project/covid_env
+crawler/venv
+.bash_history
+*.tar

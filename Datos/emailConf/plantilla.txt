@@ -1,0 +1,6 @@
+Estimado ${NOMBRE}:
+
+Se le informa que el proceso automático de carga de datos en la plataforma COVID-19 del día ${FECHA} ha fallado por el siguiente error: ${ERROR}.
+Por favor, corrija los errores y reintente manualmente el proceso de carga.
+
+Saludos.

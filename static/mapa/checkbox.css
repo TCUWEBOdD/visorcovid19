@@ -1,0 +1,80 @@
+
+/*4-10-2020 radio button*/
+/* Hide the checkbox/radio. We will simulate it later using label. */
+input[type="checkbox"],
+input[type="radio"] {
+  opacity: 0;
+  position: absolute;
+}
+
+/* Some basic styling for alignment and more */
+input[type="checkbox"],
+input[type="checkbox"] + label,
+input[type="radio"],
+input[type="radio"] + label {
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* CSS Pseudo class "before" to show checkbox/radio box. Will be attached to every label adjacent to input checkbox.*/
+input[type="checkbox"] + label:before,
+input[type="radio"] + label:before {
+  font-family: "FontAwesome";
+  background: #f1fff6;
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  margin-right: 10px;
+  text-align: center;
+  font-size: 12px;
+  padding: 4px 0;
+  color: #e4efe5;
+  transition: color 0.4s;
+  border: 1px solid #3faf2d;
+}
+
+/* Tick inside checkbox. I am using Font-awesome's tick, but you can use plain unicode tick */
+/* or any other symbol you want. */
+input[type="checkbox"] + label:before {
+  content: "\f00c";
+  border-radius: 2px;
+}
+
+/* Circle inside radio circle. Border-radius to make it a circle. */
+input[type="radio"] + label:before {
+  content: "\f111";
+  border-radius: 50%;
+}
+
+
+input:checked + label:before {
+  background: #288619;
+  color: #fff;
+}
+
+/* Styles when checkbox/radio is disabled  */
+input[type="checkbox"][disabled] + label:before,
+input[type="radio"][disabled] + label:before {
+  color: #d0d0d0;
+  background: #bfbfbf;
+  border: 1px solid #656b64;
+}
+
+/* Alternative styles for checkbox/radio with background */
+/* Apply class "checkbox-selected-backbground" to your checkbox/radio input elements.*/
+input.checkbox-selected-backbground:checked + label {
+  background-color: #d4ebff;
+  font-weight: bold;
+  padding-right: 6px;
+  color: #14540a;
+}
+
+input[type="checkbox"].checkbox-selected-backbground:checked + label {
+  border-radius: 2px;
+}
+
+input[type="radio"].checkbox-selected-backbground:checked + label {
+  border-radius: 10px;
+}

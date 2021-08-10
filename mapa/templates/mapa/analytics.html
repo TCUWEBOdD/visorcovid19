@@ -1,0 +1,97 @@
+{% load static%}
+<!DOCTYPE html>
+<html>
+    <head>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-188442846-1"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'UA-188442846-1');
+		</script>
+
+	
+		{# Cargamos la librería #}
+		{% load bootstrap4 %}
+	 
+		{# CSS Bootstrap #}
+		{% bootstrap_css %}
+		{% load static %}
+
+		
+		<link rel="shortcut icon" href="{% static 'mapa/images/favicon.ico' %}" />
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+		<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>		
+		
+		<link href='https://fonts.googleapis.com/css2?family=Roboto&display=swap' rel='stylesheet'>
+		<link rel='stylesheet' type='text/css' href="{% static 'mapa/style.css'%}">
+		<link rel='stylesheet' type='text/css' href="{% static 'mapa/bubble.css'%}">
+		
+		
+        <title>Sala Situación COVID-19</title>	
+		<style>
+		.nobr { white-space: nowrap }
+		</style>
+    </head>
+    <body>
+
+		<div class="completo">
+			<div class="container-fluid">
+			  <div id="" class="row fila1">
+				<div class="col-4">
+					<img src="{% static 'mapa/images/salud.png' %}" width="130px" height="60px" class="mx-1 my-1">
+					<img src="{% static 'mapa/images/ccss.png' %}" width="55px" height="55px" class="mx-1 my-1">
+					<img src="{% static 'mapa/images/ops.png' %}" width="80px" height="40px" class="mx-1 my-1">
+					<img src="{% static 'mapa/images/mideplan.png' %}" width="125px" height="50px" class="mx-1 my-1">
+					<img src="{% static 'mapa/images/emergencias.png' %}" width="45px" height="45px" class="mx-1 my-1">
+				</div>
+				<div class="col-4 text-center">
+					
+				  <h2>Análisis de datos de Google Analytics</h2>
+				  </br>
+				  <h5>Plataforma Nacional | Situación COVID-19</h5>
+				</div>
+				<div class="col-4">
+					<div class="flotar-der">
+						<img src="{% static 'mapa/images/UCR_h.png' %}" width="200px" height="70">
+					</div>
+				</div>
+			  </div>
+			  <div class="d-block">
+			  	<iframe class="mx-auto d-flex" width="1500" height="800" src="https://app.powerbi.com/view?r=eyJrIjoiYTQwY2RiMjktMzBiYi00NDdhLTliMmEtOWI3Yjk2NTQ2NWEzIiwidCI6ImU3OTg0Y2FjLTI1NDMtNGY4OC04Zjk3LTk1MjQzMzVlNmJjNCIsImMiOjR9&pageName=ReportSectiona12781773a0250ecd2b0" frameborder="0" allowFullScreen="true"></iframe>
+			  </div>
+			<div id="hora"> </div>
+			
+			<div id="creditos"> Desarrollado por
+				<a id="ucr-credits" data-bubbleid="ucr-bubble" href="https://www.ucr.ac.cr/"> Universidad de Costa Rica | </a>
+				<a id="od-credits"  data-bubbleid="od-bubble"  href="">Observatorio del Desarrollo</a>
+			</div>
+		</div>
+
+		<div id="ucr-bubble" class="BubbleDiv" style="display:none;z-index:99999">
+			<div class="BubbleShadow">
+			  <div class="Bubble">
+				<div class="BubbleHeader">
+				  <div class="BubbleTitle">Colaboradores</div>
+				  <div class="BubbleCloseBtn"></div>
+				</div>
+				<div class="BubbleContent">
+				  <p>Diego Quirós M. </br><a href="mailto:diegodavid.quiros@ucr.ac.cr" target="blank">Docente UCR </a>/
+							<a href="mailto:diego123cr@gmail.com" target="blank">Consultor ANT</a></p>
+				  <p>Sebastián Cruz Ch.</br><a href="mailto:sebastian.cruzchavarria@ucr.ac.cr" target="blank">Ingeniero de software</a></p>
+				  <p>Ricardo Huapaya R.</br><a href="mailto:ricardo.huapaya@ucr.ac.cr" target="blank">Estudiante UCR</a></p>
+				</div>
+				<div class="bottomLeftArrow"></div>
+				<div class="bottomRightArrow"></div>
+				<div class="topLeftArrow"></div>
+				<div class="topRightArrow"></div>
+			  </div>
+			</div>
+		  </div>
+		
+
+    {% bootstrap_javascript jquery='full' %}
+    </body>
+</html>

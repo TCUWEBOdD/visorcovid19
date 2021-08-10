@@ -1,0 +1,84 @@
+
+<svg
+   xmlns:dc='http://purl.org/dc/elements/1.1/'
+   xmlns:cc='http://creativecommons.org/ns#'
+   xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+   xmlns:svg='http://www.w3.org/2000/svg'
+   xmlns='http://www.w3.org/2000/svg'
+   xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd'
+   xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape'
+   version='1.1'
+   id='Map'
+ 
+   inkscape:version='0.48.4 r9939'
+   sodipodi:docname='Mapa_de_Distritos_de_Costa_Rica_(alta_definición).svg'>
+  <metadata
+     id='metadata3817'>
+    <rdf:RDF>
+      <cc:Work
+         rdf:about=''>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource='http://purl.org/dc/dcmitype/StillImage' />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor='#ffffff'
+     bordercolor='#666666'
+     borderopacity='1'
+     objecttolerance='10'
+     gridtolerance='10'
+     guidetolerance='10'
+     inkscape:pageopacity='0'
+     inkscape:pageshadow='2'
+     inkscape:window-width='1366'
+     inkscape:window-height='716'
+     id='namedview3815'
+     showgrid='false'
+     inkscape:zoom='1.8555947'
+     inkscape:cx='333.04688'
+     inkscape:cy='357.56732'
+     inkscape:window-x='-8'
+     inkscape:window-y='-8'
+     inkscape:window-maximized='1'
+     inkscape:current-layer='g20'
+     fit-margin-top='0'
+     fit-margin-left='0'
+     fit-margin-right='0'
+     fit-margin-bottom='0' />
+  <g
+     id='g20'
+     inkscape:groupmode='layer'
+     inkscape:label='Areas'
+     clip-path='url(#clip)'
+     visibility='visible'
+     transform='matrix(0.03566738,0,0,0.03566738,15509.253,2097.9472)'
+     style='visibility:visible'>
+	   <g id="meter" class='svg-menu__path__seleccion__background'>
+    
+	</g>
+  </g>
+  <rect
+     id='Neatline'
+     inkscape:label='Neatline'
+     style='fill:none;stroke:#999999;stroke-width:0.75278014'
+     x='0.37614441'
+     y='0.37155151'
+     width='665.34906'
+     height='596.87939' />
+  <defs
+     id='defs3804'>
+    <clipPath
+       id='clip'>
+      <rect
+         width='776.9444'
+         height='596.87939'
+         transform='matrix(28.03682,0,0,28.03682,-436401.15,-58809.35)'
+         y='0'
+         x='0'
+         id='rect3807' />
+    </clipPath>
+  </defs>
+</svg>
