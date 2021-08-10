@@ -38,20 +38,14 @@ def getGaugeChart( request ) :
 	
 def getVacunas( request ) :
     fecha = request.GET.get('fecha')
-	
     response = {}
     response['chart'] = gauge_vacunas(fecha)
     return   JsonResponse( response )
-				   
 
 def getPlots(number):
     response = {}
     response['plot2'] = nacional()
     response['graficoVacunas'] = grafico_progreso()
-    # response['plot8'] = rt_semanal()
-    # response['plot9'] = uci_optimista() 
-    # response['plot10'] = uci_pesimista()
-    # response['plot11'] = optimistaCasosDia()
     return JsonResponse( response )
 	
 def get_leaflet_cant( request ):
@@ -61,11 +55,9 @@ def get_leaflet_cant( request ):
 	
 def get_leaflet_dist( request ):
     date = request.GET.get('date')
-    print(date)
     response = {}
     response['capas'] = get_dist(date)
     return JsonResponse( response )
-
 
 def get_json_sedes( request ):
 	response = {}
@@ -80,7 +72,6 @@ def get_json_hogares( request ):
 def get_json_indigenas( request ):
 	response = {}
 	response['capas'] = get_indigenas( ) 
-	
 	return JsonResponse( response )
 	
 def home ( request ):

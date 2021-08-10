@@ -97,9 +97,7 @@ def nacional(provincia = None, canton = None, distrito = None):
     df = pd.read_sql(query, conn)
 
     fig = make_subplots(specs=[[{"secondary_y": True}]], rows=1, cols=1)
-    #fig = go.Figure()
-	#px.line(df, x=df.iloc[:,0].values, y=df.iloc[:,1].values)
-    #línea de casos activos
+    
     fig.add_trace( go.Scatter( x=df.iloc[:,0].values, y=df.iloc[:,3].values,
 		name='Activos', 
         line = dict(color="red")),

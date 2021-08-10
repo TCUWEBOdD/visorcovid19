@@ -19,6 +19,8 @@ const LAYER_PROY_DIST_15 = 11;
 const LAYER_PROY_DIST_20 = 12;
 const LAYER_PROY_DIST_40 = 13;
 const LAYER_PROY_DIST_50 = 14;
+const URL_SCRIPT_PARADAS = '/static/js/paradas.js';
+const URL_SCRIPT_FUENTES_RADIACTIVAS = '/static/js/fuentesRadiactivas.js';
 
 /* Variables globales */
 var _selectedProvince;
@@ -42,6 +44,8 @@ var _fechaActual;
 var _layer_actual;
 var _fechasValidas = [];
 var _wide_screen;
+var _paradasCargadas = false;
+var _fuentesRadiactivasCargadas = false;
 
 /* Inicialización de variables */
 provincias = new L.FeatureGroup();
@@ -913,7 +917,13 @@ function setLayers(selectedLayers){
       }
   
       if (_selectedLayer[index] == LAYER_PARADAS && _layerParadas == null) {
-        cargarJSONParadas(map);
+        if(_paradasCargadas){
+          cargarJSONParadas(map);
+        } else {
+          $.getScript(URL_SCRIPT_PARADAS, function(){
+            cargarJSONParadas(map);
+          });
+        }
       }
   
       if (_selectedLayer[index] == LAYER_HOGARES && _layerHogares == null) {
@@ -925,7 +935,13 @@ function setLayers(selectedLayers){
       }
 
       if (_selectedLayer[index] == LAYER_FUENTES && _layerFuentes == null){
-        cargarFuentesRadiactivas(map);
+        if(_fuentesRadiactivasCargadas){
+          cargarFuentesRadiactivas(map);
+        } else {
+          $.getScript(URL_SCRIPT_FUENTES_RADIACTIVAS, function(){
+            cargarFuentesRadiactivas(map);
+          });
+        }
       }
 
       if (_selectedLayer[index] == LAYER_PROY_DIST_15){

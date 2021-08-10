@@ -60,18 +60,6 @@ body {
   background: #ffffff00 !important;
 }
 
-.flotar-der {
-  margin-right: 1%;
-  width: 100%;
-}
-.flotar-der img {
-  float: right;
-}
-
-.centrado {
-  justify-content: center;
-}
-
 #creditos {
   position: fixed;
   bottom: 0;

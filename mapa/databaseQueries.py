@@ -130,9 +130,8 @@ def getCasosProvinciaFecha(columna, fecha, provincia):
 	
 def getQueryNacional():
     query = """
-    select  fecha, sum(cantidad) as acumulados, sum(recuperados) as recuperados, sum( activos) as activos, sum(caso_dia) as caso_dia
-    from ( select distinct codigo_distr, nom_prov, nom_cant, nom_dist as distrito from distrito ) as d, acumulado_distrito a
-    where a.codigo_distrito = d.codigo_distr
+    select fecha, sum(cantidad) as acumulados, sum(recuperados) as recuperados, sum(activos) as activos, sum(caso_dia) as caso_dia
+    from acumulado_distrito
     group by fecha order by fecha asc;"""
     return query
 
@@ -314,14 +313,14 @@ def get_dist(fecha):
         p.poblacion as pobInfo, p.pob_pobre as pobPobre, p.pob_am as pobAm, count(den.consecutivo) as denuncias,
         m.morbilidad as morbilidad,
         ( select cantidad as activos from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
-        ( select ta  from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
+        ( select ta from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
         ( select pendiente from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
         ( select fallecidos from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
         ( select recuperados from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
         ( select coef_var || '%' as coef_var from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
-        ( select grupo as socio   from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
-        ( select ids_salud  from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
-        ( select condicion   from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
+        ( select grupo as socio from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
+        ( select ids_salud from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
+        ( select condicion from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
         ( select caso_dia from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}')
         from distrito d join datos_distrito p on d.codigo_distr = p.codigo_distrito
         join morbilidad_distrito m on d.codigo_distr = m.codigo_distrito
