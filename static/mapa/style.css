@@ -2,7 +2,7 @@ html,
 body {
   height: 100vh;
   margin: 0;
-  font-size:1.2em;
+  font-size: 1.2em;
 }
 
 body {
@@ -86,12 +86,6 @@ body {
   padding-right: 0px;
 }
 
-#provincias,
-#cantones,
-#mapas {
-  max-width: 120px !important;
-}
-
 .info {
   font-size: 200%;
 }
@@ -130,18 +124,18 @@ body {
   padding: 5px;
 }
 
-.data-square{
+.data-square {
   margin-bottom: 1rem;
   padding-bottom: 1px;
   padding-top: 1px;
   padding-left: 5px;
-  min-height:80px;
+  min-height: 80px;
 }
 
 #activos,
 #fallecidos,
 #pms,
-#ouci{
+#ouci {
   background-color: #fea4a4;
 }
 
@@ -161,7 +155,8 @@ body {
   background-color: #b4c7e7;
 }
 
-#recuperados, #pam_div {
+#recuperados,
+#pam_div {
   background-color: #a8d18d;
 }
 
@@ -174,8 +169,7 @@ body {
 #ataque,
 #variacion,
 #pob_div,
-#den_div
-{
+#den_div {
   background-color: #f8cbac;
 }
 
@@ -200,12 +194,12 @@ body {
   max-width: 120px;
 }
 
-#dashboard-nacionales .label{
+#dashboard-nacionales .label {
   font-size: 1.2rem;
   margin-bottom: 0;
 }
 
-#dashboard-nacionales .data{
+#dashboard-nacionales .data {
   font-weight: bold;
   font-size: 1.1rem;
 }
@@ -215,7 +209,7 @@ body {
   font-size: 1.5rem;
 }
 
-.cases-info{
+.cases-info {
   padding-top: 2px;
 }
 
@@ -269,25 +263,28 @@ ul.multiselect-container {
   background-color: lightsteelblue;
 }
 
-.toast{
+.toast {
   opacity: 1 !important;
   font-size: 1rem;
 }
 
-#selectorFecha > *{
+#selectorFecha > * {
   font-size: 1.3rem;
 }
 
 @media screen and (max-width: 1700px) {
-  #col-mapa, #col-graficos, #col-indicadores {
+  #col-mapa,
+  #col-graficos,
+  #col-indicadores {
     border-bottom: 3px solid #0d47a1;
     padding-bottom: 5px;
     padding-top: 5px;
   }
 }
 
-@media screen and (min-width: 1701px){
-  html, body{
+@media screen and (min-width: 1701px) {
+  html,
+  body {
     font-size: 0.8rem;
   }
 }

@@ -1414,10 +1414,6 @@ function ajaxRequestPlots() {
   $.get(url, function (result) {
     $("#grafico2").html(result["plot2"]);
     $("#graficoVacunas").html(result["graficoVacunas"]);
-    // $("#grafico3").html(result["plot8"]);
-    // $("#grafico4").html(result["plot9"]);
-    // $("#grafico5").html(result["plot10"]);
-    // $("#grafico6").html(result["plot11"]);
     $("#col-indicadores").LoadingOverlay("hide");
   });
 }
