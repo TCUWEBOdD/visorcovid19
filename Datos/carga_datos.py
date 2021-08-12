@@ -1,17 +1,17 @@
-import psycopg2 as psql
-import pandas as pd
-import requests
-import numpy as np
-import sys
 import geopandas as gpd
-from datetime import date, datetime
-from xml.dom import minidom
+import numpy as np
+import pandas as pd
+import psycopg2 as psql
+import requests
+import sys
 from cryptography.fernet import Fernet
+from datetime import date, datetime
 from notificador import Notificador
 
 
 # Establecer en True para cargar todos los datos desde cero, e imprimir logs.
 DEBUG = False
+cwd = "/home/odd/plataformacovid19/Datos"
 
 
 def consoleLog(text):
@@ -28,7 +28,7 @@ def consoleLog(text):
         print(text)
 
 
-def obtener_credenciales(filename="/home/odd/plataformacovid19/Datos/credenciales.txt"):
+def obtener_credenciales(filename=cwd + "/credenciales.txt"):
     """
     Utilidad para obtener y desencriptar las credenciales almacenadas en el archivo credenciales.txt
     Este archivo tiene todos los parámetros necesarios para realizar la conexión a la BD.
@@ -164,7 +164,7 @@ def cargarCasosDiarios(df, ultimaFecha):
                 if fecha > ultimaFecha or DEBUG == True:
                     if not ordenes_cargadas:
                         try:
-                            cargarDenuncias(fecha)
+                            cargarOrdenesSanitarias(fecha)
                         except Exception as e:
                             consoleLog(e)
                     q = """
@@ -184,6 +184,7 @@ def cargarCasosDiarios(df, ultimaFecha):
                         conn.commit()
                     except Exception as e:
                         consoleLog(e)
+                        closeConnection(conn)
                         raise
         ordenes_cargadas = True
 
@@ -247,8 +248,8 @@ def cargarCasos(archivo, ultimaFecha):
     except (Exception, psql.Error) as error:
         consoleLog("Error en cargarCasos(): " + error)
         raise
-
-    closeConnection(conn)
+    finally:
+        closeConnection(conn)
 
 
 def cargarIndicadores(archivoCovid, ultimaFecha):
@@ -334,6 +335,11 @@ def calcularCoefVar(distrito, semana, ano, df):
         Año para el que se está realizando el cálculo.
     df : Pandas.Dataframe
         Dataframe que contiene los datos para realizar el cálculo.
+
+    Retorna
+    -------
+    float
+        Coeficiente de variación calculado para un distrito en una semana epidemiológica y año dados.
     """
 
     # Si la semana es la 25 del 2020, no se puede calcular porque no hay datos antes de esa seamana, y se retorna 0.
@@ -382,6 +388,16 @@ def calcularTasaAtaque(distrito, semana, ano, df):
         Año para el que se está realizando el cálculo.
     df : Pandas.Dataframe
         Dataframe que contiene los datos para realizar el cálculo.
+
+    Retorna
+    -------
+    float
+        Tasa de ataque calculada para un distrito en una semana epidemiológica y año dados.
+
+    Levanta
+    -------
+    Exception
+        En caso de que no haya datos de cantidad de habitantes en el distrito, imprescindible para el cálculo.
     """
 
     # Si la semana es la 25 del 2020, no se puede calcular porque no hay datos antes de esa seamana, y se retorna 0.
@@ -414,8 +430,21 @@ def calcularTasaAtaque(distrito, semana, ano, df):
         return (suma / poblacion) * 100
 
 
-# Obtiene el número de semana epidemiológica dada una fecha, según la definición del Ministerio de Salud.
 def numeroSemanaEpidemiologica(fecha):
+    """
+    Obtiene el número de semana epidemiológica dada una fecha, según la definición del Ministerio de Salud.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha en formato YYYY-MM-DD de la cual se quiere obtener la semana epidemiológica correspondiente.
+
+    Retorna
+    -------
+    int
+        Número de semana epidemiológica correspondiente a la fecha.
+    """
+
     partesFecha = fecha.split("-")
     fechaIso = date(int(partesFecha[0]), int(partesFecha[1]), int(partesFecha[2]))
     semanaActual = fechaIso.isocalendar()[1]
@@ -425,8 +454,32 @@ def numeroSemanaEpidemiologica(fecha):
     return semanaActual - 1
 
 
-# Suma los casos de una semana epidemiológica dada, para un distrito y un dataframe dados.
 def sumarCasosSemana(distrito, semana, ano, df):
+    """
+    Suma los casos nuevos de una semana epidemiológica dada, para un distrito en una semana y año dados.
+
+    Parámetros
+    ----------
+    distrito : int
+        Índice de la fila del distrito para el cálculo.
+    semana : int
+        Número de semana epidemiológica a considerar para el cálculo.
+    ano : int
+        Año para el que se está realizando el cálculo.
+    df : Pandas.Dataframe
+        Dataframe que contiene los datos para realizar el cálculo.
+
+    Retorna
+    -------
+    int
+        Suma de casos nuevos registrados en un distrito en una semana epidemiológica y año dados.
+
+    Levanta
+    -------
+    Exception
+        En caso que ocurra un error al realizar el cálculo, como un dato faltante o una fecha con formato incorrecto.
+    """
+
     # El offset es porque en esta columna empiezan las fechas
     COL_OFFSET = 6
     acumuladoSemana = 0
@@ -467,8 +520,16 @@ def sumarCasosSemana(distrito, semana, ano, df):
     return acumuladoSemana
 
 
-# Carga las alertas y las predicciones para cada distrito
 def cargarEscenarios(filename):
+    """
+    Carga las alertas y las predicciones para cada distrito, a partir de la hoja 'PCD Escenarios' del archivo EscenariosOctubre.xlsx.
+
+    Parámetros
+    ----------
+    filename : str
+        Nombre del archivo a leer para cargar los datos.
+    """
+
     df = pd.read_excel(filename, header=0, sheet_name="PCD Escenarios")
     conn = getAuthConnection()
     cursor = conn.cursor()
@@ -576,29 +637,16 @@ def cargarEscenarios(filename):
     closeConnection(conn)
 
 
-# Carga los datos de población para cada distrito, solo se usa una única vez para insertar los datos y no se actualiza.
-def cargarDistritos():
-    df = pd.read_excel("COVID19CR.xlsx", header=None, sheet_name="PoblacionDistrito")
-    conn = getAuthConnection()
-    cursor = conn.cursor()
-    for row in range(1, df.shape[0]):
-        query = """
-            INSERT INTO datos_distrito
-            VALUES ('{codigo_distrito}', {poblacion}, {pob_am}, {pob_pobre})
-        """
-        cursor.execute(
-            query.format(
-                codigo_distrito=df.iloc[row, 0].split(":")[0],
-                poblacion=df.iloc[row, 7],
-                pob_am=round((df.iloc[row, 6] / df.iloc[row, 7]) * 100, 2),
-                pob_pobre=0.0,
-            )
-        )
-        conn.commit()
-    closeConnection(conn)
+def cargarOrdenesSanitarias(fecha):
+    """
+    Consume el API de órdenes sanitarias por distrito y por fecha, y guarda los datos en el sistema.
 
+    Parámetros
+    ----------
+    fecha : str
+        Fecha en formato YYYY-MM-DD para la cual se obtendrán las órdenes sanitarias por distrito.
+    """
 
-def cargarDenuncias(fecha):
     url = (
         "https://apicovid.estuve-aqui.com/integrations/v1/ucr/sanitaryorders/details?limitDate="
         + str(fecha)
@@ -608,7 +656,7 @@ def cargarDenuncias(fecha):
     }
     r = requests.get(url, headers=head)
     df = pd.read_json(r.content)
-    consoleLog("Cargando denuncias en la fecha: " + str(fecha))
+    consoleLog("Cargando OO.SS. en la fecha: " + str(fecha))
     if len(df) > 0:
         pd.options.display.max_colwidth = 500
         query = "SELECT DISTINCT codigo, nom_prov, nom_cant, nom_dist from distrito"
@@ -637,125 +685,27 @@ def cargarDenuncias(fecha):
                 )
             )
             conn.commit()
-            consoleLog("Cargando denuncias para distrito: " + str(row[0]))
+            consoleLog("Cargando OO.SS. para distrito: " + str(row[0]))
         closeConnection(conn)
 
 
-def validateDate(date):
-    try:
-        datetime.datetime.strptime(date, "%Y-%m-%d")
-    except:
-        return False
-    return True
-
-
-def getLastDate():
-    conn = getAuthConnection()
-    cursor = conn.cursor()
-    query = "select fecha from acumulado_distrito ad order by fecha desc limit 1"
-    cursor.execute(query)
-    return cursor.fetchone()
-
-
-def getNumeroMes(mes):
-    if mes == "Ene" or mes == "Enero":
-        return 1
-    elif mes == "Feb" or mes == "Febrero":
-        return 2
-    elif mes == "Mar" or mes == "Marzo":
-        return 3
-    elif mes == "Abr" or mes == "Abril":
-        return 4
-    elif mes == "May" or mes == "Mayo":
-        return 5
-    elif mes == "Jun" or mes == "Junio":
-        return 6
-    elif mes == "Jul" or mes == "Julio":
-        return 7
-    elif mes == "Ago" or mes == "Agosto":
-        return 8
-    elif mes == "Sep" or mes == "Septiembre":
-        return 9
-    elif mes == "Oct" or mes == "Octubre":
-        return 10
-    elif mes == "Nov" or mes == "Noviembre":
-        return 11
-    elif mes == "Dic" or mes == "Diciembre":
-        return 12
-    else:
-        return -1
-
-
-def main(argv):
-    if len(argv) < 1:
-        consoleLog("Uso: carga_datos.py <Archivo COVID19> <Archivo escenarios>")
-        return False
-    else:
-        if len(argv) >= 1:
-            try:
-                archivoCovid = argv[0]
-                archivoEscenarios = argv[1]
-                cargarDatos(archivoCovid, archivoEscenarios)
-            except Exception as e:
-                consoleLog("No se pudo cargar datos. Error: " + str(e))
-                raise
-        return True
-
-
-# Carga todos los datos de actualización regular a partir de dos archivos. Esta función es llamada desde el cron job que la ejecuta para actualizar automáticamente.
-def cargarDatos(archivoCovid, archivoEscenarios):
-    print("Inicio de carga: " + datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-    try:
-        ultimaFecha = getLastDate()[0].strftime("%Y-%m-%d")
-        consoleLog("Ultima fecha en la BD: " + str(ultimaFecha))
-        cargarCasos(archivoCovid, ultimaFecha)
-        archivoCasosDiarios = pd.read_excel(
-            archivoCovid, header=None, sheet_name="DistritosNuevos"
-        )
-        cargarCasosDiarios(archivoCasosDiarios, ultimaFecha)
-        cargarDatosPais(archivoCovid, ultimaFecha)
-        cargarIndicadores(archivoCovid, ultimaFecha)
-        cargarEscenarios(archivoEscenarios)
-        # cargarCapasProyecciones()
-    except Exception as e:
-        consoleLog("Ha ocurrido un error al cargar los datos: " + str(e))
-        noti = Notificador()
-        noti.notificar(str(e))
-
-    print("Fin de carga: " + datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
-
-
-# Carga la tasa de morbilidad por distrito. Solo se utiliza una vez y no se actualiza.
-def cargarMorbilidad():
-    consoleLog("Leyendo archivo de datos...")
-    df = pd.read_excel(
-        "Morbilidad.xlsx", header=None, sheet_name="Base Final", usecols="C,M"
-    )
-    consoleLog("archivo de datos leído")
-    try:
-        conn = getAuthConnection()
-        cursor = conn.cursor()
-        for row in range(1, df.shape[0]):
-            distrito = df.iloc[row, 0]
-            morbilidad = df.iloc[row, 1]
-            consoleLog(distrito)
-            q = """
-                    INSERT INTO morbilidad_distrito (codigo_distrito, morbilidad)
-                    VALUES ({codigo}, {morbilidad})"""
-            query = q.format(codigo=distrito, morbilidad=morbilidad)
-            if not np.isnan(morbilidad):
-                cursor.execute(query)
-            consoleLog("-----------------------")
-            conn.commit()
-    except (Exception, psql.Error) as error:
-        consoleLog("Error while connecting to PostgreSQL" + error)
-        raise
-
-    closeConnection(conn)
-
-
-# Carga los datos de hospitalizaciones en salón y UCI, y el índice de positividad, a nivel país. Se actualiza regularmente.
 def cargarDatosPais(archivo, ultimaFecha):
+    """
+    Carga los datos de hospitalizaciones en salón y UCI, y el índice de positividad, a nivel país, a partir del archivo COVID19.xlsx.
+
+    Parámetros
+    ----------
+    archivo : str
+        Nombre del archivo a leer.
+    ultimaFecha : str
+        Fecha a partir de la cual se deben procesar los datos del archivo.
+
+    Levanta
+    -------
+    Exception
+        En caso de que ocurra un error al cargar los datos, como que la muestra leída sea 0.
+    """
+
     df = pd.read_excel(archivo, header=None, sheet_name="Datos", usecols="B,C,AG,AI,AY")
     try:
         conn = getAuthConnection()
@@ -794,12 +744,254 @@ def cargarDatosPais(archivo, ultimaFecha):
     except (Exception, psql.Error) as error:
         consoleLog("Error cargando los datos país: " + str(error))
         raise
+    finally:
+        closeConnection(conn)
 
+
+def validateDate(date):
+    """
+    Valida que una fecha dada sea correcta en el formato YYYY-MM-DD.
+
+    Parámetros
+    ----------
+    date : str
+        Fecha a validar.
+
+    Retorna
+    -------
+    bool
+        True si la fecha es válida, False en caso contrario.
+    """
+
+    try:
+        datetime.datetime.strptime(date, "%Y-%m-%d")
+    except:
+        return False
+    return True
+
+
+def getLastDate():
+    """
+    Obtiene la última fecha registrada en la tabla acumulado_distrito.
+
+    Retorna
+    -------
+    str
+        Última fecha registrada en la tabla acumulado_distrito en formato YYYY-MM-DD.
+    """
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    query = "select fecha from acumulado_distrito ad order by fecha desc limit 1"
+    cursor.execute(query)
+    closeConnection(conn)
+    return cursor.fetchone()
+
+
+def getNumeroMes(mes):
+    """
+    Obtiene el número de mes, de 1 a 12, a partir de una hilera.
+
+    Parámetros
+    ----------
+    mes : str
+        Hilera que contiene el nombre del mes cuyo número se quiere obtener.
+
+    Retorna
+    -------
+    int
+        Número del mes de 1 a 12 identificado en la hilera, o -1 si la hilera no es un mes válido.
+    """
+
+    if mes == "Ene" or mes == "Enero":
+        return 1
+    elif mes == "Feb" or mes == "Febrero":
+        return 2
+    elif mes == "Mar" or mes == "Marzo":
+        return 3
+    elif mes == "Abr" or mes == "Abril":
+        return 4
+    elif mes == "May" or mes == "Mayo":
+        return 5
+    elif mes == "Jun" or mes == "Junio":
+        return 6
+    elif mes == "Jul" or mes == "Julio":
+        return 7
+    elif mes == "Ago" or mes == "Agosto":
+        return 8
+    elif mes == "Sep" or mes == "Septiembre":
+        return 9
+    elif mes == "Oct" or mes == "Octubre":
+        return 10
+    elif mes == "Nov" or mes == "Noviembre":
+        return 11
+    elif mes == "Dic" or mes == "Diciembre":
+        return 12
+    else:
+        return -1
+
+
+def main(argv):
+    """
+    Función principal del programa. Ejecuta todo el cargador de datos.
+
+    Parámetros
+    ----------
+    argv : str[]
+        Arreglo de parámetros pasados al invocar el programa.
+        Debe tener el nombre o ruta del archivo COVID19CR.xlsx y de EscenariosOctubre.xlsx.
+
+    Levanta
+    -------
+    Exception
+        En caso de ocurrir algún error en el proceso de carga de datos.
+    """
+
+    if len(argv) < 1:
+        consoleLog("Uso: carga_datos.py <Archivo COVID19> <Archivo escenarios>")
+        return False
+    else:
+        if len(argv) >= 1:
+            try:
+                archivoCovid = argv[0]
+                archivoEscenarios = argv[1]
+                cargarDatos(archivoCovid, archivoEscenarios)
+            except Exception as e:
+                consoleLog("No se pudo cargar datos. Error: " + str(e))
+                raise
+        return True
+
+
+def cargarDatos(archivoCovid, archivoEscenarios):
+    """
+    Carga todos los datos de actualización diaria a partir de los archivos COVID19CR.xlsx y EscenariosOctubre.xlsx.
+    Esta función es llamada desde el cron job que se ejecuta automáticamente para actualizar los datos diariamente.
+    Si ocurre algún error en el proceso de carga de datos, envía un correo notificando el error, a los destinatarios
+    configurados en emailConf/direcciones.txt, en donde cada fila tiene el formato <nombre> <correo>.
+
+    Parámetros
+    ----------
+    archivoCovid19 : str
+        Nombre o ruta del archivo COVID19CR.xlsx.
+    archivoEscenarios : str
+        Nombre o ruta del archivo EscenariosOctubre.xlsx.
+    """
+
+    print("Inicio de carga: " + datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    try:
+        ultimaFecha = getLastDate()[0].strftime("%Y-%m-%d")
+        consoleLog("Ultima fecha en la BD: " + str(ultimaFecha))
+        cargarCasos(archivoCovid, ultimaFecha)
+        archivoCasosDiarios = pd.read_excel(
+            archivoCovid, header=None, sheet_name="DistritosNuevos"
+        )
+        cargarCasosDiarios(archivoCasosDiarios, ultimaFecha)
+        cargarDatosPais(archivoCovid, ultimaFecha)
+        cargarIndicadores(archivoCovid, ultimaFecha)
+        cargarEscenarios(archivoEscenarios)
+    except Exception as e:
+        consoleLog("Ha ocurrido un error al cargar los datos: " + str(e))
+        noti = Notificador()
+        noti.notificar(str(e))
+
+    print("Fin de carga: " + datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+
+
+# Main del programa
+if __name__ == "__main__":
+    if not main(sys.argv[1:]):
+        sys.exit(1)
+    else:
+        sys.exit(0)
+
+# -------------------------------------------------------------------- #
+# Sección de funciones para utilizar manualmente cuando sea requerido. #
+# -------------------------------------------------------------------- #
+def cargarDistritos():
+    """
+    Utilidad para cargar los datos de población (habitantes) para cada distrito, solo se usa una única vez para insertar los datos y no se actualiza.
+    Toma los datos de la hoja PoblacionDistrito del archivo COVID19CR.xlsx.
+    """
+
+    df = pd.read_excel("COVID19CR.xlsx", header=None, sheet_name="PoblacionDistrito")
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    for row in range(1, df.shape[0]):
+        query = """
+            INSERT INTO datos_distrito
+            VALUES ('{codigo_distrito}', {poblacion}, {pob_am}, {pob_pobre})
+        """
+        cursor.execute(
+            query.format(
+                codigo_distrito=df.iloc[row, 0].split(":")[0],
+                poblacion=df.iloc[row, 7],
+                pob_am=round((df.iloc[row, 6] / df.iloc[row, 7]) * 100, 2),
+                pob_pobre=0.0,
+            )
+        )
+        conn.commit()
     closeConnection(conn)
 
 
+def cargarMorbilidad():
+    """
+    Utilidad para cargar la tasa de morbilidad por distrito. Solo se utiliza una vez y no se actualiza.
+    Toma los datos de la hoja 'Base Final' del archivo Morbilidad.xlsx.
+
+    Levanta
+    -------
+    Exception
+        En caso de ocurrir algún error en la carga de datos.
+    psql.Error
+        En caso de ocurrir algún error de base de datos.
+    """
+
+    consoleLog("Leyendo archivo de datos...")
+    df = pd.read_excel(
+        "Morbilidad.xlsx", header=None, sheet_name="Base Final", usecols="C,M"
+    )
+    consoleLog("archivo de datos leído")
+    try:
+        conn = getAuthConnection()
+        cursor = conn.cursor()
+        for row in range(1, df.shape[0]):
+            distrito = df.iloc[row, 0]
+            morbilidad = df.iloc[row, 1]
+            consoleLog(distrito)
+            q = """
+                    INSERT INTO morbilidad_distrito (codigo_distrito, morbilidad)
+                    VALUES ({codigo}, {morbilidad})"""
+            query = q.format(codigo=distrito, morbilidad=morbilidad)
+            if not np.isnan(morbilidad):
+                cursor.execute(query)
+            consoleLog("-----------------------")
+            conn.commit()
+    except (Exception, psql.Error) as error:
+        consoleLog("Error while connecting to PostgreSQL" + error)
+        raise
+    finally:
+        closeConnection(conn)
+
+
 def cargarCapasProyecciones():
-    df = gpd.read_file("50 Dist 20 al 26 Jun.geojson", ignore_geometry=True)
+    """
+    Utilidad para cargar las capas de proyecciones por distrito a la base de datos. Se debe utilizar manualmente cada vez
+    que se suministren nuevas capas.
+    Toma los datos de los archivos .geojson correspondientes a las capas suministradas.
+
+    Levanta
+    -------
+    Exception
+        En caso de ocurrir algún error en el procesamiento de los datos o en el formato del archivo geojson.
+    """
+
+    # Cambiar estas variables según el archivo a cargar.
+    archivo = "50 Dist 20 al 26 Jun.geojson"
+    fecha_inicio = "2021-06-20"
+    fecha_fin = "2021-06-26"
+    muestra = int(archivo.split(" ")[0])
+
+    df = gpd.read_file(archivo, ignore_geometry=True)
 
     try:
         conn = getAuthConnection()
@@ -814,22 +1006,16 @@ def cargarCapasProyecciones():
                 queryGrupo.format(
                     codigo_dta=df.iloc[row]["codigo_dta"],
                     porcentaje=df.iloc[row, -1],
-                    fecha_inicio="2021-06-20",
-                    fecha_fin="2021-06-26",
-                    muestra=50,
+                    fecha_inicio=fecha_inicio,
+                    fecha_fin=fecha_fin,
+                    muestra=muestra,
                 )
             )
 
             conn.commit()
-        closeConnection(conn)
 
     except Exception as e:
         consoleLog("Ha ocurrido un error al cargar los datos: " + str(e))
         raise
-
-
-if __name__ == "__main__":
-    if not main(sys.argv[1:]):
-        sys.exit(1)
-    else:
-        sys.exit(0)
+    finally:
+        closeConnection(conn)
