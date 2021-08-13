@@ -421,7 +421,7 @@ def calcularTasaAtaque(distrito, semana, ano, df):
         consoleLog(
             "Error, no hay datos de población para el distrito código: " + str(codigo)
         )
-    conn.close()
+    closeConnection(conn)
 
     # Evita dividir entre 0
     if poblacion == 0:
@@ -730,7 +730,7 @@ def cargarDatosPais(archivo, ultimaFecha):
                 q = """
                         INSERT INTO datos_pais (fecha, casos_salon, casos_uci, indice_positividad)
                         VALUES ('{fecha}', {casos_salon}, {casos_uci}, {indice_positividad}) 
-                        ON CONFLICT DO UPDATE SET casos_salon={casos_salon}, casos_uci={casos_uci}, indice_positividad={indice_positividad} WHERE fecha='{fecha}';"""
+                        ON CONFLICT (fecha) DO UPDATE SET casos_salon={casos_salon}, casos_uci={casos_uci}, indice_positividad={indice_positividad};"""
                 if not np.isnan(casos_salon) and not np.isnan(casos_uci):
                     query = q.format(
                         fecha=fecha,
@@ -784,8 +784,9 @@ def getLastDate():
     cursor = conn.cursor()
     query = "select fecha from acumulado_distrito ad order by fecha desc limit 1"
     cursor.execute(query)
+    result = cursor.fetchone()
     closeConnection(conn)
-    return cursor.fetchone()
+    return result
 
 
 def getNumeroMes(mes):
