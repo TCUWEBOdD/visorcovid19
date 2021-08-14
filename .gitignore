@@ -7,7 +7,7 @@ db.sqlite3
 .sudo*
 .git2
 .git3
-Datos/datos_log.txt
+*log.txt
 covid_project/covid_env
 crawler/venv
 .bash_history

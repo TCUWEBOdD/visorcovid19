@@ -6,9 +6,7 @@ from django.conf.urls import include, url
 urlpatterns= [
 	path( 'listarCantones', views.listarCantones, name="listarCantones"),
 	path( 'listarDistritos', views.listarDistritos, name="listarDistritos"),
-	path( 'getLineChart', views.getLineChart, name="getLineChart"),
 	path( 'getGaugeChart', views.getGaugeChart, name="getGaugeChart"),
-	path( 'getMap', views.getMap, name="getMap"),
 	path( 'getPlots', views.getPlots, name="getPlots"),
 	path( 'get_leaflet_cant', views.get_leaflet_cant, name="get_leaflet_cant"),
 	path( 'get_leaflet_prov', views.get_leaflet_prov, name="get_leaflet_prov"),

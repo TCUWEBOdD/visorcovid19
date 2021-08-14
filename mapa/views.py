@@ -1,16 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from mapa.graficador import *
-from mapa.geom_creator import *
 from mapa.databaseQueries import getCantones, get_dist, getLastDate
-from constructor import crearProvincia
-from constructor import crearMapa, getParametrizedProvinceGaugePlot
-import folium
 
 
-def getMap(request):
-    mapa = crearMapa()
-    return HttpResponse(mapa, content_type="text/xml")
+def home(request):
+    context = {"geoJson": get_prov()}
+    return render(request, "mapa/geo3.html", context)
 
 
 def listarCantones(request):
@@ -21,15 +17,6 @@ def listarCantones(request):
 def listarDistritos(request):
     datos = {"distritos": getDistritos(request.GET.get("id"))}
     return JsonResponse(datos)
-
-
-def getLineChart(request):
-    provincia = request.GET.get("province")
-    canton = request.GET.get("canton")
-    distrito = request.GET.get("distrito")
-    response = {}
-    response["chart"] = nacional(provincia, canton, distrito)
-    return JsonResponse(response)
 
 
 def getGaugeChart(request):
@@ -85,11 +72,6 @@ def get_json_indigenas(request):
     response = {}
     response["capas"] = get_indigenas()
     return JsonResponse(response)
-
-
-def home(request):
-    context = {"geoJson": get_prov()}
-    return render(request, "mapa/geo3.html", context)
 
 
 def analytics(request):

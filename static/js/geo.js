@@ -382,7 +382,7 @@ window.onload = function () {
     changeGauge(_selectedProvince, _selectedCanton, selectedDistrito);
   });
 
-  loadXMLMap("getMap");
+  ajaxRequestPlots();
 
   setUpCreditsBubbles();
 }; //FIN INICIALIZADOR
@@ -1063,78 +1063,6 @@ function setDate(date) {
     let tipoGrafico = $("input:radio[name=radio-group-1-bg]:checked").val();
     changeGauge(_selectedProvince, _selectedCanton, _selectedDistrito, (tipoGrafico == 'orden'? 1 : 2))
   });
-}
-
-/**
- * Solicita el mapa en SVG al servidor a través de una petición GET.
- * @param {string} url Url del método para cargar el mapa.
- */
-function loadXMLMap(url) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      embedMap(this);
-    }
-  };
-  xhttp.open("GET", url, true);
-  xhttp.send();
-  $.LoadingOverlay("show");
-}
-
-/**
- * Empotra el mapa cargado desde el servidor en el div correspondiente en la página.
- * @param {xml} xml Xml de respuesta del servidor que contiene el mapa en SVG.
- */
-function embedMap(xml) {
-  let xmlDoc = xml.responseText;
-  let originalFill;
-
-  /**Listener para capturar el evento de hover sobre los distritos del mapa.*/
-  $(".svg-menu__path__seleccion__background *", "#col-mapa").hover(
-    function () {
-      if ($(this).attr("fill") == SELECTED_DISTRICT_COLOR) return;
-      originalFill = $(this).attr("fill");
-      $(this).attr("fill", "blue");
-
-      if (_selectedDistrito == null) {
-        let acumulados = $(this).attr("cantidad");
-        let recuperados = $(this).attr("recuperados");
-        let activos = $(this).attr("activos");
-        let ta = $(this).attr("ta");
-        let coef_var = $(this).attr("coef_var");
-        let pendiente = $(this).attr("pendiente");
-        let activos_prediccion = $(this).attr("activos_prediccion");
-
-        let proInfo = $(this).attr("provincia");
-        let cantInfo = $(this).attr("canton");
-        let distInfo = $(this).attr("name_kml");
-
-        $("#pro_info span").html(proInfo);
-        $("#cant_info span").html(cantInfo);
-        $("#dis_info").html(distInfo);
-
-        $("#cases-dashboard #activos .data").html(activos);
-        $("#cases-dashboard #recuperados .data").html(recuperados);
-        $("#cases-dashboard #variacion .data").html(coef_var);
-        $("#cases-dashboard #ataque .data").html(ta);
-        $("#cases-dashboard #pendientes .data").html(pendiente);
-      }
-    },
-    /** Se ejecuta al terminar la acción de hover. */
-    function () {
-      if ($(this).attr("fill") != SELECTED_DISTRICT_COLOR)
-        $(this).attr("fill", originalFill);
-      if (_selectedDistrito == null) $("#cases-dashboard .data").html("--");
-    }
-  );
-
-  /** Listener para capturar el evento de click en un distrito, si hay cantón y provincia seleccionadas. */
-  $(".svg-menu__path__seleccion__background *", "#col-mapa").on("click", function () {
-      let distrito = $(this).attr("name_kml");
-      seleccionarDistrito(distrito);
-    }
-  );
-  ajaxRequestPlots();
 }
 
 function seleccionarDistrito(distrito){

@@ -2,97 +2,18 @@ from plotly.offline import plot
 import plotly.graph_objs as go
 import pandas as pd
 import numpy as np
-import math
-from mapa.libreria.bd import getMyConnection, closeConnection
+from mapa.libreria.bd import getAuthConnection, closeConnection
 from mapa.databaseQueries import *
 import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.io as pio
 import random
+import covid_project.settings as sysconf
 
 CANT_CASOS = 100
 PLOT_SIZE = 170
 
-conn = getMyConnection()
-
-
-def crearGrafico(tipo):
-    if tipo == 1:
-        return burbujas()
-    if tipo == 2:
-        return burbujas()
-
-
-# luego se tiene que cambiar el ??? por un django_sqlbuilder
-def linea_acumulados(province):
-    fig = go.Figure()
-
-    if province == "Todas":
-        q = getQueryNacional()
-        grupo = "provincia"
-
-    else:
-        q = getQueryProvincia(province)
-        grupo = "canton"
-
-    df = pd.read_sql(q, conn)
-    fig = px.line(
-        df,
-        x=df.iloc[:, 0].values,
-        y=df.iloc[:, 1].values,
-        color=grupo,
-        line_group=grupo,
-    )
-
-    fig.update_layout(
-        margin=dict(l=20, r=0, t=5, b=5),
-        paper_bgcolor="white",
-        height=PLOT_SIZE,
-    )
-
-    plt_div = plot(fig, output_type="div")
-    return plt_div
-
-
-def burbujas():
-    query = getQueryBurbujas("2020-07-11")
-    df = pd.read_sql(query, conn)
-    df = df.sort_values(by=["cantidad"])
-
-    fig = px.scatter(
-        df,
-        x=np.arange(0, df.shape[0]),
-        y=df.iloc[:, 1].values,
-        size="cantidad",
-        color="canton",
-        hover_name="name_kml",
-        size_max=50,
-        labels={"x": "Distrito", "y": "Cantidad"},
-    )
-
-    fig.update_layout(
-        margin=dict(l=20, r=0, t=5, b=5),
-        paper_bgcolor="white",
-        height=PLOT_SIZE,
-    )
-
-    plt_div = plot(fig, output_type="div")
-    return plt_div
-
-
-def getRange(axis):
-    # Obtiene el rango del eje
-    return axis[1] - axis[0]
-
-
-def getXAxisCoordinate(axis, percent):
-    # Regla de 3
-    return getRange(axis) * percent + axis[0]
-
-
-def getYAxisCoordinate(axis, percent):
-    delta = math.sqrt(1 - (percent * 2 - 1) ** 2)
-    return delta * getRange(axis) + axis[0]
+cwd = sysconf.BASE_DIR
 
 
 def nacional(provincia=None, canton=None, distrito=None):
@@ -104,6 +25,8 @@ def nacional(provincia=None, canton=None, distrito=None):
         query = getQueryProvincia(provincia)
     else:
         query = getQueryNacional()
+
+    conn = getAuthConnection()
 
     df = pd.read_sql(query, conn)
 
@@ -169,209 +92,17 @@ def nacional(provincia=None, canton=None, distrito=None):
     fig.update_yaxes(gridcolor="rgb(240, 240, 240)")
 
     plt_div = plot(fig, output_type="div")
-    return plt_div
 
+    closeConnection(conn)
 
-def rt_semanal():
-    query = getQueryRt("2020-07-11")
-    df = pd.read_sql(query, conn)
-    unos = np.ones(df.shape[0])
-
-    fig = px.line(df, x=df.iloc[:, 0].values, y=df.iloc[:, 1].values)
-    fig.add_trace(
-        go.Scatter(
-            x=df.iloc[:, 0].values,
-            y=df.iloc[:, 2].values,
-            mode="lines+markers",
-            name="0.025",
-        )
-    )
-    fig.add_trace(
-        go.Scatter(
-            x=df.iloc[:, 0].values,
-            y=df.iloc[:, 3].values,
-            mode="lines+markers",
-            name="0.975",
-        )
-    )
-    fig.add_trace(
-        go.Scatter(x=df.iloc[:, 0].values, y=unos, mode="lines+markers", name="1")
-    )
-
-    fig.update_layout(
-        margin=dict(l=0, r=0, t=5, b=5),
-        paper_bgcolor="white",
-        height=PLOT_SIZE - 30,
-        legend=dict(
-            x=0.8,
-            y=0.95,
-            traceorder="normal",
-            font=dict(
-                size=12,
-            ),
-        ),
-    )
-
-    fig.update_yaxes(title_text="Tasa R(t)")
-    fig.update_xaxes(title_text="Semana")
-
-    plt_div = plot(fig, output_type="div")
-    return plt_div
-
-
-def optimistaCasosDia():
-    query = getCasosEscenario()
-    df = pd.read_sql(query, conn)
-
-    fig = px.line(df, x=df.iloc[:, 1].values, y=df.iloc[:, 2].values)
-
-    fig.add_trace(
-        go.Scatter(
-            x=df.iloc[:, 1].values,
-            y=df.iloc[:, 3].values,
-            mode="lines",
-            name="Escenario pesimista",
-            line=dict(color="red"),
-        )
-    )
-
-    fig.add_trace(
-        go.Scatter(
-            x=df.iloc[:, 1].values,
-            y=df.iloc[:, 2].values,
-            mode="lines",
-            name="Escenario optimista",
-            line=dict(color="green"),
-        )
-    )
-
-    fig.add_trace(
-        go.Scatter(
-            x=df.iloc[:, 1].values,
-            y=df.iloc[:, 4].values,
-            mode="lines",
-            name="Casos acumulados",
-            line=dict(color="blue"),
-        )
-    )
-
-    fig.update_layout(
-        margin=dict(l=0, r=0, t=5, b=5),
-        paper_bgcolor="white",
-        height=PLOT_SIZE * 2,
-        legend=dict(
-            x=0.01,
-            y=0.99,
-            traceorder="normal",
-            font=dict(
-                size=12,
-            ),
-        ),
-    )
-
-    fig.update_yaxes(title_text="Cantidad de Casos")
-    fig.update_xaxes(title_text="Cantidad de días")
-
-    plt_div = plot(fig, output_type="div")
-    return plt_div
-
-
-def uci_optimista():
-    query = getQueryUCIOptimista()
-    df = pd.read_sql(query, conn)
-
-    fig = px.line(df, x=df.iloc[:, 0].values, y=df.iloc[:, 1].values)
-
-    fig.add_trace(
-        go.Scatter(
-            x=df.iloc[:, 0].values,
-            y=df.iloc[:, 1].values,
-            mode="lines+markers",
-            name="Sala",
-            line=dict(color="red"),
-        )
-    )
-
-    fig.add_trace(
-        go.Scatter(
-            x=df.iloc[:, 0].values,
-            y=df.iloc[:, 2].values,
-            mode="lines+markers",
-            name="UCI",
-            line=dict(color="blue"),
-        )
-    )
-
-    fig.update_layout(
-        margin=dict(l=0, r=0, t=5, b=5),
-        paper_bgcolor="white",
-        height=PLOT_SIZE - 30,
-        legend=dict(
-            x=0.01,
-            y=0.99,
-            traceorder="normal",
-            font=dict(
-                size=12,
-            ),
-        ),
-    )
-
-    fig.update_yaxes(title_text="Hospitalizaciones")
-    fig.update_xaxes(title_text="Mes")
-
-    plt_div = plot(fig, output_type="div")
-    return plt_div
-
-
-def uci_pesimista():
-    query = getQueryUCIPesimista()
-    df = pd.read_sql(query, conn)
-
-    fig = px.line(df, x=df.iloc[:, 0].values, y=df.iloc[:, 1].values)
-
-    fig.add_trace(
-        go.Scatter(
-            x=df.iloc[:, 0].values,
-            y=df.iloc[:, 1].values,
-            mode="lines+markers",
-            name="Sala",
-            line=dict(color="red"),
-        )
-    )
-
-    fig.add_trace(
-        go.Scatter(
-            x=df.iloc[:, 0].values,
-            y=df.iloc[:, 2].values,
-            mode="lines+markers",
-            name="UCI",
-            line=dict(color="blue"),
-        )
-    )
-
-    fig.update_layout(
-        margin=dict(l=0, r=0, t=5, b=5),
-        paper_bgcolor="white",
-        height=PLOT_SIZE - 30,
-        legend=dict(
-            x=0.01,
-            y=0.99,
-            traceorder="normal",
-            font=dict(
-                size=12,
-            ),
-        ),
-    )
-
-    fig.update_yaxes(title_text="Hospitalizaciones")
-    fig.update_xaxes(title_text="Mes")
-
-    plt_div = plot(fig, output_type="div")
     return plt_div
 
 
 def gauge_vacunas(fecha):
     query = getQueryVacunas(fecha)
+
+    conn = getAuthConnection()
+
     df = pd.read_sql(query, conn)
 
     # Obtiene los datos de vacunación de la fecha del visor, y si no hay datos, carga la última fecha en la que hay datos
@@ -416,6 +147,9 @@ def gauge_vacunas(fecha):
     fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", height=650)
 
     plt_div = plot(fig, output_type="div")
+
+    closeConnection(conn)
+
     return plt_div
 
 
@@ -440,6 +174,8 @@ def gauge_cuad(fecha, provincia=None, canton=None, distrito=None):
             query = getQueryOrdenesPersProv(fecha, provincia)
         else:
             query = getQueryOrdenesPers(fecha)
+
+    conn = getAuthConnection()
 
     df = pd.read_sql(query, conn)
     if df.empty or df.iloc[0, 0] is None:
@@ -509,11 +245,14 @@ def gauge_cuad(fecha, provincia=None, canton=None, distrito=None):
     fig.update_yaxes(gridcolor="rgb(240, 240, 240)", title="Órdenes sanitarias")
 
     plt_div = plot(fig, output_type="div")
+
+    closeConnection(conn)
+
     return plt_div
 
 
 def grafico_progreso():
-    df = pd.read_csv("/home/odd/plataformacovid19/vacunacion/vacunas_v2.csv")
+    df = pd.read_csv(cwd + "/vacunacion/vacunas_v2.csv")
     fig1 = go.Figure()
     fig1 = make_subplots(specs=[[{"secondary_y": True}]])
 
@@ -642,7 +381,7 @@ def grafico_gauge(
 
 
 def gauge_estimacion_vacunas():
-    df = pd.read_csv("/home/odd/plataformacovid19/vacunacion/vacunas_v2.csv")
+    df = pd.read_csv(cwd + "/vacunacion/vacunas_v2.csv")
 
     llegadas = df["cantidad"].tolist()
 

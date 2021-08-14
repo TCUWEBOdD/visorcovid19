@@ -1,14 +1,34 @@
 from flask import Flask, request, Response
 from flask_sqlalchemy import SQLAlchemy
+from mapa.libreria.bd import obtenerCredenciales
+from mapa.libreria.notificador.notificador import Notificador
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://covid:@cov19@platfTf119!@127.0.0.1:8080/covidinfo'
+USUARIO = 0
+PASS = 1
+HOST = 2
+PORT = 3
+DB = 4
+
+creds = obtenerCredenciales()
+
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    "postgresql://"
+    + creds[USUARIO]
+    + ":"
+    + creds[PASS]
+    + "@"
+    + creds[HOST]
+    + ":"
+    + creds[PORT]
+    + "/"
+    + creds[DB]
+)
 
 db = SQLAlchemy(app)
 
-# Password: @cov19platfTf119
-TOKEN_DEFINED = 'F91D3F51E49063C170D0528A567221498A0BC1E68CE06ADDE4D81C28AD9396DC'
+TOKEN_DEFINED = "F91D3F51E49063C170D0528A567221498A0BC1E68CE06ADDE4D81C28AD9396DC"
 
 
 class denuncia_911(db.Model):
@@ -27,19 +47,23 @@ class denuncia_911(db.Model):
 @app.errorhandler(Exception)
 def server_error(err):
     app.logger.exception(err)
+    noti = Notificador()
+    noti.notificar(str(err))
     return err, 500
 
 
-@app.route('/denuncia911', methods=['POST'])
+@app.route("/denuncia911", methods=["POST"])
 def agregar_datos_911():
     token = request.headers["Authorization"]
-    print('Received request!')
+    print("Received request!")
     if token == TOKEN_DEFINED:
         request_data = request.json
-        print('Authenticated')
+        print("Authenticated")
         print(request_data)
         for i in request_data:
-            denuncia = denuncia_911(i['consecutivo'], i['cod_dist'], i['direccion'], i['fecha'])
+            denuncia = denuncia_911(
+                i["consecutivo"], i["cod_dist"], i["direccion"], i["fecha"]
+            )
             db.session.add(denuncia)
             db.session.commit()
 
@@ -49,4 +73,4 @@ def agregar_datos_911():
 
 
 if __name__ == "__main__":
-    app.run(host='163.178.101.94', port=8443)
+    app.run(host="163.178.101.94", port=8443)

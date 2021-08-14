@@ -4,6 +4,7 @@ from email.mime.text import MIMEText
 from cryptography.fernet import Fernet
 from datetime import datetime
 import smtplib
+import covid_project.settings as sysconf
 
 
 class Notificador:
@@ -37,7 +38,7 @@ class Notificador:
     """
 
     # Cambiar ruta según el servidor.
-    cwd = "/home/odd/plataformacovid19/Datos"
+    cwd = sysconf.BASE_DIR + "/mapa/libreria/notificador"
 
     def obtener_contactos(self, filename=cwd + "/emailConf/direcciones.txt"):
         """
