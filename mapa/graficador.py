@@ -16,15 +16,8 @@ PLOT_SIZE = 170
 cwd = sysconf.BASE_DIR
 
 
-def nacional(provincia=None, canton=None, distrito=None):
-    if distrito != None and distrito != "":
-        query = getQueryDistrito(provincia, canton, distrito)
-    elif canton != None and canton != "":
-        query = getQueryCanton(provincia, canton)
-    elif provincia != None and provincia != "":
-        query = getQueryProvincia(provincia)
-    else:
-        query = getQueryNacional()
+def nacional():
+    query = getQueryNacional()
 
     conn = getAuthConnection()
 

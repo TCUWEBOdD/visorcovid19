@@ -5,8 +5,7 @@ from mapa.databaseQueries import getCantones, get_dist, getLastDate
 
 
 def home(request):
-    context = {"geoJson": get_prov()}
-    return render(request, "mapa/geo3.html", context)
+    return render(request, "mapa/geo3.html")
 
 
 def listarCantones(request):
@@ -40,12 +39,6 @@ def getPlots(number):
     response = {}
     response["plot2"] = nacional()
     response["graficoVacunas"] = grafico_progreso()
-    return JsonResponse(response)
-
-
-def get_leaflet_cant(request):
-    response = {}
-    response["capas"] = get_cant()
     return JsonResponse(response)
 
 

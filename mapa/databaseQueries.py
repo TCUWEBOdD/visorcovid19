@@ -3,6 +3,20 @@ import geopandas as gpd
 
 
 def getCantones(provincia):
+    """
+    Obtiene la lista de nombres de cantones de una provincia dada.
+
+    Parámetros
+    ----------
+    provincia : str
+        Nombre de la provincia cuyos cantones se quieren obtener.
+
+    Retorna
+    -------
+    list
+        Lista que contiene el nombre de los cantones de la provincia dada.
+    """
+
     conn = getAuthConnection()
     cursor = conn.cursor()
     getCantonesQuery = """
@@ -23,6 +37,20 @@ def getCantones(provincia):
 
 
 def getDistritos(canton):
+    """
+    Obtiene la lista de nombres de distritos de un cantón dado.
+
+    Parámetros
+    ----------
+    canton : str
+        Nombre del cantón cuyos distritos se quieren obtener.
+
+    Retorna
+    -------
+    list
+        Lista que contiene el nombre de los distritos del cantón dado.
+    """
+
     conn = getAuthConnection()
     cursor = conn.cursor()
     getDistritosQuery = """
@@ -43,6 +71,15 @@ def getDistritos(canton):
 
 
 def getFechasValidas():
+    """
+    Obtiene todas las fechas registradas en la tabla acumulado_distrito, es decir, son las fechas para las cuales hay datos.
+
+    Retorna
+    -------
+    list
+        Lista que contiene todas las fechas válidas de la base de datos, en orden descendente.
+    """
+
     conn = getAuthConnection()
     cursor = conn.cursor()
     getFechasQuery = """
@@ -62,113 +99,39 @@ def getFechasValidas():
     return fechas
 
 
-# Retorna la cantidad de casos acumulados, recuperados y activos para una provincia dada
-def getQueryProvincia(nombre):
-    query = """
-    select  fecha, sum(cantidad) as acumulados, sum(recuperados) as recuperados, sum( activos) as activos, sum(caso_dia) as caso_dia
-    from ( select distinct id, nom_prov, nom_cant, nom_dist as distrito from distrito ) as d, acumulado_distrito a
-    where a.codigo_distrito = d.id
-	and d.nom_prov = '{province}'
-    group by fecha order by fecha asc;"""
-
-    return query.format(province=nombre)
-
-
-# Obtiene la cantidad de casos acumulados, activos, recuperados y
-def getQueryDistrito(provincia, canton, distrito):
-    query = """
-    select  fecha, sum(cantidad) as acumulados, sum(recuperados) as recuperados, sum( activos) as activos, sum(caso_dia) as caso_dia
-    from ( select distinct id, nom_prov, nom_cant, nom_dist as distrito from distrito ) as d, acumulado_distrito a
-    where a.codigo_distrito = d.id
-	and d.nom_prov = '{province}'
-    and d.nom_cant = '{canton}'
-    and d.nom_dist = '{distrito}'
-    group by fecha order by fecha asc;"""
-    return query.format(province=provincia, canton=canton, distrito=distrito)
-
-
-# ? PREGUNTAR, no tenemos datos de coef_var ni pendiente
-# * se va a usar incidence_rate en vez de coef_var, pendiente puede ser crecimiento, ta es tasa de ataque
-def getQueryAcumuladosFecha(fecha):
-    query = """
-        select d.id, d.nom_dist, d.nom_cant, d.nom_prov,
-        ad.cantidad, ad.recuperados, ad.fallecidos, ad.activos, ad.ta, ad.coef_var, ad.pendiente, 
-            case when ad.condicion = 'Naranja'  then '#ffbe61' 
-                 when ad.condicion = 'Amarillo' then '#ffff00' end
-        from distrito d left join acumulado_distrito ad on ad.codigo_distrito = d.id
-        where fecha = '{date}'
-        order by ad.cantidad desc;
-    """
-    return query.format(date=fecha)
-
-
-# !No migrar, está sobre distrito
-def getQueryProvinceMap(province, fecha):
-    query = """
-    select  *, 
-        ( select cantidad 
-          from acumulado_distrito 
-          where fecha = '{date}' 
-          and  codigo_distrito = d.id
-        ) 
-    from distrito d 
-    where d.nom_prov = '{provincia}'
-    order by cantidad asc;"""
-    return query.format(date=fecha, provincia=province)
-
-
-def getMaxCasosProvinciaFecha(date):
-    query = """
-    select max(sum) from (
-        select sum(ad.cantidad), d.nom_prov from acumulado_distrito ad join distrito d on ad.codigo_distrito = d.id
-        where fecha = '{fecha}'
-        group by d.nom_prov
-	) acumulados
-    """
-    return query.format(fecha=date)
-
-
-# PENDIENTE
-def getCasosProvinciaFecha(columna, fecha, provincia):
-    query = """
-        select sum(ad.{col}), provincia from acumulado_distrito ad join distrito d on ad.codigo_distrito = d.id
-        where fecha = '{date}'
-        and provincia = '{province}'
-        group by provincia
-    """
-    return query.format(col=columna, date=fecha, province=provincia)
-
-
 def getQueryNacional():
-    query = """
-    select fecha, sum(cantidad) as acumulados, sum(recuperados) as recuperados, sum(activos) as activos, sum(caso_dia) as caso_dia
-    from acumulado_distrito
-    group by fecha order by fecha asc;"""
-    return query
-
-
-def getQueryRt(fecha):
-    query = """
-    select  * from rt_semanal
-    order by semana asc;"""
-    return query
-
-
-def getQueryUCIOptimista():
-    query = """
-    select 	fecha, conac_hospi, conac_uci from  proyeccion_hosp;
     """
-    return query
+    Crea la consulta para obtener la cantidad de casos acumulados, recuperados, activos y casos nuevos por fecha, para todo el país.
 
+    Retorna
+    -------
+    str
+        Consulta que retorna la cantidad de casos acumulados, recuperados, activos y casos nuevos por fecha, para todo el país.
+    """
 
-def getQueryUCIPesimista():
     query = """
-    select 	fecha, sinac_hospi, sinac_uci  from  proyeccion_hosp;
+        select fecha, sum(cantidad) as acumulados, sum(recuperados) as recuperados, sum(activos) as activos, sum(caso_dia) as caso_dia
+        from acumulado_distrito
+        group by fecha order by fecha asc;
     """
     return query
 
 
 def getQueryOrdenesPers(fecha):
+    """
+    Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, a nivel nacional.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de la consulta.
+
+    Retorna
+    -------
+    str
+        Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha.
+    """
+
     if fecha != None:
         query = """
             select sum(denuncias_personas) as pers, 0 as den from ordenes_fecha
@@ -183,6 +146,22 @@ def getQueryOrdenesPers(fecha):
 
 
 def getQueryOrdenesPersProv(fecha, provincia):
+    """
+    Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para una provincia dada.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de la consulta.
+    provincia : str
+        Nombre de la provincia para la que se desea obtener los datos de la consulta.
+
+    Retorna
+    -------
+    str
+        Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para una provincia dada.
+    """
+
     if fecha != None:
         query = """
             select sum(denuncias_personas) as pers, 0 as den from ordenes_fecha
@@ -201,6 +180,24 @@ def getQueryOrdenesPersProv(fecha, provincia):
 
 
 def getQueryOrdenesPersCanton(fecha, provincia, canton):
+    """
+    Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un cantón dado.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de la consulta.
+    provincia : str
+        Nombre de la provincia para la que se desea obtener los datos de la consulta.
+    canton : str
+        Nombre del cantón para el cual se desea obtener los datos de la consulta.
+
+    Retorna
+    -------
+    str
+        Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un cantón dado.
+    """
+
     if fecha != None:
         query = """
             select sum(denuncias_personas) as pers, 0 as den from ordenes_fecha
@@ -219,6 +216,26 @@ def getQueryOrdenesPersCanton(fecha, provincia, canton):
 
 
 def getQueryOrdenesPersDist(fecha, provincia, canton, distrito):
+    """
+    Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un distrito dado.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de la consulta.
+    provincia : str
+        Nombre de la provincia para la que se desea obtener los datos de la consulta.
+    canton : str
+        Nombre del cantón para el cual se desea obtener los datos de la consulta.
+    distrito : str
+        Nombre del distrito para el cual se desea obtener los datos de la consulta.
+
+    Retorna
+    -------
+    str
+        Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un distrito dado.
+    """
+
     if fecha != None:
         query = """
             select denuncias_personas as pers, 0 as den from ordenes_fecha
@@ -238,89 +255,17 @@ def getQueryOrdenesPersDist(fecha, provincia, canton, distrito):
         return query.format(distrito=distrito, canton=canton, provincia=provincia)
 
 
-# --------------------------------------------------------------------------
-
-
-def getQueryOrdenesEstProv(provincia):
-    query = """
-	select 	sum(cant_ord_est) as est, sum(cant_den_est) as den  from  ordenes_est where substring( codigo::varchar, 1,1 ) = ( select fid::varchar from provincia p where LOWER( p.nprovincia ) = LOWER('{province}')  ); 
-    """
-    return query.format(province=provincia)
-
-
-def getQueryOrdenesEst():
-    query = """
-	select 	sum(cant_ord_est) as est, sum(cant_den_est) as den  from  ordenes_est;
-    """
-    return query
-
-
-def getQueryOrdenesEstDist(provincia, canton, distrito):
-    query = """
-	select 	sum(cant_ord_est) as est, sum(cant_den_est) as den  from  ordenes_est;
-    """
-    return query
-
-
-def getQueryOrdenesEstCanton(provincia, canton):
-    query = """
-	select 	sum(cant_ord_est) as est, sum(cant_den_est) as den  from  ordenes_est;
-    """
-    return query
-
-
-# Queries migrados de geom_creator
-
-
-def get_leaflet_prov():
-    query = """
-		select p.wkb_geometry, p.nprovincia as nombre 
-		from provincia p  ;
-		"""
-
-    conn = getAuthConnection()
-
-    df = gpd.GeoDataFrame.from_postgis(query, conn, geom_col="wkb_geometry")
-    gjson = df.to_crs(epsg="4326").to_json()
-
-    closeConnection(conn)
-
-    return gjson  #
-
-
-def get_prov():
-    query = """
-		select p.wkb_geometry, p.nprovincia as nombre 
-		from provincia p  ;
-		"""
-
-    conn = getAuthConnection()
-
-    df = gpd.GeoDataFrame.from_postgis(query, conn, geom_col="wkb_geometry")
-    gjson = df.to_crs(epsg="4326").to_json()
-
-    closeConnection(conn)
-
-    return gjson
-
-
-def get_cant():
-    query = """
-		select c.wkb_geometry, c.nom_cant_1 as nombre
-		from canton c;
-		"""
-
-    conn = getAuthConnection()
-
-    df = gpd.GeoDataFrame.from_postgis(query, conn, geom_col="wkb_geometry")
-    gjson = df.to_crs(epsg="4326").to_json()
-
-    closeConnection(conn)
-
-    return gjson  #
-
-
 def get_sedes():
+    """
+    Obtiene la capa de sedes de examen de admisión para el proces de 2020-2021, representados como puntos en el mapa, cada uno con su respectivo nombre.
+
+    Retorna
+    -------
+    Geojson
+        Capa de sedes de examen de admisión para el proces de 2020-2021, representados como puntos en el mapa, con su respectivo nombre.
+
+    """
+
     query = """
         select wkb_geometry, nombre, total from sede_examen_adminsion
     """
@@ -336,6 +281,16 @@ def get_sedes():
 
 
 def get_hogares():
+    """
+    Obtiene la capa de hogares de ancianos en Costa Rica, representados como puntos en el mapa, cada uno con su respectivo nombre.
+
+    Retorna
+    -------
+    Geojson
+        Capa de hogares de ancianos en Costa Rica, representados como puntos en el mapa, cada uno con su respectivo nombre.
+
+    """
+
     query = """
         select wkb_geometry, nombre from hogar
     """
@@ -351,6 +306,16 @@ def get_hogares():
 
 
 def get_indigenas():
+    """
+    Obtiene la capa de asentamientos indígenas de Costa Rica, representados como áreas naranjas en el mapa, cada una con su respectivo nombre.
+
+    Retorna
+    -------
+    Geojson
+        Capa de asentamientos indígenas de Costa Rica, representados como áreas naranjas en el mapa, cada una con su respectivo nombre.
+
+    """
+
     query = """
         select wkb_geometry, pueblo from terr_indigena
     """
@@ -367,6 +332,22 @@ def get_indigenas():
 
 
 def get_dist(fecha):
+    """
+    Obtiene las capas que componen el mapa que son los distritos con todos sus metadatos: casos activos, casos acumulados, casos fallecidos, casos recuperados, casos nuevos,
+    pendiente, tasa de ataque, coeficiente de variación, índice socio sanitario, denuncias al 911, tasa de morbilidad, cantidad de población total, cantidad de población
+    adulta mayor, porcentaje de pobreza, nombre del distrito, nombre del cantón y nombre de provincia, todo esto para cada distrito para una fecha dada.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener las capas del mapa.
+
+    Retorna
+    -------
+    Geojson
+        Capa principal del mapa con todos los metadatos incluidos en la geometría de cada distrito, para una fecha dada.
+    """
+
     query = """
         select distinct ST_SimplifyPreserveTopology( d.wkb_geometry, 0.001 ) as wkb_geometry, d.codigo_distr as codigo, d.nom_dist as nombre, d.nom_prov as proInfo, nom_cant as cantInfo,
         p.poblacion as pobInfo, p.pob_pobre as pobPobre, p.pob_am as pobAm, count(den.consecutivo) as denuncias,
@@ -378,7 +359,6 @@ def get_dist(fecha):
         ( select recuperados from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
         ( select coef_var || '%' as coef_var from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
         ( select grupo as socio from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
-        ( select ids_salud from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
         ( select condicion from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}'),
         ( select caso_dia from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = '{fecha}')
         from distrito d join datos_distrito p on d.codigo_distr = p.codigo_distrito
@@ -403,6 +383,15 @@ def get_dist(fecha):
 
 
 def getLastDate():
+    """
+    Obtiene la fecha más reciente registrada para la que se conocen datos en la base de datos.
+
+    Retorna
+    -------
+    str
+        Fecha más reciente registrada en la tabla acumulado_distrito, en el formato YYYY-MM-DD.
+    """
+
     conn = getAuthConnection()
     cursor = conn.cursor()
     query = "select fecha from acumulado_distrito ad order by fecha desc limit 1"
@@ -414,6 +403,20 @@ def getLastDate():
 
 
 def obtenerDatosPais(fecha):
+    """
+    Obtiene los datos a nivel país de hospitalizaciones en salón, hospitalizaciones en UCI e índice de positividad registrados en una fecha dada.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desean obtener los datos.
+
+    Retorna
+    -------
+    dict
+        Diccionario que contiene los datos a nivel país de hospitalizaciones en salón, hospitalizaciones en UCI e índice de positividad registrados en una fecha dada.
+    """
+
     query = """
         select casos_salon, casos_uci, indice_positividad from datos_pais where fecha = '{fecha}';
     """
@@ -433,6 +436,22 @@ def obtenerDatosPais(fecha):
 
 
 def getPredicciones(mes, semana):
+    """
+    Obtiene las predicciones de casos activos por distrito para un mes y semana de predicción dados.
+
+    Parámetros
+    ----------
+    mes : int
+        Número de mes de 1 a 12 para el cual se desea obtener las predicciones.
+    semana : str
+        Semana (I, II, III, IV, V) para la cual se desea obtener las predicciones según el mes dado.
+
+    Retorna
+    -------
+    dict
+        Diccionario que contiene las predicciones consultadas para el mes y semana dados.
+    """
+
     query = """
         SELECT codigo_distrito, activos, grupo as socio from prediccion_distrito WHERE mes = {mes} and semana = '{semana}'
     """
@@ -455,6 +474,22 @@ def getPredicciones(mes, semana):
 
 
 def obtenerProyecciones(fecha, muestra):
+    """
+    Obtiene los datos de proyecciones para muestras determinadas de distritos, para una fecha que caiga en el rango de una proyección registrada en la base de datos.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de proyecciones para muestras determinadas de distritos.
+    muestra : int
+        Tamaño predeterminado de la muestra en la base de datos: 15, 20, 40 o 50.
+
+    Retorna
+    -------
+    dict
+        Diccionario que contiene los datos de proyecciones para muestras determinadas de distritos, para una fecha que caiga en el rango de una proyección registrada en la base de datos.
+    """
+
     query = """
         SELECT codigo_dta, porcentaje, muestra from proyeccion_distrito WHERE fecha_inicio <= '{fecha}' and fecha_fin > '{fecha}' and muestra = {muestra}
     """
@@ -476,24 +511,23 @@ def obtenerProyecciones(fecha, muestra):
     return datos
 
 
-def getQueryPreva(conglomerado):
-    query = """
-	select codigo_distr, nom_prov, nom_cant, pendiente, nom_dist, fecha, cantidad, clas_ids
-    FROM distrito d, acumulado_distrito ad 
-    where d.codigo_distr = ad.codigo_distrito and clas_ids  like '%{conglo}%' order by nom_dist, cantidad;
-    """
-    return query.format(conglo=conglomerado)
-
-
-def getQueryPrevaParams(conglomerado):
-    query = """
-	select max(pendiente), min(pendiente), max(cantidad), min(cantidad)
-    from acumulado_distrito ad where clas_ids like  '%Muy bajo Desarrollo%';
-    """
-    return query.format(conglo=conglomerado)
-
-
 def getQueryVacunas(fecha):
+    """
+    Obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas para una fecha dada, a nivel país.
+    Este método retorna datos cuando la fecha dada coincide con alguna fecha donde existen datos de vacunación registrados en la base de datos.
+    Si no hay datos para la fecha dada, se debe usar getQueryVacunasDefault().
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de vacunación.
+
+    Retorna
+    -------
+    str
+        Consulta que obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas para una fecha dada, a nivel país.
+    """
+
     query = """
         SELECT vacunas_primera_dosis, vacunas_segunda_dosis, vacunas_primera_dosis + vacunas_segunda_dosis as total_vacunas, to_char(fecha, 'DD-MM-YYYY') FROM datos_pais WHERE fecha = '{fecha}' and vacunas_primera_dosis is not null
     """
@@ -501,6 +535,15 @@ def getQueryVacunas(fecha):
 
 
 def getQueryVacunasDefault():
+    """
+    Obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas en la última fecha en la que hayan datos de vacunación registrados en la base de datos, a nivel país.
+
+    Retorna
+    -------
+    str
+        Consulta que obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas en la última fecha de la que se tengan datos de vacunación en la base de datos, a nivel país.
+    """
+
     query = """
         SELECT vacunas_primera_dosis, vacunas_segunda_dosis, vacunas_primera_dosis + vacunas_segunda_dosis AS total_vacunas, to_char(fecha, 'DD-MM-YYYY') FROM datos_pais WHERE vacunas_primera_dosis IS NOT NULL ORDER BY fecha DESC LIMIT 1
     """
