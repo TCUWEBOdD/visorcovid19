@@ -47,29 +47,36 @@ class denuncia_911(db.Model):
 @app.errorhandler(Exception)
 def server_error(err):
     app.logger.exception(err)
-    noti = Notificador()
-    noti.notificar(str(err))
     return err, 500
+
+
+@app.route("/", methods=["GET"])
+def home():
+    return Response("Servicio web funcionando correctamente.", status=200)
 
 
 @app.route("/denuncia911", methods=["POST"])
 def agregar_datos_911():
-    token = request.headers["Authorization"]
-    print("Received request!")
-    if token == TOKEN_DEFINED:
-        request_data = request.json
-        print("Authenticated")
-        print(request_data)
-        for i in request_data:
-            denuncia = denuncia_911(
-                i["consecutivo"], i["cod_dist"], i["direccion"], i["fecha"]
-            )
-            db.session.add(denuncia)
-            db.session.commit()
+    try:
+        token = request.headers["Authorization"]
+        print("Received request!")
+        if token == TOKEN_DEFINED:
+            request_data = request.json
+            print("Authenticated")
+            print(request_data)
+            for i in request_data:
+                denuncia = denuncia_911(
+                    i["consecutivo"], i["cod_dist"], i["direccion"], i["fecha"]
+                )
+                db.session.add(denuncia)
+                db.session.commit()
 
-        return Response("Datos insertados correctamente", status=200)
+            return Response("Datos insertados correctamente", status=200)
 
-    return Response("Incorrect Token", status=401)
+        return Response("Incorrect Token", status=401)
+    except Exception as err:
+        noti = Notificador()
+        noti.notificar(str(err))
 
 
 if __name__ == "__main__":
