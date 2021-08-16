@@ -1,0 +1,885 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>visorcovid19.mapa.graficador API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>visorcovid19.mapa.graficador</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from plotly.offline import plot
+import plotly.graph_objs as go
+import pandas as pd
+import numpy as np
+from mapa.libreria.bd import getAuthConnection, closeConnection
+from mapa.databaseQueries import *
+import plotly.express as px
+from plotly.subplots import make_subplots
+import plotly.io as pio
+import random
+import covid_project.settings as sysconf
+
+CANT_CASOS = 100
+PLOT_SIZE = 170
+
+cwd = sysconf.BASE_DIR
+
+
+def nacional():
+    query = getQueryNacional()
+
+    conn = getAuthConnection()
+
+    df = pd.read_sql(query, conn)
+
+    fig = make_subplots(specs=[[{&#34;secondary_y&#34;: True}]], rows=1, cols=1)
+
+    fig.add_trace(
+        go.Scatter(
+            x=df.iloc[:, 0].values,
+            y=df.iloc[:, 3].values,
+            name=&#34;Activos&#34;,
+            line=dict(color=&#34;red&#34;),
+        ),
+        secondary_y=True,
+        row=1,
+        col=1,
+    )
+
+    # barras de casos nuevos por día
+    fig.add_trace(
+        go.Bar(
+            x=df.iloc[:, 0].values,
+            y=df.iloc[:, 4].values,
+            name=&#34;Nuevos&#34;,
+            marker_color=&#34;gray&#34;,
+        ),
+        secondary_y=False,
+        row=1,
+        col=1,
+    )
+
+    # línea de casos recuperados
+    fig.add_trace(
+        go.Scatter(
+            x=df.iloc[:, 0].values,
+            y=df.iloc[:, 2].values,
+            mode=&#34;lines+markers&#34;,
+            name=&#34;Recuperados&#34;,
+            line=dict(color=&#34;blue&#34;),
+        ),
+        secondary_y=False,
+        row=1,
+        col=1,
+    )
+
+    fig.update_layout(
+        margin=dict(l=0, r=0, t=5, b=5),
+        plot_bgcolor=&#34;white&#34;,
+        height=PLOT_SIZE * 2,
+        legend=dict(
+            x=0.1,
+            y=0.95,
+            traceorder=&#34;normal&#34;,
+            font=dict(
+                size=12,
+            ),
+        ),
+    )
+
+    fig.update_layout(
+        legend=dict(yanchor=&#34;top&#34;, y=1, xanchor=&#34;left&#34;, x=0, bgcolor=&#34;rgba(0,0,0,0)&#34;)
+    )
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(gridcolor=&#34;rgb(240, 240, 240)&#34;)
+
+    plt_div = plot(fig, output_type=&#34;div&#34;)
+
+    closeConnection(conn)
+
+    return plt_div
+
+
+def gauge_vacunas(fecha):
+    query = getQueryVacunas(fecha)
+
+    conn = getAuthConnection()
+
+    df = pd.read_sql(query, conn)
+
+    # Obtiene los datos de vacunación de la fecha del visor, y si no hay datos, carga la última fecha en la que hay datos
+    if len(df) == 0:
+        query = getQueryVacunasDefault()
+        df = pd.read_sql(query, conn)
+
+    total = df.iloc[0, 2]
+    fecha = df.iloc[0, 3]
+
+    fig = make_subplots(
+        specs=[[{&#34;type&#34;: &#34;indicator&#34;}], [{&#34;type&#34;: &#34;indicator&#34;}]],
+        rows=2,
+        cols=1,
+        row_heights=[0.5, 0.5],
+    )
+
+    grafico = go.Indicator(
+        mode=&#34;gauge+number+delta&#34;,
+        value=total,
+        domain={&#34;x&#34;: [0, 1], &#34;y&#34;: [0, 1]},
+        # delta = {&#39;reference&#39;: 380}, se puede colocar como referencia el total de vacunas de la fecha anterior
+        title={&#34;text&#34;: &#34;Total de vacunas aplicadas al &#34; + str(fecha)},
+        gauge={
+            &#34;axis&#34;: {&#34;range&#34;: [None, 7400000]},
+            &#34;threshold&#34;: {
+                &#34;line&#34;: {&#34;color&#34;: &#34;red&#34;, &#34;width&#34;: 4},
+                &#34;thickness&#34;: 0.75,
+                &#34;value&#34;: 7400000,
+            },
+        },
+        number={
+            &#34;valueformat&#34;: &#34;,&#34; + str(2) + &#34;f&#34;,
+        },
+    )
+
+    barras = gauge_estimacion_vacunas()
+
+    fig.add_trace(grafico, row=1, col=1)
+    fig.add_trace(barras, row=2, col=1)
+
+    fig.update_layout(paper_bgcolor=&#34;rgba(0,0,0,0)&#34;, height=650)
+
+    plt_div = plot(fig, output_type=&#34;div&#34;)
+
+    closeConnection(conn)
+
+    return plt_div
+
+
+def gauge_cuad(fecha, provincia=None, canton=None, distrito=None):
+
+    fig = make_subplots(
+        specs=[[{&#34;type&#34;: &#34;indicator&#34;}], [{&#34;type&#34;: &#34;scatter&#34;}]],
+        rows=2,
+        cols=1,
+        row_heights=[0.3, 0.7],
+    )
+
+    # Query para gráfico gauge en una fecha específica
+    if provincia == &#34;Todas&#34;:
+        query = getQueryOrdenesPers(fecha)
+    else:
+        if distrito != None and distrito != &#34;&#34; and distrito != &#34;NONE&#34;:
+            query = getQueryOrdenesPersDist(fecha, provincia, canton, distrito)
+        elif canton != None and canton != &#34;&#34; and canton != &#34;NONE&#34;:
+            query = getQueryOrdenesPersCanton(fecha, provincia, canton)
+        elif provincia != None and provincia != &#34;&#34; and provincia != &#34;NONE&#34;:
+            query = getQueryOrdenesPersProv(fecha, provincia)
+        else:
+            query = getQueryOrdenesPers(fecha)
+
+    conn = getAuthConnection()
+
+    df = pd.read_sql(query, conn)
+    if df.empty or df.iloc[0, 0] is None:
+        ordenesPersonas = 0
+    else:
+        ordenesPersonas = df.iloc[0, 0]
+
+    gauge = go.Indicator(
+        mode=&#34;gauge+number&#34;,
+        value=ordenesPersonas,
+        domain={&#34;x&#34;: [0, 1], &#34;y&#34;: [0, 1]},
+        title={&#34;text&#34;: &#34;Órdenes sanitarias a personas&#34;},
+        number={
+            &#34;valueformat&#34;: &#34;,&#34; + str(2) + &#34;f&#34;,
+        },
+        gauge={
+            &#34;axis&#34;: {&#34;range&#34;: [None, ordenesPersonas * 1.2]},
+            &#34;steps&#34;: [
+                {&#34;range&#34;: [0, ordenesPersonas * 0.4], &#34;color&#34;: &#34;#ffea00&#34;},
+                {
+                    &#34;range&#34;: [ordenesPersonas * 0.4, ordenesPersonas * 0.6],
+                    &#34;color&#34;: &#34;orange&#34;,
+                },
+                {
+                    &#34;range&#34;: [ordenesPersonas * 0.6, ordenesPersonas * 1.1],
+                    &#34;color&#34;: &#34;red&#34;,
+                },
+            ],
+            &#34;threshold&#34;: {
+                &#34;line&#34;: {&#34;color&#34;: &#34;#013220&#34;, &#34;width&#34;: 4},
+                &#34;thickness&#34;: 0.75,
+                &#34;value&#34;: ordenesPersonas,
+            },
+        },
+    )
+
+    # Query para gráfico scatter, para todas las fechas
+    if provincia == &#34;Todas&#34;:
+        query = getQueryOrdenesPers(None)
+    else:
+        if distrito != None and distrito != &#34;&#34; and distrito != &#34;NONE&#34;:
+            query = getQueryOrdenesPersDist(None, provincia, canton, distrito)
+        elif canton != None and canton != &#34;&#34; and canton != &#34;NONE&#34;:
+            query = getQueryOrdenesPersCanton(None, provincia, canton)
+        elif provincia != None and provincia != &#34;&#34; and provincia != &#34;NONE&#34;:
+            query = getQueryOrdenesPersProv(None, provincia)
+        else:
+            query = getQueryOrdenesPers(None)
+
+    df = pd.read_sql(query, conn)
+
+    scatter = go.Scatter(
+        x=df.iloc[:, 2].values,
+        y=df.iloc[:, 0].values,
+        name=&#34;Órdenes&#34;,
+        line=dict(color=&#34;red&#34;),
+        mode=&#34;lines&#34;,
+    )
+
+    fig.add_trace(gauge, row=1, col=1)
+
+    fig.add_trace(scatter, row=2, col=1)
+
+    fig.update_layout(paper_bgcolor=&#34;rgba(0,0,0,0)&#34;, height=700)
+
+    fig.update_xaxes(showgrid=False, title=&#34;Tiempo&#34;)
+    fig.update_yaxes(gridcolor=&#34;rgb(240, 240, 240)&#34;, title=&#34;Órdenes sanitarias&#34;)
+
+    plt_div = plot(fig, output_type=&#34;div&#34;)
+
+    closeConnection(conn)
+
+    return plt_div
+
+
+def grafico_progreso():
+    df = pd.read_csv(cwd + &#34;/vacunacion/vacunas_v2.csv&#34;)
+    fig1 = go.Figure()
+    fig1 = make_subplots(specs=[[{&#34;secondary_y&#34;: True}]])
+
+    fig1.add_trace(
+        go.Scatter(
+            x=df[&#34;fecha&#34;],
+            y=df[&#34;total&#34;],
+            name=&#34;Dosis Estimadas&#34;,
+            line=dict(color=&#34;blue&#34;),
+        ),
+        secondary_y=False,
+    )
+
+    fig1.add_trace(
+        go.Scatter(
+            x=df[&#34;fecha&#34;],
+            y=df[&#34;efect&#34;],
+            name=&#34;Dosis Aplicadas&#34;,
+            line=dict(
+                color=&#34;red&#34;,
+            ),
+        ),
+        secondary_y=False,
+    )
+
+    fig1.add_trace(
+        go.Bar(
+            x=df[&#34;fecha&#34;],
+            y=df[&#34;reservas_reales&#34;],
+            name=&#34;Estimación de Reserva&#34;,
+            marker_color=&#34;rgb(158, 178, 225)&#34;,
+            opacity=0.6,
+            width=[0.2],
+        ),
+        secondary_y=True,
+    )
+
+    fig1.update_layout(
+        title=&#34;Dosis Estimadas Aplicables y Efectivas Aplicadas&#34;,
+        xaxis_title=&#34;Semana de la Campaña de Vacunación&#34;,
+    )
+
+    fig1.update_yaxes(title_text=&#34;Dosis Aplicadas&#34;, secondary_y=False)
+
+    fig1.update_yaxes(title_text=&#34;Reserva Estimada&#34;, secondary_y=True)
+
+    fig1.update_layout(
+        legend=dict(yanchor=&#34;top&#34;, y=1, xanchor=&#34;left&#34;, x=0, bgcolor=&#34;rgba(0,0,0,0)&#34;)
+    )
+
+    fig1.update_xaxes(showgrid=False)
+    fig1.update_yaxes(gridcolor=&#34;rgb(240, 240, 240)&#34;)
+
+    plt_div = plot(fig1, output_type=&#34;div&#34;)
+    return plt_div
+
+
+def estimador_semanas(
+    cantidad_vacunas=list,
+    r=0.5,
+    meta=3500000,
+    c=0,  # r grado de aplicación de 0.5-1
+    media_llegada=200000,
+    desviacion_llegada=30000,
+):
+    primera_dosis = []
+    estimadas_llegadas = []
+    primera_dosis_estimada = []
+
+    for i in cantidad_vacunas:  # cantidad de primeras dosis
+        primera_dosis.append(i * r)
+
+    if sum(primera_dosis) &lt; meta:  # calcula las llegadas restantes
+        while sum(estimadas_llegadas) &lt; ((meta * 2) - sum(cantidad_vacunas)):
+            t = int(random.gauss(media_llegada, desviacion_llegada))
+            estimadas_llegadas.append(t)
+
+    while sum(primera_dosis) &lt; (
+        meta - sum(primera_dosis_estimada)
+    ):  # calcula las primeras dosis restantes
+        primera_dosis_estimada.append(estimadas_llegadas[c] * r)
+        c = c + 1
+
+    total_aplicadas = sum(primera_dosis) + sum(primera_dosis_estimada)
+    total_semanas = len(primera_dosis) + len(primera_dosis_estimada)
+    total_real = len(primera_dosis)
+    return total_real, total_semanas
+
+
+def grafico_gauge(
+    cantidad_vacunas=list,
+    r=0.5,
+    meta=3500000,  # r grado de aplicación de 0.5-1
+    media_llegada=200000,
+    desviacion_llegada=30000,
+):
+    semanas, estimacion_semanas = estimador_semanas(
+        cantidad_vacunas=cantidad_vacunas,
+        r=r,
+        meta=meta,
+        media_llegada=media_llegada,
+        desviacion_llegada=desviacion_llegada,
+    )
+    fig = go.Indicator(
+        mode=&#34;gauge+number+delta&#34;,
+        value=estimacion_semanas,
+        domain={&#34;x&#34;: [0, 1], &#34;y&#34;: [0, 1]},
+        delta={
+            &#34;reference&#34;: semanas
+        },  # se puede colocar como referencia el total de vacunas de la fecha anterior
+        title={&#34;text&#34;: &#34;Semanas para inmunidad al &#34; + str(r * 100) + &#34;%&#34;},
+        gauge={
+            &#34;axis&#34;: {&#34;range&#34;: [None, 120]},
+            &#34;threshold&#34;: {
+                &#34;line&#34;: {&#34;color&#34;: &#34;red&#34;, &#34;width&#34;: 4},
+                &#34;thickness&#34;: 0.75,
+                &#34;value&#34;: 50,
+            },
+        },
+        number={
+            &#34;valueformat&#34;: &#34;,&#34; + str(2) + &#34;f&#34;,
+        },
+    )
+
+    return fig
+
+
+def gauge_estimacion_vacunas():
+    df = pd.read_csv(cwd + &#34;/vacunacion/vacunas_v2.csv&#34;)
+
+    llegadas = df[&#34;cantidad&#34;].tolist()
+
+    return grafico_gauge(
+        cantidad_vacunas=llegadas, r=0.75
+    )  # aplicando el 75% de lo que llegue a primera dosis</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="visorcovid19.mapa.graficador.estimador_semanas"><code class="name flex">
+<span>def <span class="ident">estimador_semanas</span></span>(<span>cantidad_vacunas=builtins.list, r=0.5, meta=3500000, c=0, media_llegada=200000, desviacion_llegada=30000)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def estimador_semanas(
+    cantidad_vacunas=list,
+    r=0.5,
+    meta=3500000,
+    c=0,  # r grado de aplicación de 0.5-1
+    media_llegada=200000,
+    desviacion_llegada=30000,
+):
+    primera_dosis = []
+    estimadas_llegadas = []
+    primera_dosis_estimada = []
+
+    for i in cantidad_vacunas:  # cantidad de primeras dosis
+        primera_dosis.append(i * r)
+
+    if sum(primera_dosis) &lt; meta:  # calcula las llegadas restantes
+        while sum(estimadas_llegadas) &lt; ((meta * 2) - sum(cantidad_vacunas)):
+            t = int(random.gauss(media_llegada, desviacion_llegada))
+            estimadas_llegadas.append(t)
+
+    while sum(primera_dosis) &lt; (
+        meta - sum(primera_dosis_estimada)
+    ):  # calcula las primeras dosis restantes
+        primera_dosis_estimada.append(estimadas_llegadas[c] * r)
+        c = c + 1
+
+    total_aplicadas = sum(primera_dosis) + sum(primera_dosis_estimada)
+    total_semanas = len(primera_dosis) + len(primera_dosis_estimada)
+    total_real = len(primera_dosis)
+    return total_real, total_semanas</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.graficador.gauge_cuad"><code class="name flex">
+<span>def <span class="ident">gauge_cuad</span></span>(<span>fecha, provincia=None, canton=None, distrito=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def gauge_cuad(fecha, provincia=None, canton=None, distrito=None):
+
+    fig = make_subplots(
+        specs=[[{&#34;type&#34;: &#34;indicator&#34;}], [{&#34;type&#34;: &#34;scatter&#34;}]],
+        rows=2,
+        cols=1,
+        row_heights=[0.3, 0.7],
+    )
+
+    # Query para gráfico gauge en una fecha específica
+    if provincia == &#34;Todas&#34;:
+        query = getQueryOrdenesPers(fecha)
+    else:
+        if distrito != None and distrito != &#34;&#34; and distrito != &#34;NONE&#34;:
+            query = getQueryOrdenesPersDist(fecha, provincia, canton, distrito)
+        elif canton != None and canton != &#34;&#34; and canton != &#34;NONE&#34;:
+            query = getQueryOrdenesPersCanton(fecha, provincia, canton)
+        elif provincia != None and provincia != &#34;&#34; and provincia != &#34;NONE&#34;:
+            query = getQueryOrdenesPersProv(fecha, provincia)
+        else:
+            query = getQueryOrdenesPers(fecha)
+
+    conn = getAuthConnection()
+
+    df = pd.read_sql(query, conn)
+    if df.empty or df.iloc[0, 0] is None:
+        ordenesPersonas = 0
+    else:
+        ordenesPersonas = df.iloc[0, 0]
+
+    gauge = go.Indicator(
+        mode=&#34;gauge+number&#34;,
+        value=ordenesPersonas,
+        domain={&#34;x&#34;: [0, 1], &#34;y&#34;: [0, 1]},
+        title={&#34;text&#34;: &#34;Órdenes sanitarias a personas&#34;},
+        number={
+            &#34;valueformat&#34;: &#34;,&#34; + str(2) + &#34;f&#34;,
+        },
+        gauge={
+            &#34;axis&#34;: {&#34;range&#34;: [None, ordenesPersonas * 1.2]},
+            &#34;steps&#34;: [
+                {&#34;range&#34;: [0, ordenesPersonas * 0.4], &#34;color&#34;: &#34;#ffea00&#34;},
+                {
+                    &#34;range&#34;: [ordenesPersonas * 0.4, ordenesPersonas * 0.6],
+                    &#34;color&#34;: &#34;orange&#34;,
+                },
+                {
+                    &#34;range&#34;: [ordenesPersonas * 0.6, ordenesPersonas * 1.1],
+                    &#34;color&#34;: &#34;red&#34;,
+                },
+            ],
+            &#34;threshold&#34;: {
+                &#34;line&#34;: {&#34;color&#34;: &#34;#013220&#34;, &#34;width&#34;: 4},
+                &#34;thickness&#34;: 0.75,
+                &#34;value&#34;: ordenesPersonas,
+            },
+        },
+    )
+
+    # Query para gráfico scatter, para todas las fechas
+    if provincia == &#34;Todas&#34;:
+        query = getQueryOrdenesPers(None)
+    else:
+        if distrito != None and distrito != &#34;&#34; and distrito != &#34;NONE&#34;:
+            query = getQueryOrdenesPersDist(None, provincia, canton, distrito)
+        elif canton != None and canton != &#34;&#34; and canton != &#34;NONE&#34;:
+            query = getQueryOrdenesPersCanton(None, provincia, canton)
+        elif provincia != None and provincia != &#34;&#34; and provincia != &#34;NONE&#34;:
+            query = getQueryOrdenesPersProv(None, provincia)
+        else:
+            query = getQueryOrdenesPers(None)
+
+    df = pd.read_sql(query, conn)
+
+    scatter = go.Scatter(
+        x=df.iloc[:, 2].values,
+        y=df.iloc[:, 0].values,
+        name=&#34;Órdenes&#34;,
+        line=dict(color=&#34;red&#34;),
+        mode=&#34;lines&#34;,
+    )
+
+    fig.add_trace(gauge, row=1, col=1)
+
+    fig.add_trace(scatter, row=2, col=1)
+
+    fig.update_layout(paper_bgcolor=&#34;rgba(0,0,0,0)&#34;, height=700)
+
+    fig.update_xaxes(showgrid=False, title=&#34;Tiempo&#34;)
+    fig.update_yaxes(gridcolor=&#34;rgb(240, 240, 240)&#34;, title=&#34;Órdenes sanitarias&#34;)
+
+    plt_div = plot(fig, output_type=&#34;div&#34;)
+
+    closeConnection(conn)
+
+    return plt_div</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.graficador.gauge_estimacion_vacunas"><code class="name flex">
+<span>def <span class="ident">gauge_estimacion_vacunas</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def gauge_estimacion_vacunas():
+    df = pd.read_csv(cwd + &#34;/vacunacion/vacunas_v2.csv&#34;)
+
+    llegadas = df[&#34;cantidad&#34;].tolist()
+
+    return grafico_gauge(
+        cantidad_vacunas=llegadas, r=0.75
+    )  # aplicando el 75% de lo que llegue a primera dosis</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.graficador.gauge_vacunas"><code class="name flex">
+<span>def <span class="ident">gauge_vacunas</span></span>(<span>fecha)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def gauge_vacunas(fecha):
+    query = getQueryVacunas(fecha)
+
+    conn = getAuthConnection()
+
+    df = pd.read_sql(query, conn)
+
+    # Obtiene los datos de vacunación de la fecha del visor, y si no hay datos, carga la última fecha en la que hay datos
+    if len(df) == 0:
+        query = getQueryVacunasDefault()
+        df = pd.read_sql(query, conn)
+
+    total = df.iloc[0, 2]
+    fecha = df.iloc[0, 3]
+
+    fig = make_subplots(
+        specs=[[{&#34;type&#34;: &#34;indicator&#34;}], [{&#34;type&#34;: &#34;indicator&#34;}]],
+        rows=2,
+        cols=1,
+        row_heights=[0.5, 0.5],
+    )
+
+    grafico = go.Indicator(
+        mode=&#34;gauge+number+delta&#34;,
+        value=total,
+        domain={&#34;x&#34;: [0, 1], &#34;y&#34;: [0, 1]},
+        # delta = {&#39;reference&#39;: 380}, se puede colocar como referencia el total de vacunas de la fecha anterior
+        title={&#34;text&#34;: &#34;Total de vacunas aplicadas al &#34; + str(fecha)},
+        gauge={
+            &#34;axis&#34;: {&#34;range&#34;: [None, 7400000]},
+            &#34;threshold&#34;: {
+                &#34;line&#34;: {&#34;color&#34;: &#34;red&#34;, &#34;width&#34;: 4},
+                &#34;thickness&#34;: 0.75,
+                &#34;value&#34;: 7400000,
+            },
+        },
+        number={
+            &#34;valueformat&#34;: &#34;,&#34; + str(2) + &#34;f&#34;,
+        },
+    )
+
+    barras = gauge_estimacion_vacunas()
+
+    fig.add_trace(grafico, row=1, col=1)
+    fig.add_trace(barras, row=2, col=1)
+
+    fig.update_layout(paper_bgcolor=&#34;rgba(0,0,0,0)&#34;, height=650)
+
+    plt_div = plot(fig, output_type=&#34;div&#34;)
+
+    closeConnection(conn)
+
+    return plt_div</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.graficador.grafico_gauge"><code class="name flex">
+<span>def <span class="ident">grafico_gauge</span></span>(<span>cantidad_vacunas=builtins.list, r=0.5, meta=3500000, media_llegada=200000, desviacion_llegada=30000)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def grafico_gauge(
+    cantidad_vacunas=list,
+    r=0.5,
+    meta=3500000,  # r grado de aplicación de 0.5-1
+    media_llegada=200000,
+    desviacion_llegada=30000,
+):
+    semanas, estimacion_semanas = estimador_semanas(
+        cantidad_vacunas=cantidad_vacunas,
+        r=r,
+        meta=meta,
+        media_llegada=media_llegada,
+        desviacion_llegada=desviacion_llegada,
+    )
+    fig = go.Indicator(
+        mode=&#34;gauge+number+delta&#34;,
+        value=estimacion_semanas,
+        domain={&#34;x&#34;: [0, 1], &#34;y&#34;: [0, 1]},
+        delta={
+            &#34;reference&#34;: semanas
+        },  # se puede colocar como referencia el total de vacunas de la fecha anterior
+        title={&#34;text&#34;: &#34;Semanas para inmunidad al &#34; + str(r * 100) + &#34;%&#34;},
+        gauge={
+            &#34;axis&#34;: {&#34;range&#34;: [None, 120]},
+            &#34;threshold&#34;: {
+                &#34;line&#34;: {&#34;color&#34;: &#34;red&#34;, &#34;width&#34;: 4},
+                &#34;thickness&#34;: 0.75,
+                &#34;value&#34;: 50,
+            },
+        },
+        number={
+            &#34;valueformat&#34;: &#34;,&#34; + str(2) + &#34;f&#34;,
+        },
+    )
+
+    return fig</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.graficador.grafico_progreso"><code class="name flex">
+<span>def <span class="ident">grafico_progreso</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def grafico_progreso():
+    df = pd.read_csv(cwd + &#34;/vacunacion/vacunas_v2.csv&#34;)
+    fig1 = go.Figure()
+    fig1 = make_subplots(specs=[[{&#34;secondary_y&#34;: True}]])
+
+    fig1.add_trace(
+        go.Scatter(
+            x=df[&#34;fecha&#34;],
+            y=df[&#34;total&#34;],
+            name=&#34;Dosis Estimadas&#34;,
+            line=dict(color=&#34;blue&#34;),
+        ),
+        secondary_y=False,
+    )
+
+    fig1.add_trace(
+        go.Scatter(
+            x=df[&#34;fecha&#34;],
+            y=df[&#34;efect&#34;],
+            name=&#34;Dosis Aplicadas&#34;,
+            line=dict(
+                color=&#34;red&#34;,
+            ),
+        ),
+        secondary_y=False,
+    )
+
+    fig1.add_trace(
+        go.Bar(
+            x=df[&#34;fecha&#34;],
+            y=df[&#34;reservas_reales&#34;],
+            name=&#34;Estimación de Reserva&#34;,
+            marker_color=&#34;rgb(158, 178, 225)&#34;,
+            opacity=0.6,
+            width=[0.2],
+        ),
+        secondary_y=True,
+    )
+
+    fig1.update_layout(
+        title=&#34;Dosis Estimadas Aplicables y Efectivas Aplicadas&#34;,
+        xaxis_title=&#34;Semana de la Campaña de Vacunación&#34;,
+    )
+
+    fig1.update_yaxes(title_text=&#34;Dosis Aplicadas&#34;, secondary_y=False)
+
+    fig1.update_yaxes(title_text=&#34;Reserva Estimada&#34;, secondary_y=True)
+
+    fig1.update_layout(
+        legend=dict(yanchor=&#34;top&#34;, y=1, xanchor=&#34;left&#34;, x=0, bgcolor=&#34;rgba(0,0,0,0)&#34;)
+    )
+
+    fig1.update_xaxes(showgrid=False)
+    fig1.update_yaxes(gridcolor=&#34;rgb(240, 240, 240)&#34;)
+
+    plt_div = plot(fig1, output_type=&#34;div&#34;)
+    return plt_div</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.graficador.nacional"><code class="name flex">
+<span>def <span class="ident">nacional</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def nacional():
+    query = getQueryNacional()
+
+    conn = getAuthConnection()
+
+    df = pd.read_sql(query, conn)
+
+    fig = make_subplots(specs=[[{&#34;secondary_y&#34;: True}]], rows=1, cols=1)
+
+    fig.add_trace(
+        go.Scatter(
+            x=df.iloc[:, 0].values,
+            y=df.iloc[:, 3].values,
+            name=&#34;Activos&#34;,
+            line=dict(color=&#34;red&#34;),
+        ),
+        secondary_y=True,
+        row=1,
+        col=1,
+    )
+
+    # barras de casos nuevos por día
+    fig.add_trace(
+        go.Bar(
+            x=df.iloc[:, 0].values,
+            y=df.iloc[:, 4].values,
+            name=&#34;Nuevos&#34;,
+            marker_color=&#34;gray&#34;,
+        ),
+        secondary_y=False,
+        row=1,
+        col=1,
+    )
+
+    # línea de casos recuperados
+    fig.add_trace(
+        go.Scatter(
+            x=df.iloc[:, 0].values,
+            y=df.iloc[:, 2].values,
+            mode=&#34;lines+markers&#34;,
+            name=&#34;Recuperados&#34;,
+            line=dict(color=&#34;blue&#34;),
+        ),
+        secondary_y=False,
+        row=1,
+        col=1,
+    )
+
+    fig.update_layout(
+        margin=dict(l=0, r=0, t=5, b=5),
+        plot_bgcolor=&#34;white&#34;,
+        height=PLOT_SIZE * 2,
+        legend=dict(
+            x=0.1,
+            y=0.95,
+            traceorder=&#34;normal&#34;,
+            font=dict(
+                size=12,
+            ),
+        ),
+    )
+
+    fig.update_layout(
+        legend=dict(yanchor=&#34;top&#34;, y=1, xanchor=&#34;left&#34;, x=0, bgcolor=&#34;rgba(0,0,0,0)&#34;)
+    )
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(gridcolor=&#34;rgb(240, 240, 240)&#34;)
+
+    plt_div = plot(fig, output_type=&#34;div&#34;)
+
+    closeConnection(conn)
+
+    return plt_div</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="visorcovid19.mapa" href="index.html">visorcovid19.mapa</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="visorcovid19.mapa.graficador.estimador_semanas" href="#visorcovid19.mapa.graficador.estimador_semanas">estimador_semanas</a></code></li>
+<li><code><a title="visorcovid19.mapa.graficador.gauge_cuad" href="#visorcovid19.mapa.graficador.gauge_cuad">gauge_cuad</a></code></li>
+<li><code><a title="visorcovid19.mapa.graficador.gauge_estimacion_vacunas" href="#visorcovid19.mapa.graficador.gauge_estimacion_vacunas">gauge_estimacion_vacunas</a></code></li>
+<li><code><a title="visorcovid19.mapa.graficador.gauge_vacunas" href="#visorcovid19.mapa.graficador.gauge_vacunas">gauge_vacunas</a></code></li>
+<li><code><a title="visorcovid19.mapa.graficador.grafico_gauge" href="#visorcovid19.mapa.graficador.grafico_gauge">grafico_gauge</a></code></li>
+<li><code><a title="visorcovid19.mapa.graficador.grafico_progreso" href="#visorcovid19.mapa.graficador.grafico_progreso">grafico_progreso</a></code></li>
+<li><code><a title="visorcovid19.mapa.graficador.nacional" href="#visorcovid19.mapa.graficador.nacional">nacional</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

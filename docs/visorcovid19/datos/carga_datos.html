@@ -1,0 +1,2203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>visorcovid19.datos.carga_datos API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>visorcovid19.datos.carga_datos</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import geopandas as gpd
+import numpy as np
+import pandas as pd
+import psycopg2 as psql
+import requests
+import sys
+from datetime import date, datetime
+from mapa.libreria.bd import getAuthConnection, closeConnection
+from mapa.libreria.notificador.notificador import Notificador
+
+
+# Establecer en True para cargar todos los datos desde cero, e imprimir logs.
+DEBUG = False
+
+
+def consoleLog(text):
+    &#34;&#34;&#34;
+    Utilidad para imprimir logs en la consola basado en la variable global DEBUG.
+
+    Parámetros
+    ----------
+    text : str
+        Texto a imprimir en la consola.
+    &#34;&#34;&#34;
+
+    if DEBUG:
+        print(text)
+
+
+def cargarCasosDiarios(df, ultimaFecha):
+    &#34;&#34;&#34;
+    Carga los casos por día para cada distrito en cada fecha a partir de la hoja DistritosNuevos del archivo COVID19CR.xlsx.
+
+    Parámetros
+    ----------
+    df : Pandas.Dataframe
+        Dataframe que contiene la hoja del archivo a leer.
+    ultimaFecha : str
+        Fecha a partir de la cual se deben procesar los datos del archivo.
+
+    Levanta
+    -------
+    Exception
+        Si ocurre algún error inesperado al cargar y procesar los datos.
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    # las fechas empiezan en la columna 6
+    COL_OFFSET = 6
+    COL_COD_DISTRITO = 4
+    ordenes_cargadas = False
+
+    # para cada fila sin contar encabezado
+    for row in range(1, df.shape[0]):
+        # para cada fecha
+        for col in range(COL_OFFSET, COL_OFFSET + len(df.iloc[0, COL_OFFSET:])):
+            if not pd.isnull(df.iloc[row, col]):
+                fecha = str(df.iloc[0, col]).split(&#34; &#34;)[0]
+                if fecha &gt; ultimaFecha or DEBUG == True:
+                    if not ordenes_cargadas:
+                        try:
+                            cargarOrdenesSanitarias(fecha)
+                        except Exception as e:
+                            consoleLog(e)
+                    q = &#34;&#34;&#34;
+                        UPDATE acumulado_distrito 
+                        SET caso_dia = {cantidad}
+                        WHERE codigo_distrito = &#39;{codigo}&#39;
+                        AND fecha = &#39;{fecha}&#39;&#34;&#34;&#34;
+
+                    # carga los casos por día si es mayor que 0 para cada distrito en cada fecha
+                    query = q.format(
+                        cantidad=df.iloc[row, col] if df.iloc[row, col] &gt;= 0 else 0,
+                        codigo=df.iloc[row, COL_COD_DISTRITO],
+                        fecha=fecha,
+                    )
+                    try:
+                        cursor.execute(query)
+                        conn.commit()
+                    except Exception as e:
+                        consoleLog(e)
+                        closeConnection(conn)
+                        raise
+        ordenes_cargadas = True
+
+        consoleLog(
+            &#34;Cargando casos nuevos para el distrito: &#34;
+            + str(df.iloc[row, COL_COD_DISTRITO])
+        )
+
+    closeConnection(conn)
+
+
+def cargarCasos(archivo, ultimaFecha):
+    &#34;&#34;&#34;
+    Carga los casos activos, acumulados, fallecidos, recuperados para todos los distritos y todas las fechas,
+    a partir de la hoja Desagre_Distrito del archivo COVID19CR.xlsx.
+
+    Parámetros
+    ----------
+    archivo : str
+        Nombre del archivo a leer.
+    ultimaFecha : str
+        Fecha a partir de la cual se deben procesar los datos del archivo.
+
+    Levanta
+    -------
+    Exception
+        Si ocurre algún error inesperado al cargar y procesar los datos.
+    psql.Error
+        Si ocurre un error de base de datos.
+    &#34;&#34;&#34;
+
+    consoleLog(&#34;Leyendo archivo de casos...&#34;)
+    df = pd.read_excel(
+        archivo, header=None, sheet_name=&#34;Desagre_Distrito&#34;, usecols=&#34;G,I,N,R,V,Z&#34;
+    )
+    consoleLog(&#34;archivo de casos leído&#34;)
+    try:
+        conn = getAuthConnection()
+        cursor = conn.cursor()
+
+        # para cada fila sin contar encabezado
+        for row in range(1, df.shape[0]):
+            fecha = str(df.iloc[row, 1]).split(&#34; &#34;)[0]
+            if fecha &gt; ultimaFecha or DEBUG == True:
+                q = &#34;&#34;&#34;
+                        INSERT INTO acumulado_distrito (fecha, codigo_distrito, recuperados, cantidad, fallecidos, activos)
+                        VALUES (&#39;{fecha}&#39;, {codigo}, {recuperados}, {cantidad}, {fallecidos}, {activos}) ON CONFLICT DO NOTHING;&#34;&#34;&#34;
+                query = q.format(
+                    codigo=df.iloc[row, 0],
+                    fecha=fecha,
+                    cantidad=df.iloc[row, 2] if df.iloc[row, 2] &gt;= 0 else 0,
+                    recuperados=df.iloc[row, 3] if df.iloc[row, 3] &gt;= 0 else 0,
+                    fallecidos=df.iloc[row, 4] if df.iloc[row, 4] &gt;= 0 else 0,
+                    activos=df.iloc[row, 5] if df.iloc[row, 5] &gt;= 0 else 0,
+                )
+                cursor.execute(query)
+                consoleLog(&#34;-----------------------&#34;)
+                consoleLog(fecha)
+                consoleLog(&#34;-----------------------&#34;)
+                conn.commit()
+    except (Exception, psql.Error) as error:
+        consoleLog(&#34;Error en cargarCasos(): &#34; + error)
+        raise
+    finally:
+        closeConnection(conn)
+
+
+def cargarIndicadores(archivoCovid, ultimaFecha):
+    &#34;&#34;&#34;
+    Carga el coeficiente de variación y tasa de ataque para cada distrito y cada semana epidemiológica, según la definición del Ministerio de Salud,
+    a partir de la hoja DistritosNuevos del archivo COVID19CR.xlsx.
+
+    Parámetros
+    ----------
+    archivoCovid : str
+        Nombre del archivo a leer.
+    ultimaFecha : str
+        Fecha a partir de la cual se deben procesar los datos del archivo.
+    &#34;&#34;&#34;
+
+    df = pd.read_excel(archivoCovid, header=None, sheet_name=&#34;3_4 DIST_ACTIV&#34;)
+    dfNuevos = pd.read_excel(archivoCovid, header=None, sheet_name=&#34;DistritosNuevos&#34;)
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    COL_OFFSET = 6
+    COL_COD_DISTRITO = 4
+    semanaAnterior = 0
+    coef_var = 0
+    tasa_ataque = 0
+    # para cada distrito (fila)
+    for row in range(1, df.shape[0]):
+        # para cada fecha
+        codigo = df.iloc[row, COL_COD_DISTRITO]
+        if not str(codigo).endswith(&#34;99&#34;):
+            for col in range(COL_OFFSET, COL_OFFSET + len(df.iloc[0, COL_OFFSET:])):
+                q = &#34;&#34;&#34;
+                    UPDATE acumulado_distrito 
+                    SET coef_var = {coef_var},
+                    ta = {tasa_ataque}
+                    WHERE codigo_distrito = &#39;{codigo}&#39;
+                    AND fecha = &#39;{fecha}&#39;&#34;&#34;&#34;
+
+                # Hace split porque contiene también la hora, y no es necesaria.
+                fecha = str(df.iloc[0, col]).split(&#34; &#34;)[0]
+                if (
+                    True
+                ):  # fecha &gt; ultimaFecha or DEBUG == True: # Comentado temporalmente porque ocasiona errores en el cálculo si no se consideran todas las fechas
+                    semanaActual = numeroSemanaEpidemiologica(fecha)
+                    anoActual = fecha.split(&#34;-&#34;)[0]
+
+                    # El coeficiente se asocia a cada semana, por eso se calcula solo una vez
+                    if semanaActual != semanaAnterior:
+                        coef_var = 0
+                        tasa_ataque = 0
+                        coef_var = calcularCoefVar(row, semanaActual, anoActual, df)
+                        tasa_ataque = calcularTasaAtaque(
+                            row, semanaActual, anoActual, dfNuevos
+                        )
+                        semanaAnterior = semanaActual
+
+                    # Multiplica por 100 porque es un porcentaje, y redondea a dos decimales
+                    query = q.format(
+                        coef_var=round(coef_var * 100, 2),
+                        codigo=codigo,
+                        tasa_ataque=tasa_ataque,
+                        fecha=fecha,
+                    )
+
+                    cursor.execute(query)
+                    conn.commit()
+            consoleLog(&#34;Cargando coef_var y ta para distrito: &#34; + str(codigo))
+    closeConnection(conn)
+
+
+def calcularCoefVar(distrito, semana, ano, df):
+    &#34;&#34;&#34;
+    Calcula el coeficiente de variación para un distrito tomando en cuenta desde la semana epidemiológica indicada hasta las 3 semanas anteriores,
+    según la definición dada por el Ministerio de Salud.
+
+    Parámetros
+    ----------
+    distrito : int
+        Índice de la fila del distrito para el cálculo.
+    semana : int
+        Número de semana epidemiológica a considerar para el cálculo. Se considera desde semana actual hasta 3 semanas anteriores
+        para obtener el valor del coeficiente de variación.
+    ano : int
+        Año para el que se está realizando el cálculo.
+    df : Pandas.Dataframe
+        Dataframe que contiene los datos para realizar el cálculo.
+
+    Retorna
+    -------
+    float
+        Coeficiente de variación calculado para un distrito en una semana epidemiológica y año dados.
+    &#34;&#34;&#34;
+
+    # Si la semana es la 25 del 2020, no se puede calcular porque no hay datos antes de esa seamana, y se retorna 0.
+    if semana &lt; 28 and int(ano) == 2020:
+        return 0
+
+    semanaCalculo = 0
+    casosSemanasAnteriores = []
+    anoActual = 0
+    for i in range(1, 4):
+        if semana - i &lt; 0:
+            anoActual = str(int(ano) - 1)
+            maxSemana = numeroSemanaEpidemiologica(anoActual + &#34;-12-31&#34;)
+            semanaCalculo = maxSemana + 1 - i
+        else:
+            anoActual = ano
+            semanaCalculo = semana - i
+        # se crea un arreglo con la cantidad de casos activos de las últimas 3 semanas epidemiológicas anteriores a la semana dada
+        casosSemanasAnteriores.append(
+            sumarCasosSemana(distrito, semanaCalculo, anoActual, df)
+        )
+
+    # Se realiza el cálculo de la desviación estándar y la media aritmética
+    sd = np.std(casosSemanasAnteriores)
+    mean = np.mean(casosSemanasAnteriores)
+
+    # Evita dividir entre 0
+    if sd == 0 or mean == 0:
+        return 0
+    else:
+        return sd / mean
+
+
+def calcularTasaAtaque(distrito, semana, ano, df):
+    &#34;&#34;&#34;
+    Calcula la tasa de ataque para un distrito en la semana epidemiológica indicada,
+    según la definición dada por el Ministerio de Salud.
+
+    Parámetros
+    ----------
+    distrito : int
+        Índice de la fila del distrito para el cálculo.
+    semana : int
+        Número de semana epidemiológica a considerar para el cálculo.
+    ano : int
+        Año para el que se está realizando el cálculo.
+    df : Pandas.Dataframe
+        Dataframe que contiene los datos para realizar el cálculo.
+
+    Retorna
+    -------
+    float
+        Tasa de ataque calculada para un distrito en una semana epidemiológica y año dados.
+
+    Levanta
+    -------
+    Exception
+        En caso de que no haya datos de cantidad de habitantes en el distrito, imprescindible para el cálculo.
+    &#34;&#34;&#34;
+
+    # Si la semana es la 25 del 2020, no se puede calcular porque no hay datos antes de esa seamana, y se retorna 0.
+    if semana &lt; 26 and int(ano) == 2020:
+        return 0
+
+    # Se realiza el cálculo de la desviación estándar y la media aritmética
+    suma = sumarCasosSemana(distrito, semana, ano, df)
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    query = &#34;select poblacion from datos_distrito where codigo_distrito = &#39;{codigo}&#39;&#34;
+    if str(df.iloc[distrito, 4]).endswith(&#34;99&#34;):
+        return 0
+    codigo = df.iloc[distrito, 4]
+    cursor.execute(query.format(codigo=df.iloc[distrito, 4]))
+    poblacion = 0
+    try:
+        poblacion = cursor.fetchone()[0]
+    except:
+        consoleLog(
+            &#34;Error, no hay datos de población para el distrito código: &#34; + str(codigo)
+        )
+    closeConnection(conn)
+
+    # Evita dividir entre 0
+    if poblacion == 0:
+        return 0
+    else:
+        return (suma / poblacion) * 100
+
+
+def numeroSemanaEpidemiologica(fecha):
+    &#34;&#34;&#34;
+    Obtiene el número de semana epidemiológica dada una fecha, según la definición del Ministerio de Salud.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha en formato YYYY-MM-DD de la cual se quiere obtener la semana epidemiológica correspondiente.
+
+    Retorna
+    -------
+    int
+        Número de semana epidemiológica correspondiente a la fecha.
+    &#34;&#34;&#34;
+
+    partesFecha = fecha.split(&#34;-&#34;)
+    fechaIso = date(int(partesFecha[0]), int(partesFecha[1]), int(partesFecha[2]))
+    semanaActual = fechaIso.isocalendar()[1]
+    # La semana epidemiológica es la siguiente de la semana ISO, si el día es domingo.
+    if fechaIso.weekday() == 6:
+        semanaActual = semanaActual + 1
+    return semanaActual - 1
+
+
+def sumarCasosSemana(distrito, semana, ano, df):
+    &#34;&#34;&#34;
+    Suma los casos nuevos de una semana epidemiológica dada, para un distrito en una semana y año dados.
+
+    Parámetros
+    ----------
+    distrito : int
+        Índice de la fila del distrito para el cálculo.
+    semana : int
+        Número de semana epidemiológica a considerar para el cálculo.
+    ano : int
+        Año para el que se está realizando el cálculo.
+    df : Pandas.Dataframe
+        Dataframe que contiene los datos para realizar el cálculo.
+
+    Retorna
+    -------
+    int
+        Suma de casos nuevos registrados en un distrito en una semana epidemiológica y año dados.
+
+    Levanta
+    -------
+    Exception
+        En caso que ocurra un error al realizar el cálculo, como un dato faltante o una fecha con formato incorrecto.
+    &#34;&#34;&#34;
+
+    # El offset es porque en esta columna empiezan las fechas
+    COL_OFFSET = 6
+    acumuladoSemana = 0
+    sumo = False
+    semanaCalculo = -1
+    for col in range(COL_OFFSET, df.shape[1]):
+        try:
+            fecha = str(df.iloc[0, col]).split(&#34; &#34;)[0]
+
+            # Si la fecha analizada pertenece a la semana epidemiológica requerida en el año especificado, se agrega el dato a la suma.
+            if numeroSemanaEpidemiologica(fecha) == semana and (
+                ano == fecha.split(&#34;-&#34;)[0] or ano == str(int(fecha.split(&#34;-&#34;)[0]) + 1)
+            ):
+                if semanaCalculo == -1:
+                    semanaCalculo = semana
+                    sumo = True
+                try:
+                    acumuladoSemana += (
+                        df.iloc[distrito, col] if df.iloc[distrito, col] &gt;= 0 else 0
+                    )
+                except:
+                    pass
+            # Si ya cambió de semana epidemiológica después de sumar los casos, retorna
+            elif numeroSemanaEpidemiologica(fecha) != semanaCalculo and sumo == True:
+                return acumuladoSemana
+        except Exception as e:
+            consoleLog(
+                &#34;Error!! &#34;
+                + str(e)
+                + &#34; Columna: &#34;
+                + str(col)
+                + &#34;Distrito: &#34;
+                + str(distrito)
+                + &#34; Fecha: &#34;
+                + str(fecha)
+            )
+            raise
+    return acumuladoSemana
+
+
+def cargarEscenarios(filename):
+    &#34;&#34;&#34;
+    Carga las alertas y las predicciones para cada distrito, a partir de la hoja &#39;PCD Escenarios&#39; del archivo EscenariosOctubre.xlsx.
+
+    Parámetros
+    ----------
+    filename : str
+        Nombre del archivo a leer para cargar los datos.
+    &#34;&#34;&#34;
+
+    df = pd.read_excel(filename, header=0, sheet_name=&#34;PCD Escenarios&#34;)
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    for row in range(1, df.shape[0]):
+        prediccion = df.iloc[row, 7]
+        semana = prediccion.split(&#34; &#34;)[0]
+        mes = (
+            prediccion.split(&#34; &#34;)[2]
+            if len(prediccion.split(&#34; &#34;)) &gt; 2
+            else prediccion.split(&#34; &#34;)[1]
+        )
+        # se carga el grupo y el nivel de alerta para todo el mes para cada distrito con los datos de la semana I por defecto
+        if semana == &#34;I&#34;:
+
+            # en caso de que no venga el Índice Socio Sanitario, no se pone la columna grupo en el query
+            if df.iloc[row, 6] is np.nan:
+                queryGrupo = &#34;&#34;&#34;
+                    UPDATE acumulado_distrito
+                    SET condicion = &#39;{condicion}&#39;
+                    WHERE codigo_distrito = &#39;{distrito}&#39;
+                    AND date_part(&#39;month&#39;, fecha) = {mesActual}
+                    AND fecha &gt; &#39;2020-12-31&#39;
+                &#34;&#34;&#34;
+
+                cursor.execute(
+                    queryGrupo.format(
+                        distrito=df.iloc[row, 0],
+                        condicion=df.iloc[row, 8],
+                        mesActual=getNumeroMes(mes),
+                    )
+                )
+
+            else:
+                queryGrupo = &#34;&#34;&#34;
+                    UPDATE acumulado_distrito
+                    SET grupo = &#39;{grupo}&#39;,
+                    condicion = &#39;{condicion}&#39;
+                    WHERE codigo_distrito = &#39;{distrito}&#39;
+                    AND date_part(&#39;month&#39;, fecha) = {mesActual}
+                    AND fecha &gt; &#39;2020-12-31&#39;
+                &#34;&#34;&#34;
+
+                cursor.execute(
+                    queryGrupo.format(
+                        distrito=df.iloc[row, 0],
+                        grupo=df.iloc[row, 6],
+                        condicion=df.iloc[row, 8],
+                        mesActual=getNumeroMes(mes),
+                    )
+                )
+
+        queryPrediccion = &#34;&#34;&#34;
+            INSERT INTO prediccion_distrito (
+                codigo_distrito,
+                nombre_distrito,
+                mes,
+                semana,
+                activos,
+                prevalencia,
+                acumulado,
+                inv_acum
+            )
+            VALUES (
+                &#39;{codigo_distrito}&#39;,
+                &#39;{nombre_distrito}&#39;,
+                {mes},
+                &#39;{semana}&#39;,
+                {activos},
+                {prevalencia},
+                {acumulado},
+                {inv_acum}
+            ) ON CONFLICT DO NOTHING;
+                &#34;&#34;&#34;
+
+        activos = df.iloc[row, 2]
+        prevalencia = df.iloc[row, 3]
+        acumulado = df.iloc[row, 4]
+        inv_acum = df.iloc[row, 5]
+
+        if np.isnan(activos):
+            activos = 0
+        if np.isnan(prevalencia):
+            prevalencia = 0
+        if np.isnan(acumulado):
+            acumulado = 0
+        if np.isnan(inv_acum):
+            inv_acum = 0
+
+        cursor.execute(
+            queryPrediccion.format(
+                codigo_distrito=df.iloc[row, 0],
+                nombre_distrito=df.iloc[row, 1],
+                mes=getNumeroMes(mes),
+                semana=semana,
+                activos=activos,
+                prevalencia=prevalencia,
+                acumulado=acumulado,
+                inv_acum=inv_acum,
+            )
+        )
+        consoleLog(&#34;-----------------------&#34;)
+        consoleLog(df.iloc[row, 1])
+        consoleLog(&#34;-----------------------&#34;)
+        conn.commit()
+    closeConnection(conn)
+
+
+def cargarOrdenesSanitarias(fecha):
+    &#34;&#34;&#34;
+    Consume el API de órdenes sanitarias por distrito y por fecha, y guarda los datos en el sistema.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha en formato YYYY-MM-DD para la cual se obtendrán las órdenes sanitarias por distrito.
+    &#34;&#34;&#34;
+
+    url = (
+        &#34;https://apicovid.estuve-aqui.com/integrations/v1/ucr/sanitaryorders/details?limitDate=&#34;
+        + str(fecha)
+    )
+    head = {
+        &#34;ucr-token&#34;: &#34;ib41jDxofoRccn73Z79Kkts6YCCvfPxW8axklf0AKNeJ69ouem8ubymBpsqzHNC3YrZoPgiU9MKOAFKGZhJkbBxqG9q2ShG4I9IbCS6qRYu9TH&#34;
+    }
+    r = requests.get(url, headers=head)
+    df = pd.read_json(r.content)
+    consoleLog(&#34;Cargando OO.SS. en la fecha: &#34; + str(fecha))
+    if len(df) &gt; 0:
+        pd.options.display.max_colwidth = 500
+        query = &#34;SELECT DISTINCT codigo, nom_prov, nom_cant, nom_dist from distrito&#34;
+        conn = getAuthConnection()
+        cursor = conn.cursor()
+        cursor.execute(query)
+        results = cursor.fetchall()
+
+        for row in results:
+            suma = 0
+            for district in df[&#34;data&#34;]:
+                if (
+                    district[&#34;state&#34;] == row[1]
+                    and district[&#34;city&#34;] == row[2]
+                    and district[&#34;district&#34;] == row[3]
+                ):
+                    suma += int(district[&#34;total&#34;])
+            insert_query = &#34;&#34;&#34;
+                INSERT INTO ordenes_fecha
+                VALUES (&#39;{fecha}&#39;, &#39;{codigo_distrito}&#39;, {denuncias})
+                ON CONFLICT DO NOTHING;
+            &#34;&#34;&#34;
+            cursor.execute(
+                insert_query.format(
+                    fecha=fecha, codigo_distrito=str(row[0]), denuncias=suma
+                )
+            )
+            conn.commit()
+            consoleLog(&#34;Cargando OO.SS. para distrito: &#34; + str(row[0]))
+        closeConnection(conn)
+
+
+def cargarDatosPais(archivo, ultimaFecha):
+    &#34;&#34;&#34;
+    Carga los datos de hospitalizaciones en salón y UCI, y el índice de positividad, a nivel país, a partir del archivo COVID19.xlsx.
+
+    Parámetros
+    ----------
+    archivo : str
+        Nombre del archivo a leer.
+    ultimaFecha : str
+        Fecha a partir de la cual se deben procesar los datos del archivo.
+
+    Levanta
+    -------
+    Exception
+        En caso de que ocurra un error al cargar los datos, como que la muestra leída sea 0.
+    &#34;&#34;&#34;
+
+    df = pd.read_excel(archivo, header=None, sheet_name=&#34;Datos&#34;, usecols=&#34;B,C,AG,AI,AY&#34;)
+    try:
+        conn = getAuthConnection()
+        cursor = conn.cursor()
+        for row in range(1, df.shape[0]):
+            fecha = str(df.iloc[row, 0]).split(&#34; &#34;)[0]
+            if fecha &gt; ultimaFecha or DEBUG == True:
+                consoleLog(&#34;Cargando datos país para la fecha: &#34; + str(fecha))
+                acumulados = df.iloc[row, 1]
+                casos_salon = df.iloc[row, 2]
+                casos_uci = df.iloc[row, 3]
+                muestras = df.iloc[row, 4]
+                indice_positividad = 0
+                try:
+                    indice_positividad = (acumulados / muestras) * 100
+                except Exception as e:
+                    consoleLog(str(e))
+                if np.isnan(indice_positividad):
+                    indice_positividad = &#34;null&#34;
+                else:
+                    indice_positividad = round(indice_positividad, 2)
+                q = &#34;&#34;&#34;
+                        INSERT INTO datos_pais (fecha, casos_salon, casos_uci, indice_positividad)
+                        VALUES (&#39;{fecha}&#39;, {casos_salon}, {casos_uci}, {indice_positividad}) 
+                        ON CONFLICT (fecha) DO UPDATE SET casos_salon={casos_salon}, casos_uci={casos_uci}, indice_positividad={indice_positividad};&#34;&#34;&#34;
+                if not np.isnan(casos_salon) and not np.isnan(casos_uci):
+                    query = q.format(
+                        fecha=fecha,
+                        casos_salon=casos_salon,
+                        casos_uci=casos_uci,
+                        indice_positividad=indice_positividad,
+                    )
+                    cursor.execute(query)
+                    consoleLog(&#34;-----------------------&#34;)
+                    conn.commit()
+    except (Exception, psql.Error) as error:
+        consoleLog(&#34;Error cargando los datos país: &#34; + str(error))
+        raise
+    finally:
+        closeConnection(conn)
+
+
+def validateDate(date):
+    &#34;&#34;&#34;
+    Valida que una fecha dada sea correcta en el formato YYYY-MM-DD.
+
+    Parámetros
+    ----------
+    date : str
+        Fecha a validar.
+
+    Retorna
+    -------
+    bool
+        True si la fecha es válida, False en caso contrario.
+    &#34;&#34;&#34;
+
+    try:
+        datetime.datetime.strptime(date, &#34;%Y-%m-%d&#34;)
+    except:
+        return False
+    return True
+
+
+def getLastDate():
+    &#34;&#34;&#34;
+    Obtiene la última fecha registrada en la tabla acumulado_distrito.
+
+    Retorna
+    -------
+    str
+        Última fecha registrada en la tabla acumulado_distrito en formato YYYY-MM-DD.
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    query = &#34;select fecha from acumulado_distrito ad order by fecha desc limit 1&#34;
+    cursor.execute(query)
+    result = cursor.fetchone()
+    closeConnection(conn)
+    return result
+
+
+def getNumeroMes(mes):
+    &#34;&#34;&#34;
+    Obtiene el número de mes, de 1 a 12, a partir de una hilera.
+
+    Parámetros
+    ----------
+    mes : str
+        Hilera que contiene el nombre del mes cuyo número se quiere obtener.
+
+    Retorna
+    -------
+    int
+        Número del mes de 1 a 12 identificado en la hilera, o -1 si la hilera no es un mes válido.
+    &#34;&#34;&#34;
+
+    if mes == &#34;Ene&#34; or mes == &#34;Enero&#34;:
+        return 1
+    elif mes == &#34;Feb&#34; or mes == &#34;Febrero&#34;:
+        return 2
+    elif mes == &#34;Mar&#34; or mes == &#34;Marzo&#34;:
+        return 3
+    elif mes == &#34;Abr&#34; or mes == &#34;Abril&#34;:
+        return 4
+    elif mes == &#34;May&#34; or mes == &#34;Mayo&#34;:
+        return 5
+    elif mes == &#34;Jun&#34; or mes == &#34;Junio&#34;:
+        return 6
+    elif mes == &#34;Jul&#34; or mes == &#34;Julio&#34;:
+        return 7
+    elif mes == &#34;Ago&#34; or mes == &#34;Agosto&#34;:
+        return 8
+    elif mes == &#34;Sep&#34; or mes == &#34;Septiembre&#34;:
+        return 9
+    elif mes == &#34;Oct&#34; or mes == &#34;Octubre&#34;:
+        return 10
+    elif mes == &#34;Nov&#34; or mes == &#34;Noviembre&#34;:
+        return 11
+    elif mes == &#34;Dic&#34; or mes == &#34;Diciembre&#34;:
+        return 12
+    else:
+        return -1
+
+
+def main(argv):
+    &#34;&#34;&#34;
+    Función principal del programa. Ejecuta todo el cargador de datos.
+
+    Parámetros
+    ----------
+    argv : str[]
+        Arreglo de parámetros pasados al invocar el programa.
+        Debe tener el nombre o ruta del archivo COVID19CR.xlsx y de EscenariosOctubre.xlsx.
+
+    Levanta
+    -------
+    Exception
+        En caso de ocurrir algún error en el proceso de carga de datos.
+    &#34;&#34;&#34;
+
+    if len(argv) &lt; 1:
+        consoleLog(&#34;Uso: carga_datos.py &lt;Archivo COVID19&gt; &lt;Archivo escenarios&gt;&#34;)
+        return False
+    else:
+        if len(argv) &gt;= 1:
+            try:
+                archivoCovid = argv[0]
+                archivoEscenarios = argv[1]
+                cargarDatos(archivoCovid, archivoEscenarios)
+            except Exception as e:
+                consoleLog(&#34;No se pudo cargar datos. Error: &#34; + str(e))
+                raise
+        return True
+
+
+def cargarDatos(archivoCovid, archivoEscenarios):
+    &#34;&#34;&#34;
+    Carga todos los datos de actualización diaria a partir de los archivos COVID19CR.xlsx y EscenariosOctubre.xlsx.
+    Esta función es llamada desde el cron job que se ejecuta automáticamente para actualizar los datos diariamente.
+    Si ocurre algún error en el proceso de carga de datos, envía un correo notificando el error, a los destinatarios
+    configurados en emailConf/direcciones.txt, en donde cada fila tiene el formato &lt;nombre&gt; &lt;correo&gt;.
+
+    Parámetros
+    ----------
+    archivoCovid19 : str
+        Nombre o ruta del archivo COVID19CR.xlsx.
+    archivoEscenarios : str
+        Nombre o ruta del archivo EscenariosOctubre.xlsx.
+    &#34;&#34;&#34;
+
+    print(&#34;Inicio de carga: &#34; + datetime.now().strftime(&#34;%d/%m/%Y %H:%M:%S&#34;))
+    try:
+        ultimaFecha = getLastDate()[0].strftime(&#34;%Y-%m-%d&#34;)
+        consoleLog(&#34;Ultima fecha en la BD: &#34; + str(ultimaFecha))
+        cargarCasos(archivoCovid, ultimaFecha)
+        archivoCasosDiarios = pd.read_excel(
+            archivoCovid, header=None, sheet_name=&#34;DistritosNuevos&#34;
+        )
+        cargarCasosDiarios(archivoCasosDiarios, ultimaFecha)
+        cargarDatosPais(archivoCovid, ultimaFecha)
+        cargarIndicadores(archivoCovid, ultimaFecha)
+        cargarEscenarios(archivoEscenarios)
+    except Exception as e:
+        consoleLog(&#34;Ha ocurrido un error al cargar los datos: &#34; + str(e))
+        noti = Notificador()
+        noti.notificar(str(e))
+
+    print(&#34;Fin de carga: &#34; + datetime.now().strftime(&#34;%d/%m/%Y %H:%M:%S&#34;))
+
+
+# Main del programa
+if __name__ == &#34;__main__&#34;:
+    if not main(sys.argv[1:]):
+        sys.exit(1)
+    else:
+        sys.exit(0)
+
+# -------------------------------------------------------------------- #
+# Sección de funciones para utilizar manualmente cuando sea requerido. #
+# -------------------------------------------------------------------- #
+def cargarDistritos():
+    &#34;&#34;&#34;
+    Utilidad para cargar los datos de población (habitantes) para cada distrito, solo se usa una única vez para insertar los datos y no se actualiza.
+    Toma los datos de la hoja PoblacionDistrito del archivo COVID19CR.xlsx.
+    &#34;&#34;&#34;
+
+    df = pd.read_excel(&#34;COVID19CR.xlsx&#34;, header=None, sheet_name=&#34;PoblacionDistrito&#34;)
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    for row in range(1, df.shape[0]):
+        query = &#34;&#34;&#34;
+            INSERT INTO datos_distrito
+            VALUES (&#39;{codigo_distrito}&#39;, {poblacion}, {pob_am}, {pob_pobre})
+        &#34;&#34;&#34;
+        cursor.execute(
+            query.format(
+                codigo_distrito=df.iloc[row, 0].split(&#34;:&#34;)[0],
+                poblacion=df.iloc[row, 7],
+                pob_am=round((df.iloc[row, 6] / df.iloc[row, 7]) * 100, 2),
+                pob_pobre=0.0,
+            )
+        )
+        conn.commit()
+    closeConnection(conn)
+
+
+def cargarMorbilidad():
+    &#34;&#34;&#34;
+    Utilidad para cargar la tasa de morbilidad por distrito. Solo se utiliza una vez y no se actualiza.
+    Toma los datos de la hoja &#39;Base Final&#39; del archivo Morbilidad.xlsx.
+
+    Levanta
+    -------
+    Exception
+        En caso de ocurrir algún error en la carga de datos.
+    psql.Error
+        En caso de ocurrir algún error de base de datos.
+    &#34;&#34;&#34;
+
+    consoleLog(&#34;Leyendo archivo de datos...&#34;)
+    df = pd.read_excel(
+        &#34;Morbilidad.xlsx&#34;, header=None, sheet_name=&#34;Base Final&#34;, usecols=&#34;C,M&#34;
+    )
+    consoleLog(&#34;archivo de datos leído&#34;)
+    try:
+        conn = getAuthConnection()
+        cursor = conn.cursor()
+        for row in range(1, df.shape[0]):
+            distrito = df.iloc[row, 0]
+            morbilidad = df.iloc[row, 1]
+            consoleLog(distrito)
+            q = &#34;&#34;&#34;
+                    INSERT INTO morbilidad_distrito (codigo_distrito, morbilidad)
+                    VALUES ({codigo}, {morbilidad})&#34;&#34;&#34;
+            query = q.format(codigo=distrito, morbilidad=morbilidad)
+            if not np.isnan(morbilidad):
+                cursor.execute(query)
+            consoleLog(&#34;-----------------------&#34;)
+            conn.commit()
+    except (Exception, psql.Error) as error:
+        consoleLog(&#34;Error while connecting to PostgreSQL&#34; + error)
+        raise
+    finally:
+        closeConnection(conn)
+
+
+def cargarCapasProyecciones():
+    &#34;&#34;&#34;
+    Utilidad para cargar las capas de proyecciones por distrito a la base de datos. Se debe utilizar manualmente cada vez
+    que se suministren nuevas capas.
+    Toma los datos de los archivos .geojson correspondientes a las capas suministradas.
+
+    Levanta
+    -------
+    Exception
+        En caso de ocurrir algún error en el procesamiento de los datos o en el formato del archivo geojson.
+    &#34;&#34;&#34;
+
+    # Cambiar estas variables según el archivo a cargar.
+    archivo = &#34;50 Dist 20 al 26 Jun.geojson&#34;
+    fecha_inicio = &#34;2021-06-20&#34;
+    fecha_fin = &#34;2021-06-26&#34;
+    muestra = int(archivo.split(&#34; &#34;)[0])
+
+    df = gpd.read_file(archivo, ignore_geometry=True)
+
+    try:
+        conn = getAuthConnection()
+        cursor = conn.cursor()
+        for row in range(len(df)):
+            queryGrupo = &#34;&#34;&#34;
+                    INSERT INTO proyeccion_distrito (codigo_dta, porcentaje, fecha_inicio, fecha_fin, muestra)
+                    VALUES ({codigo_dta}, {porcentaje}, &#39;{fecha_inicio}&#39;, &#39;{fecha_fin}&#39;, {muestra}) ON CONFLICT DO NOTHING;
+                &#34;&#34;&#34;
+
+            cursor.execute(
+                queryGrupo.format(
+                    codigo_dta=df.iloc[row][&#34;codigo_dta&#34;],
+                    porcentaje=df.iloc[row, -1],
+                    fecha_inicio=fecha_inicio,
+                    fecha_fin=fecha_fin,
+                    muestra=muestra,
+                )
+            )
+
+            conn.commit()
+
+    except Exception as e:
+        consoleLog(&#34;Ha ocurrido un error al cargar los datos: &#34; + str(e))
+        raise
+    finally:
+        closeConnection(conn)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="visorcovid19.datos.carga_datos.calcularCoefVar"><code class="name flex">
+<span>def <span class="ident">calcularCoefVar</span></span>(<span>distrito, semana, ano, df)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Calcula el coeficiente de variación para un distrito tomando en cuenta desde la semana epidemiológica indicada hasta las 3 semanas anteriores,
+según la definición dada por el Ministerio de Salud.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>distrito : int
+Índice de la fila del distrito para el cálculo.
+semana : int
+Número de semana epidemiológica a considerar para el cálculo. Se considera desde semana actual hasta 3 semanas anteriores
+para obtener el valor del coeficiente de variación.
+ano : int
+Año para el que se está realizando el cálculo.
+df : Pandas.Dataframe
+Dataframe que contiene los datos para realizar el cálculo.</p>
+<h2 id="retorna">Retorna</h2>
+<p>float
+Coeficiente de variación calculado para un distrito en una semana epidemiológica y año dados.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calcularCoefVar(distrito, semana, ano, df):
+    &#34;&#34;&#34;
+    Calcula el coeficiente de variación para un distrito tomando en cuenta desde la semana epidemiológica indicada hasta las 3 semanas anteriores,
+    según la definición dada por el Ministerio de Salud.
+
+    Parámetros
+    ----------
+    distrito : int
+        Índice de la fila del distrito para el cálculo.
+    semana : int
+        Número de semana epidemiológica a considerar para el cálculo. Se considera desde semana actual hasta 3 semanas anteriores
+        para obtener el valor del coeficiente de variación.
+    ano : int
+        Año para el que se está realizando el cálculo.
+    df : Pandas.Dataframe
+        Dataframe que contiene los datos para realizar el cálculo.
+
+    Retorna
+    -------
+    float
+        Coeficiente de variación calculado para un distrito en una semana epidemiológica y año dados.
+    &#34;&#34;&#34;
+
+    # Si la semana es la 25 del 2020, no se puede calcular porque no hay datos antes de esa seamana, y se retorna 0.
+    if semana &lt; 28 and int(ano) == 2020:
+        return 0
+
+    semanaCalculo = 0
+    casosSemanasAnteriores = []
+    anoActual = 0
+    for i in range(1, 4):
+        if semana - i &lt; 0:
+            anoActual = str(int(ano) - 1)
+            maxSemana = numeroSemanaEpidemiologica(anoActual + &#34;-12-31&#34;)
+            semanaCalculo = maxSemana + 1 - i
+        else:
+            anoActual = ano
+            semanaCalculo = semana - i
+        # se crea un arreglo con la cantidad de casos activos de las últimas 3 semanas epidemiológicas anteriores a la semana dada
+        casosSemanasAnteriores.append(
+            sumarCasosSemana(distrito, semanaCalculo, anoActual, df)
+        )
+
+    # Se realiza el cálculo de la desviación estándar y la media aritmética
+    sd = np.std(casosSemanasAnteriores)
+    mean = np.mean(casosSemanasAnteriores)
+
+    # Evita dividir entre 0
+    if sd == 0 or mean == 0:
+        return 0
+    else:
+        return sd / mean</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.calcularTasaAtaque"><code class="name flex">
+<span>def <span class="ident">calcularTasaAtaque</span></span>(<span>distrito, semana, ano, df)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Calcula la tasa de ataque para un distrito en la semana epidemiológica indicada,
+según la definición dada por el Ministerio de Salud.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>distrito : int
+Índice de la fila del distrito para el cálculo.
+semana : int
+Número de semana epidemiológica a considerar para el cálculo.
+ano : int
+Año para el que se está realizando el cálculo.
+df : Pandas.Dataframe
+Dataframe que contiene los datos para realizar el cálculo.</p>
+<h2 id="retorna">Retorna</h2>
+<p>float
+Tasa de ataque calculada para un distrito en una semana epidemiológica y año dados.</p>
+<h2 id="levanta">Levanta</h2>
+<p>Exception
+En caso de que no haya datos de cantidad de habitantes en el distrito, imprescindible para el cálculo.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def calcularTasaAtaque(distrito, semana, ano, df):
+    &#34;&#34;&#34;
+    Calcula la tasa de ataque para un distrito en la semana epidemiológica indicada,
+    según la definición dada por el Ministerio de Salud.
+
+    Parámetros
+    ----------
+    distrito : int
+        Índice de la fila del distrito para el cálculo.
+    semana : int
+        Número de semana epidemiológica a considerar para el cálculo.
+    ano : int
+        Año para el que se está realizando el cálculo.
+    df : Pandas.Dataframe
+        Dataframe que contiene los datos para realizar el cálculo.
+
+    Retorna
+    -------
+    float
+        Tasa de ataque calculada para un distrito en una semana epidemiológica y año dados.
+
+    Levanta
+    -------
+    Exception
+        En caso de que no haya datos de cantidad de habitantes en el distrito, imprescindible para el cálculo.
+    &#34;&#34;&#34;
+
+    # Si la semana es la 25 del 2020, no se puede calcular porque no hay datos antes de esa seamana, y se retorna 0.
+    if semana &lt; 26 and int(ano) == 2020:
+        return 0
+
+    # Se realiza el cálculo de la desviación estándar y la media aritmética
+    suma = sumarCasosSemana(distrito, semana, ano, df)
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    query = &#34;select poblacion from datos_distrito where codigo_distrito = &#39;{codigo}&#39;&#34;
+    if str(df.iloc[distrito, 4]).endswith(&#34;99&#34;):
+        return 0
+    codigo = df.iloc[distrito, 4]
+    cursor.execute(query.format(codigo=df.iloc[distrito, 4]))
+    poblacion = 0
+    try:
+        poblacion = cursor.fetchone()[0]
+    except:
+        consoleLog(
+            &#34;Error, no hay datos de población para el distrito código: &#34; + str(codigo)
+        )
+    closeConnection(conn)
+
+    # Evita dividir entre 0
+    if poblacion == 0:
+        return 0
+    else:
+        return (suma / poblacion) * 100</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.cargarCapasProyecciones"><code class="name flex">
+<span>def <span class="ident">cargarCapasProyecciones</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Utilidad para cargar las capas de proyecciones por distrito a la base de datos. Se debe utilizar manualmente cada vez
+que se suministren nuevas capas.
+Toma los datos de los archivos .geojson correspondientes a las capas suministradas.</p>
+<h2 id="levanta">Levanta</h2>
+<p>Exception
+En caso de ocurrir algún error en el procesamiento de los datos o en el formato del archivo geojson.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cargarCapasProyecciones():
+    &#34;&#34;&#34;
+    Utilidad para cargar las capas de proyecciones por distrito a la base de datos. Se debe utilizar manualmente cada vez
+    que se suministren nuevas capas.
+    Toma los datos de los archivos .geojson correspondientes a las capas suministradas.
+
+    Levanta
+    -------
+    Exception
+        En caso de ocurrir algún error en el procesamiento de los datos o en el formato del archivo geojson.
+    &#34;&#34;&#34;
+
+    # Cambiar estas variables según el archivo a cargar.
+    archivo = &#34;50 Dist 20 al 26 Jun.geojson&#34;
+    fecha_inicio = &#34;2021-06-20&#34;
+    fecha_fin = &#34;2021-06-26&#34;
+    muestra = int(archivo.split(&#34; &#34;)[0])
+
+    df = gpd.read_file(archivo, ignore_geometry=True)
+
+    try:
+        conn = getAuthConnection()
+        cursor = conn.cursor()
+        for row in range(len(df)):
+            queryGrupo = &#34;&#34;&#34;
+                    INSERT INTO proyeccion_distrito (codigo_dta, porcentaje, fecha_inicio, fecha_fin, muestra)
+                    VALUES ({codigo_dta}, {porcentaje}, &#39;{fecha_inicio}&#39;, &#39;{fecha_fin}&#39;, {muestra}) ON CONFLICT DO NOTHING;
+                &#34;&#34;&#34;
+
+            cursor.execute(
+                queryGrupo.format(
+                    codigo_dta=df.iloc[row][&#34;codigo_dta&#34;],
+                    porcentaje=df.iloc[row, -1],
+                    fecha_inicio=fecha_inicio,
+                    fecha_fin=fecha_fin,
+                    muestra=muestra,
+                )
+            )
+
+            conn.commit()
+
+    except Exception as e:
+        consoleLog(&#34;Ha ocurrido un error al cargar los datos: &#34; + str(e))
+        raise
+    finally:
+        closeConnection(conn)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.cargarCasos"><code class="name flex">
+<span>def <span class="ident">cargarCasos</span></span>(<span>archivo, ultimaFecha)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Carga los casos activos, acumulados, fallecidos, recuperados para todos los distritos y todas las fechas,
+a partir de la hoja Desagre_Distrito del archivo COVID19CR.xlsx.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>archivo : str
+Nombre del archivo a leer.
+ultimaFecha : str
+Fecha a partir de la cual se deben procesar los datos del archivo.</p>
+<h2 id="levanta">Levanta</h2>
+<p>Exception
+Si ocurre algún error inesperado al cargar y procesar los datos.
+psql.Error
+Si ocurre un error de base de datos.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cargarCasos(archivo, ultimaFecha):
+    &#34;&#34;&#34;
+    Carga los casos activos, acumulados, fallecidos, recuperados para todos los distritos y todas las fechas,
+    a partir de la hoja Desagre_Distrito del archivo COVID19CR.xlsx.
+
+    Parámetros
+    ----------
+    archivo : str
+        Nombre del archivo a leer.
+    ultimaFecha : str
+        Fecha a partir de la cual se deben procesar los datos del archivo.
+
+    Levanta
+    -------
+    Exception
+        Si ocurre algún error inesperado al cargar y procesar los datos.
+    psql.Error
+        Si ocurre un error de base de datos.
+    &#34;&#34;&#34;
+
+    consoleLog(&#34;Leyendo archivo de casos...&#34;)
+    df = pd.read_excel(
+        archivo, header=None, sheet_name=&#34;Desagre_Distrito&#34;, usecols=&#34;G,I,N,R,V,Z&#34;
+    )
+    consoleLog(&#34;archivo de casos leído&#34;)
+    try:
+        conn = getAuthConnection()
+        cursor = conn.cursor()
+
+        # para cada fila sin contar encabezado
+        for row in range(1, df.shape[0]):
+            fecha = str(df.iloc[row, 1]).split(&#34; &#34;)[0]
+            if fecha &gt; ultimaFecha or DEBUG == True:
+                q = &#34;&#34;&#34;
+                        INSERT INTO acumulado_distrito (fecha, codigo_distrito, recuperados, cantidad, fallecidos, activos)
+                        VALUES (&#39;{fecha}&#39;, {codigo}, {recuperados}, {cantidad}, {fallecidos}, {activos}) ON CONFLICT DO NOTHING;&#34;&#34;&#34;
+                query = q.format(
+                    codigo=df.iloc[row, 0],
+                    fecha=fecha,
+                    cantidad=df.iloc[row, 2] if df.iloc[row, 2] &gt;= 0 else 0,
+                    recuperados=df.iloc[row, 3] if df.iloc[row, 3] &gt;= 0 else 0,
+                    fallecidos=df.iloc[row, 4] if df.iloc[row, 4] &gt;= 0 else 0,
+                    activos=df.iloc[row, 5] if df.iloc[row, 5] &gt;= 0 else 0,
+                )
+                cursor.execute(query)
+                consoleLog(&#34;-----------------------&#34;)
+                consoleLog(fecha)
+                consoleLog(&#34;-----------------------&#34;)
+                conn.commit()
+    except (Exception, psql.Error) as error:
+        consoleLog(&#34;Error en cargarCasos(): &#34; + error)
+        raise
+    finally:
+        closeConnection(conn)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.cargarCasosDiarios"><code class="name flex">
+<span>def <span class="ident">cargarCasosDiarios</span></span>(<span>df, ultimaFecha)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Carga los casos por día para cada distrito en cada fecha a partir de la hoja DistritosNuevos del archivo COVID19CR.xlsx.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>df : Pandas.Dataframe
+Dataframe que contiene la hoja del archivo a leer.
+ultimaFecha : str
+Fecha a partir de la cual se deben procesar los datos del archivo.</p>
+<h2 id="levanta">Levanta</h2>
+<p>Exception
+Si ocurre algún error inesperado al cargar y procesar los datos.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cargarCasosDiarios(df, ultimaFecha):
+    &#34;&#34;&#34;
+    Carga los casos por día para cada distrito en cada fecha a partir de la hoja DistritosNuevos del archivo COVID19CR.xlsx.
+
+    Parámetros
+    ----------
+    df : Pandas.Dataframe
+        Dataframe que contiene la hoja del archivo a leer.
+    ultimaFecha : str
+        Fecha a partir de la cual se deben procesar los datos del archivo.
+
+    Levanta
+    -------
+    Exception
+        Si ocurre algún error inesperado al cargar y procesar los datos.
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    # las fechas empiezan en la columna 6
+    COL_OFFSET = 6
+    COL_COD_DISTRITO = 4
+    ordenes_cargadas = False
+
+    # para cada fila sin contar encabezado
+    for row in range(1, df.shape[0]):
+        # para cada fecha
+        for col in range(COL_OFFSET, COL_OFFSET + len(df.iloc[0, COL_OFFSET:])):
+            if not pd.isnull(df.iloc[row, col]):
+                fecha = str(df.iloc[0, col]).split(&#34; &#34;)[0]
+                if fecha &gt; ultimaFecha or DEBUG == True:
+                    if not ordenes_cargadas:
+                        try:
+                            cargarOrdenesSanitarias(fecha)
+                        except Exception as e:
+                            consoleLog(e)
+                    q = &#34;&#34;&#34;
+                        UPDATE acumulado_distrito 
+                        SET caso_dia = {cantidad}
+                        WHERE codigo_distrito = &#39;{codigo}&#39;
+                        AND fecha = &#39;{fecha}&#39;&#34;&#34;&#34;
+
+                    # carga los casos por día si es mayor que 0 para cada distrito en cada fecha
+                    query = q.format(
+                        cantidad=df.iloc[row, col] if df.iloc[row, col] &gt;= 0 else 0,
+                        codigo=df.iloc[row, COL_COD_DISTRITO],
+                        fecha=fecha,
+                    )
+                    try:
+                        cursor.execute(query)
+                        conn.commit()
+                    except Exception as e:
+                        consoleLog(e)
+                        closeConnection(conn)
+                        raise
+        ordenes_cargadas = True
+
+        consoleLog(
+            &#34;Cargando casos nuevos para el distrito: &#34;
+            + str(df.iloc[row, COL_COD_DISTRITO])
+        )
+
+    closeConnection(conn)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.cargarDatos"><code class="name flex">
+<span>def <span class="ident">cargarDatos</span></span>(<span>archivoCovid, archivoEscenarios)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Carga todos los datos de actualización diaria a partir de los archivos COVID19CR.xlsx y EscenariosOctubre.xlsx.
+Esta función es llamada desde el cron job que se ejecuta automáticamente para actualizar los datos diariamente.
+Si ocurre algún error en el proceso de carga de datos, envía un correo notificando el error, a los destinatarios
+configurados en emailConf/direcciones.txt, en donde cada fila tiene el formato <nombre> <correo>.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>archivoCovid19 : str
+Nombre o ruta del archivo COVID19CR.xlsx.
+archivoEscenarios : str
+Nombre o ruta del archivo EscenariosOctubre.xlsx.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cargarDatos(archivoCovid, archivoEscenarios):
+    &#34;&#34;&#34;
+    Carga todos los datos de actualización diaria a partir de los archivos COVID19CR.xlsx y EscenariosOctubre.xlsx.
+    Esta función es llamada desde el cron job que se ejecuta automáticamente para actualizar los datos diariamente.
+    Si ocurre algún error en el proceso de carga de datos, envía un correo notificando el error, a los destinatarios
+    configurados en emailConf/direcciones.txt, en donde cada fila tiene el formato &lt;nombre&gt; &lt;correo&gt;.
+
+    Parámetros
+    ----------
+    archivoCovid19 : str
+        Nombre o ruta del archivo COVID19CR.xlsx.
+    archivoEscenarios : str
+        Nombre o ruta del archivo EscenariosOctubre.xlsx.
+    &#34;&#34;&#34;
+
+    print(&#34;Inicio de carga: &#34; + datetime.now().strftime(&#34;%d/%m/%Y %H:%M:%S&#34;))
+    try:
+        ultimaFecha = getLastDate()[0].strftime(&#34;%Y-%m-%d&#34;)
+        consoleLog(&#34;Ultima fecha en la BD: &#34; + str(ultimaFecha))
+        cargarCasos(archivoCovid, ultimaFecha)
+        archivoCasosDiarios = pd.read_excel(
+            archivoCovid, header=None, sheet_name=&#34;DistritosNuevos&#34;
+        )
+        cargarCasosDiarios(archivoCasosDiarios, ultimaFecha)
+        cargarDatosPais(archivoCovid, ultimaFecha)
+        cargarIndicadores(archivoCovid, ultimaFecha)
+        cargarEscenarios(archivoEscenarios)
+    except Exception as e:
+        consoleLog(&#34;Ha ocurrido un error al cargar los datos: &#34; + str(e))
+        noti = Notificador()
+        noti.notificar(str(e))
+
+    print(&#34;Fin de carga: &#34; + datetime.now().strftime(&#34;%d/%m/%Y %H:%M:%S&#34;))</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.cargarDatosPais"><code class="name flex">
+<span>def <span class="ident">cargarDatosPais</span></span>(<span>archivo, ultimaFecha)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Carga los datos de hospitalizaciones en salón y UCI, y el índice de positividad, a nivel país, a partir del archivo COVID19.xlsx.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>archivo : str
+Nombre del archivo a leer.
+ultimaFecha : str
+Fecha a partir de la cual se deben procesar los datos del archivo.</p>
+<h2 id="levanta">Levanta</h2>
+<p>Exception
+En caso de que ocurra un error al cargar los datos, como que la muestra leída sea 0.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cargarDatosPais(archivo, ultimaFecha):
+    &#34;&#34;&#34;
+    Carga los datos de hospitalizaciones en salón y UCI, y el índice de positividad, a nivel país, a partir del archivo COVID19.xlsx.
+
+    Parámetros
+    ----------
+    archivo : str
+        Nombre del archivo a leer.
+    ultimaFecha : str
+        Fecha a partir de la cual se deben procesar los datos del archivo.
+
+    Levanta
+    -------
+    Exception
+        En caso de que ocurra un error al cargar los datos, como que la muestra leída sea 0.
+    &#34;&#34;&#34;
+
+    df = pd.read_excel(archivo, header=None, sheet_name=&#34;Datos&#34;, usecols=&#34;B,C,AG,AI,AY&#34;)
+    try:
+        conn = getAuthConnection()
+        cursor = conn.cursor()
+        for row in range(1, df.shape[0]):
+            fecha = str(df.iloc[row, 0]).split(&#34; &#34;)[0]
+            if fecha &gt; ultimaFecha or DEBUG == True:
+                consoleLog(&#34;Cargando datos país para la fecha: &#34; + str(fecha))
+                acumulados = df.iloc[row, 1]
+                casos_salon = df.iloc[row, 2]
+                casos_uci = df.iloc[row, 3]
+                muestras = df.iloc[row, 4]
+                indice_positividad = 0
+                try:
+                    indice_positividad = (acumulados / muestras) * 100
+                except Exception as e:
+                    consoleLog(str(e))
+                if np.isnan(indice_positividad):
+                    indice_positividad = &#34;null&#34;
+                else:
+                    indice_positividad = round(indice_positividad, 2)
+                q = &#34;&#34;&#34;
+                        INSERT INTO datos_pais (fecha, casos_salon, casos_uci, indice_positividad)
+                        VALUES (&#39;{fecha}&#39;, {casos_salon}, {casos_uci}, {indice_positividad}) 
+                        ON CONFLICT (fecha) DO UPDATE SET casos_salon={casos_salon}, casos_uci={casos_uci}, indice_positividad={indice_positividad};&#34;&#34;&#34;
+                if not np.isnan(casos_salon) and not np.isnan(casos_uci):
+                    query = q.format(
+                        fecha=fecha,
+                        casos_salon=casos_salon,
+                        casos_uci=casos_uci,
+                        indice_positividad=indice_positividad,
+                    )
+                    cursor.execute(query)
+                    consoleLog(&#34;-----------------------&#34;)
+                    conn.commit()
+    except (Exception, psql.Error) as error:
+        consoleLog(&#34;Error cargando los datos país: &#34; + str(error))
+        raise
+    finally:
+        closeConnection(conn)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.cargarDistritos"><code class="name flex">
+<span>def <span class="ident">cargarDistritos</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Utilidad para cargar los datos de población (habitantes) para cada distrito, solo se usa una única vez para insertar los datos y no se actualiza.
+Toma los datos de la hoja PoblacionDistrito del archivo COVID19CR.xlsx.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cargarDistritos():
+    &#34;&#34;&#34;
+    Utilidad para cargar los datos de población (habitantes) para cada distrito, solo se usa una única vez para insertar los datos y no se actualiza.
+    Toma los datos de la hoja PoblacionDistrito del archivo COVID19CR.xlsx.
+    &#34;&#34;&#34;
+
+    df = pd.read_excel(&#34;COVID19CR.xlsx&#34;, header=None, sheet_name=&#34;PoblacionDistrito&#34;)
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    for row in range(1, df.shape[0]):
+        query = &#34;&#34;&#34;
+            INSERT INTO datos_distrito
+            VALUES (&#39;{codigo_distrito}&#39;, {poblacion}, {pob_am}, {pob_pobre})
+        &#34;&#34;&#34;
+        cursor.execute(
+            query.format(
+                codigo_distrito=df.iloc[row, 0].split(&#34;:&#34;)[0],
+                poblacion=df.iloc[row, 7],
+                pob_am=round((df.iloc[row, 6] / df.iloc[row, 7]) * 100, 2),
+                pob_pobre=0.0,
+            )
+        )
+        conn.commit()
+    closeConnection(conn)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.cargarEscenarios"><code class="name flex">
+<span>def <span class="ident">cargarEscenarios</span></span>(<span>filename)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Carga las alertas y las predicciones para cada distrito, a partir de la hoja 'PCD Escenarios' del archivo EscenariosOctubre.xlsx.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>filename : str
+Nombre del archivo a leer para cargar los datos.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cargarEscenarios(filename):
+    &#34;&#34;&#34;
+    Carga las alertas y las predicciones para cada distrito, a partir de la hoja &#39;PCD Escenarios&#39; del archivo EscenariosOctubre.xlsx.
+
+    Parámetros
+    ----------
+    filename : str
+        Nombre del archivo a leer para cargar los datos.
+    &#34;&#34;&#34;
+
+    df = pd.read_excel(filename, header=0, sheet_name=&#34;PCD Escenarios&#34;)
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    for row in range(1, df.shape[0]):
+        prediccion = df.iloc[row, 7]
+        semana = prediccion.split(&#34; &#34;)[0]
+        mes = (
+            prediccion.split(&#34; &#34;)[2]
+            if len(prediccion.split(&#34; &#34;)) &gt; 2
+            else prediccion.split(&#34; &#34;)[1]
+        )
+        # se carga el grupo y el nivel de alerta para todo el mes para cada distrito con los datos de la semana I por defecto
+        if semana == &#34;I&#34;:
+
+            # en caso de que no venga el Índice Socio Sanitario, no se pone la columna grupo en el query
+            if df.iloc[row, 6] is np.nan:
+                queryGrupo = &#34;&#34;&#34;
+                    UPDATE acumulado_distrito
+                    SET condicion = &#39;{condicion}&#39;
+                    WHERE codigo_distrito = &#39;{distrito}&#39;
+                    AND date_part(&#39;month&#39;, fecha) = {mesActual}
+                    AND fecha &gt; &#39;2020-12-31&#39;
+                &#34;&#34;&#34;
+
+                cursor.execute(
+                    queryGrupo.format(
+                        distrito=df.iloc[row, 0],
+                        condicion=df.iloc[row, 8],
+                        mesActual=getNumeroMes(mes),
+                    )
+                )
+
+            else:
+                queryGrupo = &#34;&#34;&#34;
+                    UPDATE acumulado_distrito
+                    SET grupo = &#39;{grupo}&#39;,
+                    condicion = &#39;{condicion}&#39;
+                    WHERE codigo_distrito = &#39;{distrito}&#39;
+                    AND date_part(&#39;month&#39;, fecha) = {mesActual}
+                    AND fecha &gt; &#39;2020-12-31&#39;
+                &#34;&#34;&#34;
+
+                cursor.execute(
+                    queryGrupo.format(
+                        distrito=df.iloc[row, 0],
+                        grupo=df.iloc[row, 6],
+                        condicion=df.iloc[row, 8],
+                        mesActual=getNumeroMes(mes),
+                    )
+                )
+
+        queryPrediccion = &#34;&#34;&#34;
+            INSERT INTO prediccion_distrito (
+                codigo_distrito,
+                nombre_distrito,
+                mes,
+                semana,
+                activos,
+                prevalencia,
+                acumulado,
+                inv_acum
+            )
+            VALUES (
+                &#39;{codigo_distrito}&#39;,
+                &#39;{nombre_distrito}&#39;,
+                {mes},
+                &#39;{semana}&#39;,
+                {activos},
+                {prevalencia},
+                {acumulado},
+                {inv_acum}
+            ) ON CONFLICT DO NOTHING;
+                &#34;&#34;&#34;
+
+        activos = df.iloc[row, 2]
+        prevalencia = df.iloc[row, 3]
+        acumulado = df.iloc[row, 4]
+        inv_acum = df.iloc[row, 5]
+
+        if np.isnan(activos):
+            activos = 0
+        if np.isnan(prevalencia):
+            prevalencia = 0
+        if np.isnan(acumulado):
+            acumulado = 0
+        if np.isnan(inv_acum):
+            inv_acum = 0
+
+        cursor.execute(
+            queryPrediccion.format(
+                codigo_distrito=df.iloc[row, 0],
+                nombre_distrito=df.iloc[row, 1],
+                mes=getNumeroMes(mes),
+                semana=semana,
+                activos=activos,
+                prevalencia=prevalencia,
+                acumulado=acumulado,
+                inv_acum=inv_acum,
+            )
+        )
+        consoleLog(&#34;-----------------------&#34;)
+        consoleLog(df.iloc[row, 1])
+        consoleLog(&#34;-----------------------&#34;)
+        conn.commit()
+    closeConnection(conn)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.cargarIndicadores"><code class="name flex">
+<span>def <span class="ident">cargarIndicadores</span></span>(<span>archivoCovid, ultimaFecha)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Carga el coeficiente de variación y tasa de ataque para cada distrito y cada semana epidemiológica, según la definición del Ministerio de Salud,
+a partir de la hoja DistritosNuevos del archivo COVID19CR.xlsx.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>archivoCovid : str
+Nombre del archivo a leer.
+ultimaFecha : str
+Fecha a partir de la cual se deben procesar los datos del archivo.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cargarIndicadores(archivoCovid, ultimaFecha):
+    &#34;&#34;&#34;
+    Carga el coeficiente de variación y tasa de ataque para cada distrito y cada semana epidemiológica, según la definición del Ministerio de Salud,
+    a partir de la hoja DistritosNuevos del archivo COVID19CR.xlsx.
+
+    Parámetros
+    ----------
+    archivoCovid : str
+        Nombre del archivo a leer.
+    ultimaFecha : str
+        Fecha a partir de la cual se deben procesar los datos del archivo.
+    &#34;&#34;&#34;
+
+    df = pd.read_excel(archivoCovid, header=None, sheet_name=&#34;3_4 DIST_ACTIV&#34;)
+    dfNuevos = pd.read_excel(archivoCovid, header=None, sheet_name=&#34;DistritosNuevos&#34;)
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    COL_OFFSET = 6
+    COL_COD_DISTRITO = 4
+    semanaAnterior = 0
+    coef_var = 0
+    tasa_ataque = 0
+    # para cada distrito (fila)
+    for row in range(1, df.shape[0]):
+        # para cada fecha
+        codigo = df.iloc[row, COL_COD_DISTRITO]
+        if not str(codigo).endswith(&#34;99&#34;):
+            for col in range(COL_OFFSET, COL_OFFSET + len(df.iloc[0, COL_OFFSET:])):
+                q = &#34;&#34;&#34;
+                    UPDATE acumulado_distrito 
+                    SET coef_var = {coef_var},
+                    ta = {tasa_ataque}
+                    WHERE codigo_distrito = &#39;{codigo}&#39;
+                    AND fecha = &#39;{fecha}&#39;&#34;&#34;&#34;
+
+                # Hace split porque contiene también la hora, y no es necesaria.
+                fecha = str(df.iloc[0, col]).split(&#34; &#34;)[0]
+                if (
+                    True
+                ):  # fecha &gt; ultimaFecha or DEBUG == True: # Comentado temporalmente porque ocasiona errores en el cálculo si no se consideran todas las fechas
+                    semanaActual = numeroSemanaEpidemiologica(fecha)
+                    anoActual = fecha.split(&#34;-&#34;)[0]
+
+                    # El coeficiente se asocia a cada semana, por eso se calcula solo una vez
+                    if semanaActual != semanaAnterior:
+                        coef_var = 0
+                        tasa_ataque = 0
+                        coef_var = calcularCoefVar(row, semanaActual, anoActual, df)
+                        tasa_ataque = calcularTasaAtaque(
+                            row, semanaActual, anoActual, dfNuevos
+                        )
+                        semanaAnterior = semanaActual
+
+                    # Multiplica por 100 porque es un porcentaje, y redondea a dos decimales
+                    query = q.format(
+                        coef_var=round(coef_var * 100, 2),
+                        codigo=codigo,
+                        tasa_ataque=tasa_ataque,
+                        fecha=fecha,
+                    )
+
+                    cursor.execute(query)
+                    conn.commit()
+            consoleLog(&#34;Cargando coef_var y ta para distrito: &#34; + str(codigo))
+    closeConnection(conn)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.cargarMorbilidad"><code class="name flex">
+<span>def <span class="ident">cargarMorbilidad</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Utilidad para cargar la tasa de morbilidad por distrito. Solo se utiliza una vez y no se actualiza.
+Toma los datos de la hoja 'Base Final' del archivo Morbilidad.xlsx.</p>
+<h2 id="levanta">Levanta</h2>
+<p>Exception
+En caso de ocurrir algún error en la carga de datos.
+psql.Error
+En caso de ocurrir algún error de base de datos.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cargarMorbilidad():
+    &#34;&#34;&#34;
+    Utilidad para cargar la tasa de morbilidad por distrito. Solo se utiliza una vez y no se actualiza.
+    Toma los datos de la hoja &#39;Base Final&#39; del archivo Morbilidad.xlsx.
+
+    Levanta
+    -------
+    Exception
+        En caso de ocurrir algún error en la carga de datos.
+    psql.Error
+        En caso de ocurrir algún error de base de datos.
+    &#34;&#34;&#34;
+
+    consoleLog(&#34;Leyendo archivo de datos...&#34;)
+    df = pd.read_excel(
+        &#34;Morbilidad.xlsx&#34;, header=None, sheet_name=&#34;Base Final&#34;, usecols=&#34;C,M&#34;
+    )
+    consoleLog(&#34;archivo de datos leído&#34;)
+    try:
+        conn = getAuthConnection()
+        cursor = conn.cursor()
+        for row in range(1, df.shape[0]):
+            distrito = df.iloc[row, 0]
+            morbilidad = df.iloc[row, 1]
+            consoleLog(distrito)
+            q = &#34;&#34;&#34;
+                    INSERT INTO morbilidad_distrito (codigo_distrito, morbilidad)
+                    VALUES ({codigo}, {morbilidad})&#34;&#34;&#34;
+            query = q.format(codigo=distrito, morbilidad=morbilidad)
+            if not np.isnan(morbilidad):
+                cursor.execute(query)
+            consoleLog(&#34;-----------------------&#34;)
+            conn.commit()
+    except (Exception, psql.Error) as error:
+        consoleLog(&#34;Error while connecting to PostgreSQL&#34; + error)
+        raise
+    finally:
+        closeConnection(conn)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.cargarOrdenesSanitarias"><code class="name flex">
+<span>def <span class="ident">cargarOrdenesSanitarias</span></span>(<span>fecha)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Consume el API de órdenes sanitarias por distrito y por fecha, y guarda los datos en el sistema.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>fecha : str
+Fecha en formato YYYY-MM-DD para la cual se obtendrán las órdenes sanitarias por distrito.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cargarOrdenesSanitarias(fecha):
+    &#34;&#34;&#34;
+    Consume el API de órdenes sanitarias por distrito y por fecha, y guarda los datos en el sistema.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha en formato YYYY-MM-DD para la cual se obtendrán las órdenes sanitarias por distrito.
+    &#34;&#34;&#34;
+
+    url = (
+        &#34;https://apicovid.estuve-aqui.com/integrations/v1/ucr/sanitaryorders/details?limitDate=&#34;
+        + str(fecha)
+    )
+    head = {
+        &#34;ucr-token&#34;: &#34;ib41jDxofoRccn73Z79Kkts6YCCvfPxW8axklf0AKNeJ69ouem8ubymBpsqzHNC3YrZoPgiU9MKOAFKGZhJkbBxqG9q2ShG4I9IbCS6qRYu9TH&#34;
+    }
+    r = requests.get(url, headers=head)
+    df = pd.read_json(r.content)
+    consoleLog(&#34;Cargando OO.SS. en la fecha: &#34; + str(fecha))
+    if len(df) &gt; 0:
+        pd.options.display.max_colwidth = 500
+        query = &#34;SELECT DISTINCT codigo, nom_prov, nom_cant, nom_dist from distrito&#34;
+        conn = getAuthConnection()
+        cursor = conn.cursor()
+        cursor.execute(query)
+        results = cursor.fetchall()
+
+        for row in results:
+            suma = 0
+            for district in df[&#34;data&#34;]:
+                if (
+                    district[&#34;state&#34;] == row[1]
+                    and district[&#34;city&#34;] == row[2]
+                    and district[&#34;district&#34;] == row[3]
+                ):
+                    suma += int(district[&#34;total&#34;])
+            insert_query = &#34;&#34;&#34;
+                INSERT INTO ordenes_fecha
+                VALUES (&#39;{fecha}&#39;, &#39;{codigo_distrito}&#39;, {denuncias})
+                ON CONFLICT DO NOTHING;
+            &#34;&#34;&#34;
+            cursor.execute(
+                insert_query.format(
+                    fecha=fecha, codigo_distrito=str(row[0]), denuncias=suma
+                )
+            )
+            conn.commit()
+            consoleLog(&#34;Cargando OO.SS. para distrito: &#34; + str(row[0]))
+        closeConnection(conn)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.consoleLog"><code class="name flex">
+<span>def <span class="ident">consoleLog</span></span>(<span>text)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Utilidad para imprimir logs en la consola basado en la variable global DEBUG.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>text : str
+Texto a imprimir en la consola.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def consoleLog(text):
+    &#34;&#34;&#34;
+    Utilidad para imprimir logs en la consola basado en la variable global DEBUG.
+
+    Parámetros
+    ----------
+    text : str
+        Texto a imprimir en la consola.
+    &#34;&#34;&#34;
+
+    if DEBUG:
+        print(text)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.getLastDate"><code class="name flex">
+<span>def <span class="ident">getLastDate</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene la última fecha registrada en la tabla acumulado_distrito.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Última fecha registrada en la tabla acumulado_distrito en formato YYYY-MM-DD.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getLastDate():
+    &#34;&#34;&#34;
+    Obtiene la última fecha registrada en la tabla acumulado_distrito.
+
+    Retorna
+    -------
+    str
+        Última fecha registrada en la tabla acumulado_distrito en formato YYYY-MM-DD.
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    query = &#34;select fecha from acumulado_distrito ad order by fecha desc limit 1&#34;
+    cursor.execute(query)
+    result = cursor.fetchone()
+    closeConnection(conn)
+    return result</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.getNumeroMes"><code class="name flex">
+<span>def <span class="ident">getNumeroMes</span></span>(<span>mes)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene el número de mes, de 1 a 12, a partir de una hilera.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>mes : str
+Hilera que contiene el nombre del mes cuyo número se quiere obtener.</p>
+<h2 id="retorna">Retorna</h2>
+<p>int
+Número del mes de 1 a 12 identificado en la hilera, o -1 si la hilera no es un mes válido.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getNumeroMes(mes):
+    &#34;&#34;&#34;
+    Obtiene el número de mes, de 1 a 12, a partir de una hilera.
+
+    Parámetros
+    ----------
+    mes : str
+        Hilera que contiene el nombre del mes cuyo número se quiere obtener.
+
+    Retorna
+    -------
+    int
+        Número del mes de 1 a 12 identificado en la hilera, o -1 si la hilera no es un mes válido.
+    &#34;&#34;&#34;
+
+    if mes == &#34;Ene&#34; or mes == &#34;Enero&#34;:
+        return 1
+    elif mes == &#34;Feb&#34; or mes == &#34;Febrero&#34;:
+        return 2
+    elif mes == &#34;Mar&#34; or mes == &#34;Marzo&#34;:
+        return 3
+    elif mes == &#34;Abr&#34; or mes == &#34;Abril&#34;:
+        return 4
+    elif mes == &#34;May&#34; or mes == &#34;Mayo&#34;:
+        return 5
+    elif mes == &#34;Jun&#34; or mes == &#34;Junio&#34;:
+        return 6
+    elif mes == &#34;Jul&#34; or mes == &#34;Julio&#34;:
+        return 7
+    elif mes == &#34;Ago&#34; or mes == &#34;Agosto&#34;:
+        return 8
+    elif mes == &#34;Sep&#34; or mes == &#34;Septiembre&#34;:
+        return 9
+    elif mes == &#34;Oct&#34; or mes == &#34;Octubre&#34;:
+        return 10
+    elif mes == &#34;Nov&#34; or mes == &#34;Noviembre&#34;:
+        return 11
+    elif mes == &#34;Dic&#34; or mes == &#34;Diciembre&#34;:
+        return 12
+    else:
+        return -1</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.main"><code class="name flex">
+<span>def <span class="ident">main</span></span>(<span>argv)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Función principal del programa. Ejecuta todo el cargador de datos.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>argv : str[]
+Arreglo de parámetros pasados al invocar el programa.
+Debe tener el nombre o ruta del archivo COVID19CR.xlsx y de EscenariosOctubre.xlsx.</p>
+<h2 id="levanta">Levanta</h2>
+<p>Exception
+En caso de ocurrir algún error en el proceso de carga de datos.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def main(argv):
+    &#34;&#34;&#34;
+    Función principal del programa. Ejecuta todo el cargador de datos.
+
+    Parámetros
+    ----------
+    argv : str[]
+        Arreglo de parámetros pasados al invocar el programa.
+        Debe tener el nombre o ruta del archivo COVID19CR.xlsx y de EscenariosOctubre.xlsx.
+
+    Levanta
+    -------
+    Exception
+        En caso de ocurrir algún error en el proceso de carga de datos.
+    &#34;&#34;&#34;
+
+    if len(argv) &lt; 1:
+        consoleLog(&#34;Uso: carga_datos.py &lt;Archivo COVID19&gt; &lt;Archivo escenarios&gt;&#34;)
+        return False
+    else:
+        if len(argv) &gt;= 1:
+            try:
+                archivoCovid = argv[0]
+                archivoEscenarios = argv[1]
+                cargarDatos(archivoCovid, archivoEscenarios)
+            except Exception as e:
+                consoleLog(&#34;No se pudo cargar datos. Error: &#34; + str(e))
+                raise
+        return True</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.numeroSemanaEpidemiologica"><code class="name flex">
+<span>def <span class="ident">numeroSemanaEpidemiologica</span></span>(<span>fecha)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene el número de semana epidemiológica dada una fecha, según la definición del Ministerio de Salud.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>fecha : str
+Fecha en formato YYYY-MM-DD de la cual se quiere obtener la semana epidemiológica correspondiente.</p>
+<h2 id="retorna">Retorna</h2>
+<p>int
+Número de semana epidemiológica correspondiente a la fecha.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def numeroSemanaEpidemiologica(fecha):
+    &#34;&#34;&#34;
+    Obtiene el número de semana epidemiológica dada una fecha, según la definición del Ministerio de Salud.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha en formato YYYY-MM-DD de la cual se quiere obtener la semana epidemiológica correspondiente.
+
+    Retorna
+    -------
+    int
+        Número de semana epidemiológica correspondiente a la fecha.
+    &#34;&#34;&#34;
+
+    partesFecha = fecha.split(&#34;-&#34;)
+    fechaIso = date(int(partesFecha[0]), int(partesFecha[1]), int(partesFecha[2]))
+    semanaActual = fechaIso.isocalendar()[1]
+    # La semana epidemiológica es la siguiente de la semana ISO, si el día es domingo.
+    if fechaIso.weekday() == 6:
+        semanaActual = semanaActual + 1
+    return semanaActual - 1</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.sumarCasosSemana"><code class="name flex">
+<span>def <span class="ident">sumarCasosSemana</span></span>(<span>distrito, semana, ano, df)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Suma los casos nuevos de una semana epidemiológica dada, para un distrito en una semana y año dados.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>distrito : int
+Índice de la fila del distrito para el cálculo.
+semana : int
+Número de semana epidemiológica a considerar para el cálculo.
+ano : int
+Año para el que se está realizando el cálculo.
+df : Pandas.Dataframe
+Dataframe que contiene los datos para realizar el cálculo.</p>
+<h2 id="retorna">Retorna</h2>
+<p>int
+Suma de casos nuevos registrados en un distrito en una semana epidemiológica y año dados.</p>
+<h2 id="levanta">Levanta</h2>
+<p>Exception
+En caso que ocurra un error al realizar el cálculo, como un dato faltante o una fecha con formato incorrecto.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sumarCasosSemana(distrito, semana, ano, df):
+    &#34;&#34;&#34;
+    Suma los casos nuevos de una semana epidemiológica dada, para un distrito en una semana y año dados.
+
+    Parámetros
+    ----------
+    distrito : int
+        Índice de la fila del distrito para el cálculo.
+    semana : int
+        Número de semana epidemiológica a considerar para el cálculo.
+    ano : int
+        Año para el que se está realizando el cálculo.
+    df : Pandas.Dataframe
+        Dataframe que contiene los datos para realizar el cálculo.
+
+    Retorna
+    -------
+    int
+        Suma de casos nuevos registrados en un distrito en una semana epidemiológica y año dados.
+
+    Levanta
+    -------
+    Exception
+        En caso que ocurra un error al realizar el cálculo, como un dato faltante o una fecha con formato incorrecto.
+    &#34;&#34;&#34;
+
+    # El offset es porque en esta columna empiezan las fechas
+    COL_OFFSET = 6
+    acumuladoSemana = 0
+    sumo = False
+    semanaCalculo = -1
+    for col in range(COL_OFFSET, df.shape[1]):
+        try:
+            fecha = str(df.iloc[0, col]).split(&#34; &#34;)[0]
+
+            # Si la fecha analizada pertenece a la semana epidemiológica requerida en el año especificado, se agrega el dato a la suma.
+            if numeroSemanaEpidemiologica(fecha) == semana and (
+                ano == fecha.split(&#34;-&#34;)[0] or ano == str(int(fecha.split(&#34;-&#34;)[0]) + 1)
+            ):
+                if semanaCalculo == -1:
+                    semanaCalculo = semana
+                    sumo = True
+                try:
+                    acumuladoSemana += (
+                        df.iloc[distrito, col] if df.iloc[distrito, col] &gt;= 0 else 0
+                    )
+                except:
+                    pass
+            # Si ya cambió de semana epidemiológica después de sumar los casos, retorna
+            elif numeroSemanaEpidemiologica(fecha) != semanaCalculo and sumo == True:
+                return acumuladoSemana
+        except Exception as e:
+            consoleLog(
+                &#34;Error!! &#34;
+                + str(e)
+                + &#34; Columna: &#34;
+                + str(col)
+                + &#34;Distrito: &#34;
+                + str(distrito)
+                + &#34; Fecha: &#34;
+                + str(fecha)
+            )
+            raise
+    return acumuladoSemana</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.datos.carga_datos.validateDate"><code class="name flex">
+<span>def <span class="ident">validateDate</span></span>(<span>date)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Valida que una fecha dada sea correcta en el formato YYYY-MM-DD.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>date : str
+Fecha a validar.</p>
+<h2 id="retorna">Retorna</h2>
+<p>bool
+True si la fecha es válida, False en caso contrario.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def validateDate(date):
+    &#34;&#34;&#34;
+    Valida que una fecha dada sea correcta en el formato YYYY-MM-DD.
+
+    Parámetros
+    ----------
+    date : str
+        Fecha a validar.
+
+    Retorna
+    -------
+    bool
+        True si la fecha es válida, False en caso contrario.
+    &#34;&#34;&#34;
+
+    try:
+        datetime.datetime.strptime(date, &#34;%Y-%m-%d&#34;)
+    except:
+        return False
+    return True</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="visorcovid19.datos" href="index.html">visorcovid19.datos</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="visorcovid19.datos.carga_datos.calcularCoefVar" href="#visorcovid19.datos.carga_datos.calcularCoefVar">calcularCoefVar</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.calcularTasaAtaque" href="#visorcovid19.datos.carga_datos.calcularTasaAtaque">calcularTasaAtaque</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.cargarCapasProyecciones" href="#visorcovid19.datos.carga_datos.cargarCapasProyecciones">cargarCapasProyecciones</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.cargarCasos" href="#visorcovid19.datos.carga_datos.cargarCasos">cargarCasos</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.cargarCasosDiarios" href="#visorcovid19.datos.carga_datos.cargarCasosDiarios">cargarCasosDiarios</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.cargarDatos" href="#visorcovid19.datos.carga_datos.cargarDatos">cargarDatos</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.cargarDatosPais" href="#visorcovid19.datos.carga_datos.cargarDatosPais">cargarDatosPais</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.cargarDistritos" href="#visorcovid19.datos.carga_datos.cargarDistritos">cargarDistritos</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.cargarEscenarios" href="#visorcovid19.datos.carga_datos.cargarEscenarios">cargarEscenarios</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.cargarIndicadores" href="#visorcovid19.datos.carga_datos.cargarIndicadores">cargarIndicadores</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.cargarMorbilidad" href="#visorcovid19.datos.carga_datos.cargarMorbilidad">cargarMorbilidad</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.cargarOrdenesSanitarias" href="#visorcovid19.datos.carga_datos.cargarOrdenesSanitarias">cargarOrdenesSanitarias</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.consoleLog" href="#visorcovid19.datos.carga_datos.consoleLog">consoleLog</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.getLastDate" href="#visorcovid19.datos.carga_datos.getLastDate">getLastDate</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.getNumeroMes" href="#visorcovid19.datos.carga_datos.getNumeroMes">getNumeroMes</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.main" href="#visorcovid19.datos.carga_datos.main">main</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.numeroSemanaEpidemiologica" href="#visorcovid19.datos.carga_datos.numeroSemanaEpidemiologica">numeroSemanaEpidemiologica</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.sumarCasosSemana" href="#visorcovid19.datos.carga_datos.sumarCasosSemana">sumarCasosSemana</a></code></li>
+<li><code><a title="visorcovid19.datos.carga_datos.validateDate" href="#visorcovid19.datos.carga_datos.validateDate">validateDate</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

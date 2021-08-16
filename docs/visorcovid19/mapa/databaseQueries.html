@@ -1,0 +1,1450 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>visorcovid19.mapa.databaseQueries API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>visorcovid19.mapa.databaseQueries</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from mapa.libreria.bd import getAuthConnection, closeConnection
+import geopandas as gpd
+
+
+def getCantones(provincia):
+    &#34;&#34;&#34;
+    Obtiene la lista de nombres de cantones de una provincia dada.
+
+    Parámetros
+    ----------
+    provincia : str
+        Nombre de la provincia cuyos cantones se quieren obtener.
+
+    Retorna
+    -------
+    list
+        Lista que contiene el nombre de los cantones de la provincia dada.
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    getCantonesQuery = &#34;&#34;&#34;
+        select c.nom_cant_1 from canton c where UNACCENT(nom_prov) ILIKE UNACCENT(&#39;{provincia}&#39;) order by nom_cant_1
+    &#34;&#34;&#34;
+
+    cursor.execute(getCantonesQuery.format(provincia=provincia))
+    records = cursor.fetchall()
+
+    cantones = []
+
+    for row in records:
+        cantones.append(row[0])
+
+    closeConnection(conn)
+
+    return cantones
+
+
+def getDistritos(canton):
+    &#34;&#34;&#34;
+    Obtiene la lista de nombres de distritos de un cantón dado.
+
+    Parámetros
+    ----------
+    canton : str
+        Nombre del cantón cuyos distritos se quieren obtener.
+
+    Retorna
+    -------
+    list
+        Lista que contiene el nombre de los distritos del cantón dado.
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    getDistritosQuery = &#34;&#34;&#34;
+        select distinct d.nom_dist from distrito d where UNACCENT(nom_cant) ILIKE UNACCENT(&#39;{canton}&#39;) order by nom_dist
+    &#34;&#34;&#34;
+
+    cursor.execute(getDistritosQuery.format(canton=canton))
+    records = cursor.fetchall()
+
+    distritos = []
+
+    for row in records:
+        distritos.append(row[0])
+
+    closeConnection(conn)
+
+    return distritos
+
+
+def getFechasValidas():
+    &#34;&#34;&#34;
+    Obtiene todas las fechas registradas en la tabla acumulado_distrito, es decir, son las fechas para las cuales hay datos.
+
+    Retorna
+    -------
+    list
+        Lista que contiene todas las fechas válidas de la base de datos, en orden descendente.
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    getFechasQuery = &#34;&#34;&#34;
+        select distinct fecha from acumulado_distrito order by fecha desc
+    &#34;&#34;&#34;
+
+    cursor.execute(getFechasQuery)
+    records = cursor.fetchall()
+
+    fechas = []
+
+    for row in records:
+        fechas.append(row[0])
+
+    closeConnection(conn)
+
+    return fechas
+
+
+def getQueryNacional():
+    &#34;&#34;&#34;
+    Crea la consulta para obtener la cantidad de casos acumulados, recuperados, activos y casos nuevos por fecha, para todo el país.
+
+    Retorna
+    -------
+    str
+        Consulta que retorna la cantidad de casos acumulados, recuperados, activos y casos nuevos por fecha, para todo el país.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        select fecha, sum(cantidad) as acumulados, sum(recuperados) as recuperados, sum(activos) as activos, sum(caso_dia) as caso_dia
+        from acumulado_distrito
+        group by fecha order by fecha asc;
+    &#34;&#34;&#34;
+    return query
+
+
+def getQueryOrdenesPers(fecha):
+    &#34;&#34;&#34;
+    Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, a nivel nacional.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de la consulta.
+
+    Retorna
+    -------
+    str
+        Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha.
+    &#34;&#34;&#34;
+
+    if fecha != None:
+        query = &#34;&#34;&#34;
+            select sum(denuncias_personas) as pers, 0 as den from ordenes_fecha
+            where fecha = &#39;{fecha}&#39; 
+        &#34;&#34;&#34;
+        return query.format(fecha=fecha)
+    else:
+        query = &#34;&#34;&#34;
+            select sum(denuncias_personas) as pers, 0 as den, fecha from ordenes_fecha group by fecha order by fecha asc
+        &#34;&#34;&#34;
+        return query
+
+
+def getQueryOrdenesPersProv(fecha, provincia):
+    &#34;&#34;&#34;
+    Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para una provincia dada.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de la consulta.
+    provincia : str
+        Nombre de la provincia para la que se desea obtener los datos de la consulta.
+
+    Retorna
+    -------
+    str
+        Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para una provincia dada.
+    &#34;&#34;&#34;
+
+    if fecha != None:
+        query = &#34;&#34;&#34;
+            select sum(denuncias_personas) as pers, 0 as den from ordenes_fecha
+            where fecha = &#39;{fecha}&#39; and
+            substring( cod_distrito::varchar, 1,1 ) = ( select substring( codigo::varchar, 1,1 )
+            from distrito d where LOWER( d.nom_prov ) = LOWER(&#39;{provincia}&#39;) limit 1);
+        &#34;&#34;&#34;
+        return query.format(fecha=fecha, provincia=provincia)
+    else:
+        query = &#34;&#34;&#34;
+            select sum(denuncias_personas) as pers, 0 as den, fecha from ordenes_fecha
+            where substring( cod_distrito::varchar, 1,1 ) = ( select substring( codigo::varchar, 1,1 )
+            from distrito d where LOWER( d.nom_prov ) = LOWER(&#39;{provincia}&#39;) limit 1) group by fecha order by fecha asc;
+        &#34;&#34;&#34;
+        return query.format(provincia=provincia)
+
+
+def getQueryOrdenesPersCanton(fecha, provincia, canton):
+    &#34;&#34;&#34;
+    Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un cantón dado.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de la consulta.
+    provincia : str
+        Nombre de la provincia para la que se desea obtener los datos de la consulta.
+    canton : str
+        Nombre del cantón para el cual se desea obtener los datos de la consulta.
+
+    Retorna
+    -------
+    str
+        Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un cantón dado.
+    &#34;&#34;&#34;
+
+    if fecha != None:
+        query = &#34;&#34;&#34;
+            select sum(denuncias_personas) as pers, 0 as den from ordenes_fecha
+            where fecha = &#39;{fecha}&#39; and
+            substring( cod_distrito::varchar, 1,3 ) = ( select substring( codigo::varchar, 1,3 )
+            from distrito d where UNACCENT( d.nom_prov ) ILIKE UNACCENT(&#39;{provincia}&#39;) and UNACCENT ( d.nom_cant ) ILIKE UNACCENT (&#39;{canton}&#39;) limit 1);
+        &#34;&#34;&#34;
+        return query.format(fecha=fecha, provincia=provincia, canton=canton)
+    else:
+        query = &#34;&#34;&#34;
+            select sum(denuncias_personas) as pers, 0 as den, fecha from ordenes_fecha
+            where substring( cod_distrito::varchar, 1,3 ) = ( select substring( codigo::varchar, 1,3 )
+            from distrito d where UNACCENT( d.nom_prov ) ILIKE UNACCENT(&#39;{provincia}&#39;) and UNACCENT ( d.nom_cant ) ILIKE UNACCENT (&#39;{canton}&#39;) limit 1) group by fecha order by fecha asc;
+        &#34;&#34;&#34;
+        return query.format(provincia=provincia, canton=canton)
+
+
+def getQueryOrdenesPersDist(fecha, provincia, canton, distrito):
+    &#34;&#34;&#34;
+    Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un distrito dado.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de la consulta.
+    provincia : str
+        Nombre de la provincia para la que se desea obtener los datos de la consulta.
+    canton : str
+        Nombre del cantón para el cual se desea obtener los datos de la consulta.
+    distrito : str
+        Nombre del distrito para el cual se desea obtener los datos de la consulta.
+
+    Retorna
+    -------
+    str
+        Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un distrito dado.
+    &#34;&#34;&#34;
+
+    if fecha != None:
+        query = &#34;&#34;&#34;
+            select denuncias_personas as pers, 0 as den from ordenes_fecha
+            where fecha = &#39;{fecha}&#39; and
+            cod_distrito = ( select codigo
+            from distrito d where UNACCENT( d.nom_dist ) ILIKE UNACCENT(&#39;{distrito}&#39;) and UNACCENT(d.nom_cant) ILIKE UNACCENT(&#39;{canton}&#39;) and UNACCENT(d.nom_prov) ILIKE UNACCENT(&#39;{provincia}&#39;) LIMIT 1)
+        &#34;&#34;&#34;
+        return query.format(
+            fecha=fecha, distrito=distrito, canton=canton, provincia=provincia
+        )
+    else:
+        query = &#34;&#34;&#34;
+            select denuncias_personas as pers, 0 as den, fecha from ordenes_fecha
+            where cod_distrito = ( select codigo
+            from distrito d where UNACCENT( d.nom_dist ) ILIKE UNACCENT(&#39;{distrito}&#39;) and UNACCENT(d.nom_cant) ILIKE UNACCENT(&#39;{canton}&#39;) and UNACCENT(d.nom_prov) ILIKE UNACCENT(&#39;{provincia}&#39;) LIMIT 1) order by fecha asc
+        &#34;&#34;&#34;
+        return query.format(distrito=distrito, canton=canton, provincia=provincia)
+
+
+def get_sedes():
+    &#34;&#34;&#34;
+    Obtiene la capa de sedes de examen de admisión para el proces de 2020-2021, representados como puntos en el mapa, cada uno con su respectivo nombre.
+
+    Retorna
+    -------
+    Geojson
+        Capa de sedes de examen de admisión para el proces de 2020-2021, representados como puntos en el mapa, con su respectivo nombre.
+
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        select wkb_geometry, nombre, total from sede_examen_adminsion
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+
+    df = gpd.GeoDataFrame.from_postgis(query, conn, geom_col=&#34;wkb_geometry&#34;)
+    gjson = df.to_crs(epsg=&#34;4326&#34;).to_json()
+
+    closeConnection(conn)
+
+    return gjson
+
+
+def get_hogares():
+    &#34;&#34;&#34;
+    Obtiene la capa de hogares de ancianos en Costa Rica, representados como puntos en el mapa, cada uno con su respectivo nombre.
+
+    Retorna
+    -------
+    Geojson
+        Capa de hogares de ancianos en Costa Rica, representados como puntos en el mapa, cada uno con su respectivo nombre.
+
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        select wkb_geometry, nombre from hogar
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+
+    df = gpd.GeoDataFrame.from_postgis(query, conn, geom_col=&#34;wkb_geometry&#34;)
+    gjson = df.to_crs(epsg=&#34;4326&#34;).to_json()
+
+    closeConnection(conn)
+
+    return gjson
+
+
+def get_indigenas():
+    &#34;&#34;&#34;
+    Obtiene la capa de asentamientos indígenas de Costa Rica, representados como áreas naranjas en el mapa, cada una con su respectivo nombre.
+
+    Retorna
+    -------
+    Geojson
+        Capa de asentamientos indígenas de Costa Rica, representados como áreas naranjas en el mapa, cada una con su respectivo nombre.
+
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        select wkb_geometry, pueblo from terr_indigena
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+
+    df = gpd.GeoDataFrame.from_postgis(query, conn, geom_col=&#34;wkb_geometry&#34;)
+    df.crs = &#34;EPSG:4326&#34;
+    gjson = df.to_crs(epsg=&#34;4326&#34;).to_json()
+
+    closeConnection(conn)
+
+    return gjson
+
+
+def get_dist(fecha):
+    &#34;&#34;&#34;
+    Obtiene las capas que componen el mapa que son los distritos con todos sus metadatos: casos activos, casos acumulados, casos fallecidos, casos recuperados, casos nuevos,
+    pendiente, tasa de ataque, coeficiente de variación, índice socio sanitario, denuncias al 911, tasa de morbilidad, cantidad de población total, cantidad de población
+    adulta mayor, porcentaje de pobreza, nombre del distrito, nombre del cantón y nombre de provincia, todo esto para cada distrito para una fecha dada.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener las capas del mapa.
+
+    Retorna
+    -------
+    Geojson
+        Capa principal del mapa con todos los metadatos incluidos en la geometría de cada distrito, para una fecha dada.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        select distinct ST_SimplifyPreserveTopology( d.wkb_geometry, 0.001 ) as wkb_geometry, d.codigo_distr as codigo, d.nom_dist as nombre, d.nom_prov as proInfo, nom_cant as cantInfo,
+        p.poblacion as pobInfo, p.pob_pobre as pobPobre, p.pob_am as pobAm, count(den.consecutivo) as denuncias,
+        m.morbilidad as morbilidad,
+        ( select cantidad as activos from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select ta from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select pendiente from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select fallecidos from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select recuperados from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select coef_var || &#39;%&#39; as coef_var from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select grupo as socio from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select condicion from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select caso_dia from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;)
+        from distrito d join datos_distrito p on d.codigo_distr = p.codigo_distrito
+        join morbilidad_distrito m on d.codigo_distr = m.codigo_distrito
+        left outer join denuncia_911 den on den.cod_dist = d.codigo_distr and fecha = &#39;{fecha}&#39;
+        group by d.wkb_geometry, d.codigo_distr, d.nom_dist, d.nom_prov, nom_cant, p.poblacion, p.pob_pobre, p.pob_am, m.morbilidad
+        order by d.codigo_distr
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+
+    df = gpd.GeoDataFrame.from_postgis(
+        query.format(fecha=fecha), conn, geom_col=&#34;wkb_geometry&#34;
+    )
+    df.crs = &#34;EPSG:4326&#34;
+    df[&#34;fillColor&#34;] = &#34;red&#34;
+    gjson = df.to_crs(epsg=&#34;4326&#34;).to_json()
+
+    closeConnection(conn)
+
+    return gjson
+
+
+def getLastDate():
+    &#34;&#34;&#34;
+    Obtiene la fecha más reciente registrada para la que se conocen datos en la base de datos.
+
+    Retorna
+    -------
+    str
+        Fecha más reciente registrada en la tabla acumulado_distrito, en el formato YYYY-MM-DD.
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    query = &#34;select fecha from acumulado_distrito ad order by fecha desc limit 1&#34;
+    cursor.execute(query)
+
+    result = cursor.fetchone()
+    closeConnection(conn)
+    return result
+
+
+def obtenerDatosPais(fecha):
+    &#34;&#34;&#34;
+    Obtiene los datos a nivel país de hospitalizaciones en salón, hospitalizaciones en UCI e índice de positividad registrados en una fecha dada.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desean obtener los datos.
+
+    Retorna
+    -------
+    dict
+        Diccionario que contiene los datos a nivel país de hospitalizaciones en salón, hospitalizaciones en UCI e índice de positividad registrados en una fecha dada.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        select casos_salon, casos_uci, indice_positividad from datos_pais where fecha = &#39;{fecha}&#39;;
+    &#34;&#34;&#34;
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+
+    cursor.execute(query.format(fecha=fecha))
+    records = cursor.fetchall()
+
+    datos = {}
+
+    datos[&#34;casos_salon&#34;] = records[0][0]
+    datos[&#34;casos_uci&#34;] = records[0][1]
+    datos[&#34;indice_positividad&#34;] = str(records[0][2]) + &#34;%&#34;
+    closeConnection(conn)
+    return datos
+
+
+def getPredicciones(mes, semana):
+    &#34;&#34;&#34;
+    Obtiene las predicciones de casos activos por distrito para un mes y semana de predicción dados.
+
+    Parámetros
+    ----------
+    mes : int
+        Número de mes de 1 a 12 para el cual se desea obtener las predicciones.
+    semana : str
+        Semana (I, II, III, IV, V) para la cual se desea obtener las predicciones según el mes dado.
+
+    Retorna
+    -------
+    dict
+        Diccionario que contiene las predicciones consultadas para el mes y semana dados.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        SELECT codigo_distrito, activos, grupo as socio from prediccion_distrito WHERE mes = {mes} and semana = &#39;{semana}&#39;
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+
+    cursor.execute(query.format(mes=mes, semana=semana))
+    records = cursor.fetchall()
+
+    datos = {}
+
+    for row in records:
+        tupla = {}
+        tupla[&#34;activos&#34;] = row[1]
+        tupla[&#34;socio&#34;] = row[2]
+        datos[str(row[0])] = tupla
+    closeConnection(conn)
+    return datos
+
+
+def obtenerProyecciones(fecha, muestra):
+    &#34;&#34;&#34;
+    Obtiene los datos de proyecciones para muestras determinadas de distritos, para una fecha que caiga en el rango de una proyección registrada en la base de datos.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de proyecciones para muestras determinadas de distritos.
+    muestra : int
+        Tamaño predeterminado de la muestra en la base de datos: 15, 20, 40 o 50.
+
+    Retorna
+    -------
+    dict
+        Diccionario que contiene los datos de proyecciones para muestras determinadas de distritos, para una fecha que caiga en el rango de una proyección registrada en la base de datos.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        SELECT codigo_dta, porcentaje, muestra from proyeccion_distrito WHERE fecha_inicio &lt;= &#39;{fecha}&#39; and fecha_fin &gt; &#39;{fecha}&#39; and muestra = {muestra}
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+
+    cursor.execute(query.format(fecha=fecha, muestra=muestra))
+    records = cursor.fetchall()
+
+    datos = {}
+
+    for row in records:
+        tupla = {}
+        tupla[&#34;porcentaje&#34;] = row[1]
+        tupla[&#34;muestra&#34;] = row[2]
+        datos[str(row[0])] = tupla
+    closeConnection(conn)
+    return datos
+
+
+def getQueryVacunas(fecha):
+    &#34;&#34;&#34;
+    Obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas para una fecha dada, a nivel país.
+    Este método retorna datos cuando la fecha dada coincide con alguna fecha donde existen datos de vacunación registrados en la base de datos.
+    Si no hay datos para la fecha dada, se debe usar getQueryVacunasDefault().
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de vacunación.
+
+    Retorna
+    -------
+    str
+        Consulta que obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas para una fecha dada, a nivel país.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        SELECT vacunas_primera_dosis, vacunas_segunda_dosis, vacunas_primera_dosis + vacunas_segunda_dosis as total_vacunas, to_char(fecha, &#39;DD-MM-YYYY&#39;) FROM datos_pais WHERE fecha = &#39;{fecha}&#39; and vacunas_primera_dosis is not null
+    &#34;&#34;&#34;
+    return query.format(fecha=fecha)
+
+
+def getQueryVacunasDefault():
+    &#34;&#34;&#34;
+    Obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas en la última fecha en la que hayan datos de vacunación registrados en la base de datos, a nivel país.
+
+    Retorna
+    -------
+    str
+        Consulta que obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas en la última fecha de la que se tengan datos de vacunación en la base de datos, a nivel país.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        SELECT vacunas_primera_dosis, vacunas_segunda_dosis, vacunas_primera_dosis + vacunas_segunda_dosis AS total_vacunas, to_char(fecha, &#39;DD-MM-YYYY&#39;) FROM datos_pais WHERE vacunas_primera_dosis IS NOT NULL ORDER BY fecha DESC LIMIT 1
+    &#34;&#34;&#34;
+    return query</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="visorcovid19.mapa.databaseQueries.getCantones"><code class="name flex">
+<span>def <span class="ident">getCantones</span></span>(<span>provincia)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene la lista de nombres de cantones de una provincia dada.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>provincia : str
+Nombre de la provincia cuyos cantones se quieren obtener.</p>
+<h2 id="retorna">Retorna</h2>
+<p>list
+Lista que contiene el nombre de los cantones de la provincia dada.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getCantones(provincia):
+    &#34;&#34;&#34;
+    Obtiene la lista de nombres de cantones de una provincia dada.
+
+    Parámetros
+    ----------
+    provincia : str
+        Nombre de la provincia cuyos cantones se quieren obtener.
+
+    Retorna
+    -------
+    list
+        Lista que contiene el nombre de los cantones de la provincia dada.
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    getCantonesQuery = &#34;&#34;&#34;
+        select c.nom_cant_1 from canton c where UNACCENT(nom_prov) ILIKE UNACCENT(&#39;{provincia}&#39;) order by nom_cant_1
+    &#34;&#34;&#34;
+
+    cursor.execute(getCantonesQuery.format(provincia=provincia))
+    records = cursor.fetchall()
+
+    cantones = []
+
+    for row in records:
+        cantones.append(row[0])
+
+    closeConnection(conn)
+
+    return cantones</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.getDistritos"><code class="name flex">
+<span>def <span class="ident">getDistritos</span></span>(<span>canton)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene la lista de nombres de distritos de un cantón dado.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>canton : str
+Nombre del cantón cuyos distritos se quieren obtener.</p>
+<h2 id="retorna">Retorna</h2>
+<p>list
+Lista que contiene el nombre de los distritos del cantón dado.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getDistritos(canton):
+    &#34;&#34;&#34;
+    Obtiene la lista de nombres de distritos de un cantón dado.
+
+    Parámetros
+    ----------
+    canton : str
+        Nombre del cantón cuyos distritos se quieren obtener.
+
+    Retorna
+    -------
+    list
+        Lista que contiene el nombre de los distritos del cantón dado.
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    getDistritosQuery = &#34;&#34;&#34;
+        select distinct d.nom_dist from distrito d where UNACCENT(nom_cant) ILIKE UNACCENT(&#39;{canton}&#39;) order by nom_dist
+    &#34;&#34;&#34;
+
+    cursor.execute(getDistritosQuery.format(canton=canton))
+    records = cursor.fetchall()
+
+    distritos = []
+
+    for row in records:
+        distritos.append(row[0])
+
+    closeConnection(conn)
+
+    return distritos</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.getFechasValidas"><code class="name flex">
+<span>def <span class="ident">getFechasValidas</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene todas las fechas registradas en la tabla acumulado_distrito, es decir, son las fechas para las cuales hay datos.</p>
+<h2 id="retorna">Retorna</h2>
+<p>list
+Lista que contiene todas las fechas válidas de la base de datos, en orden descendente.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getFechasValidas():
+    &#34;&#34;&#34;
+    Obtiene todas las fechas registradas en la tabla acumulado_distrito, es decir, son las fechas para las cuales hay datos.
+
+    Retorna
+    -------
+    list
+        Lista que contiene todas las fechas válidas de la base de datos, en orden descendente.
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    getFechasQuery = &#34;&#34;&#34;
+        select distinct fecha from acumulado_distrito order by fecha desc
+    &#34;&#34;&#34;
+
+    cursor.execute(getFechasQuery)
+    records = cursor.fetchall()
+
+    fechas = []
+
+    for row in records:
+        fechas.append(row[0])
+
+    closeConnection(conn)
+
+    return fechas</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.getLastDate"><code class="name flex">
+<span>def <span class="ident">getLastDate</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene la fecha más reciente registrada para la que se conocen datos en la base de datos.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Fecha más reciente registrada en la tabla acumulado_distrito, en el formato YYYY-MM-DD.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getLastDate():
+    &#34;&#34;&#34;
+    Obtiene la fecha más reciente registrada para la que se conocen datos en la base de datos.
+
+    Retorna
+    -------
+    str
+        Fecha más reciente registrada en la tabla acumulado_distrito, en el formato YYYY-MM-DD.
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+    query = &#34;select fecha from acumulado_distrito ad order by fecha desc limit 1&#34;
+    cursor.execute(query)
+
+    result = cursor.fetchone()
+    closeConnection(conn)
+    return result</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.getPredicciones"><code class="name flex">
+<span>def <span class="ident">getPredicciones</span></span>(<span>mes, semana)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene las predicciones de casos activos por distrito para un mes y semana de predicción dados.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>mes : int
+Número de mes de 1 a 12 para el cual se desea obtener las predicciones.
+semana : str
+Semana (I, II, III, IV, V) para la cual se desea obtener las predicciones según el mes dado.</p>
+<h2 id="retorna">Retorna</h2>
+<p>dict
+Diccionario que contiene las predicciones consultadas para el mes y semana dados.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getPredicciones(mes, semana):
+    &#34;&#34;&#34;
+    Obtiene las predicciones de casos activos por distrito para un mes y semana de predicción dados.
+
+    Parámetros
+    ----------
+    mes : int
+        Número de mes de 1 a 12 para el cual se desea obtener las predicciones.
+    semana : str
+        Semana (I, II, III, IV, V) para la cual se desea obtener las predicciones según el mes dado.
+
+    Retorna
+    -------
+    dict
+        Diccionario que contiene las predicciones consultadas para el mes y semana dados.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        SELECT codigo_distrito, activos, grupo as socio from prediccion_distrito WHERE mes = {mes} and semana = &#39;{semana}&#39;
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+
+    cursor.execute(query.format(mes=mes, semana=semana))
+    records = cursor.fetchall()
+
+    datos = {}
+
+    for row in records:
+        tupla = {}
+        tupla[&#34;activos&#34;] = row[1]
+        tupla[&#34;socio&#34;] = row[2]
+        datos[str(row[0])] = tupla
+    closeConnection(conn)
+    return datos</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.getQueryNacional"><code class="name flex">
+<span>def <span class="ident">getQueryNacional</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Crea la consulta para obtener la cantidad de casos acumulados, recuperados, activos y casos nuevos por fecha, para todo el país.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Consulta que retorna la cantidad de casos acumulados, recuperados, activos y casos nuevos por fecha, para todo el país.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getQueryNacional():
+    &#34;&#34;&#34;
+    Crea la consulta para obtener la cantidad de casos acumulados, recuperados, activos y casos nuevos por fecha, para todo el país.
+
+    Retorna
+    -------
+    str
+        Consulta que retorna la cantidad de casos acumulados, recuperados, activos y casos nuevos por fecha, para todo el país.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        select fecha, sum(cantidad) as acumulados, sum(recuperados) as recuperados, sum(activos) as activos, sum(caso_dia) as caso_dia
+        from acumulado_distrito
+        group by fecha order by fecha asc;
+    &#34;&#34;&#34;
+    return query</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.getQueryOrdenesPers"><code class="name flex">
+<span>def <span class="ident">getQueryOrdenesPers</span></span>(<span>fecha)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, a nivel nacional.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>fecha : str
+Fecha para la cual se desea obtener los datos de la consulta.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getQueryOrdenesPers(fecha):
+    &#34;&#34;&#34;
+    Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, a nivel nacional.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de la consulta.
+
+    Retorna
+    -------
+    str
+        Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha.
+    &#34;&#34;&#34;
+
+    if fecha != None:
+        query = &#34;&#34;&#34;
+            select sum(denuncias_personas) as pers, 0 as den from ordenes_fecha
+            where fecha = &#39;{fecha}&#39; 
+        &#34;&#34;&#34;
+        return query.format(fecha=fecha)
+    else:
+        query = &#34;&#34;&#34;
+            select sum(denuncias_personas) as pers, 0 as den, fecha from ordenes_fecha group by fecha order by fecha asc
+        &#34;&#34;&#34;
+        return query</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.getQueryOrdenesPersCanton"><code class="name flex">
+<span>def <span class="ident">getQueryOrdenesPersCanton</span></span>(<span>fecha, provincia, canton)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un cantón dado.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>fecha : str
+Fecha para la cual se desea obtener los datos de la consulta.
+provincia : str
+Nombre de la provincia para la que se desea obtener los datos de la consulta.
+canton : str
+Nombre del cantón para el cual se desea obtener los datos de la consulta.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un cantón dado.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getQueryOrdenesPersCanton(fecha, provincia, canton):
+    &#34;&#34;&#34;
+    Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un cantón dado.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de la consulta.
+    provincia : str
+        Nombre de la provincia para la que se desea obtener los datos de la consulta.
+    canton : str
+        Nombre del cantón para el cual se desea obtener los datos de la consulta.
+
+    Retorna
+    -------
+    str
+        Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un cantón dado.
+    &#34;&#34;&#34;
+
+    if fecha != None:
+        query = &#34;&#34;&#34;
+            select sum(denuncias_personas) as pers, 0 as den from ordenes_fecha
+            where fecha = &#39;{fecha}&#39; and
+            substring( cod_distrito::varchar, 1,3 ) = ( select substring( codigo::varchar, 1,3 )
+            from distrito d where UNACCENT( d.nom_prov ) ILIKE UNACCENT(&#39;{provincia}&#39;) and UNACCENT ( d.nom_cant ) ILIKE UNACCENT (&#39;{canton}&#39;) limit 1);
+        &#34;&#34;&#34;
+        return query.format(fecha=fecha, provincia=provincia, canton=canton)
+    else:
+        query = &#34;&#34;&#34;
+            select sum(denuncias_personas) as pers, 0 as den, fecha from ordenes_fecha
+            where substring( cod_distrito::varchar, 1,3 ) = ( select substring( codigo::varchar, 1,3 )
+            from distrito d where UNACCENT( d.nom_prov ) ILIKE UNACCENT(&#39;{provincia}&#39;) and UNACCENT ( d.nom_cant ) ILIKE UNACCENT (&#39;{canton}&#39;) limit 1) group by fecha order by fecha asc;
+        &#34;&#34;&#34;
+        return query.format(provincia=provincia, canton=canton)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.getQueryOrdenesPersDist"><code class="name flex">
+<span>def <span class="ident">getQueryOrdenesPersDist</span></span>(<span>fecha, provincia, canton, distrito)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un distrito dado.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>fecha : str
+Fecha para la cual se desea obtener los datos de la consulta.
+provincia : str
+Nombre de la provincia para la que se desea obtener los datos de la consulta.
+canton : str
+Nombre del cantón para el cual se desea obtener los datos de la consulta.
+distrito : str
+Nombre del distrito para el cual se desea obtener los datos de la consulta.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un distrito dado.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getQueryOrdenesPersDist(fecha, provincia, canton, distrito):
+    &#34;&#34;&#34;
+    Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un distrito dado.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de la consulta.
+    provincia : str
+        Nombre de la provincia para la que se desea obtener los datos de la consulta.
+    canton : str
+        Nombre del cantón para el cual se desea obtener los datos de la consulta.
+    distrito : str
+        Nombre del distrito para el cual se desea obtener los datos de la consulta.
+
+    Retorna
+    -------
+    str
+        Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para un distrito dado.
+    &#34;&#34;&#34;
+
+    if fecha != None:
+        query = &#34;&#34;&#34;
+            select denuncias_personas as pers, 0 as den from ordenes_fecha
+            where fecha = &#39;{fecha}&#39; and
+            cod_distrito = ( select codigo
+            from distrito d where UNACCENT( d.nom_dist ) ILIKE UNACCENT(&#39;{distrito}&#39;) and UNACCENT(d.nom_cant) ILIKE UNACCENT(&#39;{canton}&#39;) and UNACCENT(d.nom_prov) ILIKE UNACCENT(&#39;{provincia}&#39;) LIMIT 1)
+        &#34;&#34;&#34;
+        return query.format(
+            fecha=fecha, distrito=distrito, canton=canton, provincia=provincia
+        )
+    else:
+        query = &#34;&#34;&#34;
+            select denuncias_personas as pers, 0 as den, fecha from ordenes_fecha
+            where cod_distrito = ( select codigo
+            from distrito d where UNACCENT( d.nom_dist ) ILIKE UNACCENT(&#39;{distrito}&#39;) and UNACCENT(d.nom_cant) ILIKE UNACCENT(&#39;{canton}&#39;) and UNACCENT(d.nom_prov) ILIKE UNACCENT(&#39;{provincia}&#39;) LIMIT 1) order by fecha asc
+        &#34;&#34;&#34;
+        return query.format(distrito=distrito, canton=canton, provincia=provincia)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.getQueryOrdenesPersProv"><code class="name flex">
+<span>def <span class="ident">getQueryOrdenesPersProv</span></span>(<span>fecha, provincia)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para una provincia dada.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>fecha : str
+Fecha para la cual se desea obtener los datos de la consulta.
+provincia : str
+Nombre de la provincia para la que se desea obtener los datos de la consulta.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para una provincia dada.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getQueryOrdenesPersProv(fecha, provincia):
+    &#34;&#34;&#34;
+    Crea la consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para una provincia dada.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de la consulta.
+    provincia : str
+        Nombre de la provincia para la que se desea obtener los datos de la consulta.
+
+    Retorna
+    -------
+    str
+        Consulta para obtener la suma de órdenes sanitarias a personas, en total o agrupada por fecha, para una provincia dada.
+    &#34;&#34;&#34;
+
+    if fecha != None:
+        query = &#34;&#34;&#34;
+            select sum(denuncias_personas) as pers, 0 as den from ordenes_fecha
+            where fecha = &#39;{fecha}&#39; and
+            substring( cod_distrito::varchar, 1,1 ) = ( select substring( codigo::varchar, 1,1 )
+            from distrito d where LOWER( d.nom_prov ) = LOWER(&#39;{provincia}&#39;) limit 1);
+        &#34;&#34;&#34;
+        return query.format(fecha=fecha, provincia=provincia)
+    else:
+        query = &#34;&#34;&#34;
+            select sum(denuncias_personas) as pers, 0 as den, fecha from ordenes_fecha
+            where substring( cod_distrito::varchar, 1,1 ) = ( select substring( codigo::varchar, 1,1 )
+            from distrito d where LOWER( d.nom_prov ) = LOWER(&#39;{provincia}&#39;) limit 1) group by fecha order by fecha asc;
+        &#34;&#34;&#34;
+        return query.format(provincia=provincia)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.getQueryVacunas"><code class="name flex">
+<span>def <span class="ident">getQueryVacunas</span></span>(<span>fecha)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas para una fecha dada, a nivel país.
+Este método retorna datos cuando la fecha dada coincide con alguna fecha donde existen datos de vacunación registrados en la base de datos.
+Si no hay datos para la fecha dada, se debe usar getQueryVacunasDefault().</p>
+<h2 id="parametros">Parámetros</h2>
+<p>fecha : str
+Fecha para la cual se desea obtener los datos de vacunación.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Consulta que obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas para una fecha dada, a nivel país.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getQueryVacunas(fecha):
+    &#34;&#34;&#34;
+    Obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas para una fecha dada, a nivel país.
+    Este método retorna datos cuando la fecha dada coincide con alguna fecha donde existen datos de vacunación registrados en la base de datos.
+    Si no hay datos para la fecha dada, se debe usar getQueryVacunasDefault().
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de vacunación.
+
+    Retorna
+    -------
+    str
+        Consulta que obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas para una fecha dada, a nivel país.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        SELECT vacunas_primera_dosis, vacunas_segunda_dosis, vacunas_primera_dosis + vacunas_segunda_dosis as total_vacunas, to_char(fecha, &#39;DD-MM-YYYY&#39;) FROM datos_pais WHERE fecha = &#39;{fecha}&#39; and vacunas_primera_dosis is not null
+    &#34;&#34;&#34;
+    return query.format(fecha=fecha)</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.getQueryVacunasDefault"><code class="name flex">
+<span>def <span class="ident">getQueryVacunasDefault</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas en la última fecha en la que hayan datos de vacunación registrados en la base de datos, a nivel país.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Consulta que obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas en la última fecha de la que se tengan datos de vacunación en la base de datos, a nivel país.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def getQueryVacunasDefault():
+    &#34;&#34;&#34;
+    Obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas en la última fecha en la que hayan datos de vacunación registrados en la base de datos, a nivel país.
+
+    Retorna
+    -------
+    str
+        Consulta que obtiene los datos de primeras dosis aplicadas y segundas dosis aplicadas en la última fecha de la que se tengan datos de vacunación en la base de datos, a nivel país.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        SELECT vacunas_primera_dosis, vacunas_segunda_dosis, vacunas_primera_dosis + vacunas_segunda_dosis AS total_vacunas, to_char(fecha, &#39;DD-MM-YYYY&#39;) FROM datos_pais WHERE vacunas_primera_dosis IS NOT NULL ORDER BY fecha DESC LIMIT 1
+    &#34;&#34;&#34;
+    return query</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.get_dist"><code class="name flex">
+<span>def <span class="ident">get_dist</span></span>(<span>fecha)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene las capas que componen el mapa que son los distritos con todos sus metadatos: casos activos, casos acumulados, casos fallecidos, casos recuperados, casos nuevos,
+pendiente, tasa de ataque, coeficiente de variación, índice socio sanitario, denuncias al 911, tasa de morbilidad, cantidad de población total, cantidad de población
+adulta mayor, porcentaje de pobreza, nombre del distrito, nombre del cantón y nombre de provincia, todo esto para cada distrito para una fecha dada.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>fecha : str
+Fecha para la cual se desea obtener las capas del mapa.</p>
+<h2 id="retorna">Retorna</h2>
+<p>Geojson
+Capa principal del mapa con todos los metadatos incluidos en la geometría de cada distrito, para una fecha dada.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_dist(fecha):
+    &#34;&#34;&#34;
+    Obtiene las capas que componen el mapa que son los distritos con todos sus metadatos: casos activos, casos acumulados, casos fallecidos, casos recuperados, casos nuevos,
+    pendiente, tasa de ataque, coeficiente de variación, índice socio sanitario, denuncias al 911, tasa de morbilidad, cantidad de población total, cantidad de población
+    adulta mayor, porcentaje de pobreza, nombre del distrito, nombre del cantón y nombre de provincia, todo esto para cada distrito para una fecha dada.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener las capas del mapa.
+
+    Retorna
+    -------
+    Geojson
+        Capa principal del mapa con todos los metadatos incluidos en la geometría de cada distrito, para una fecha dada.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        select distinct ST_SimplifyPreserveTopology( d.wkb_geometry, 0.001 ) as wkb_geometry, d.codigo_distr as codigo, d.nom_dist as nombre, d.nom_prov as proInfo, nom_cant as cantInfo,
+        p.poblacion as pobInfo, p.pob_pobre as pobPobre, p.pob_am as pobAm, count(den.consecutivo) as denuncias,
+        m.morbilidad as morbilidad,
+        ( select cantidad as activos from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select ta from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select pendiente from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select fallecidos from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select recuperados from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select coef_var || &#39;%&#39; as coef_var from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select grupo as socio from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select condicion from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;),
+        ( select caso_dia from acumulado_distrito a where a.codigo_distrito = d.codigo_distr and fecha = &#39;{fecha}&#39;)
+        from distrito d join datos_distrito p on d.codigo_distr = p.codigo_distrito
+        join morbilidad_distrito m on d.codigo_distr = m.codigo_distrito
+        left outer join denuncia_911 den on den.cod_dist = d.codigo_distr and fecha = &#39;{fecha}&#39;
+        group by d.wkb_geometry, d.codigo_distr, d.nom_dist, d.nom_prov, nom_cant, p.poblacion, p.pob_pobre, p.pob_am, m.morbilidad
+        order by d.codigo_distr
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+
+    df = gpd.GeoDataFrame.from_postgis(
+        query.format(fecha=fecha), conn, geom_col=&#34;wkb_geometry&#34;
+    )
+    df.crs = &#34;EPSG:4326&#34;
+    df[&#34;fillColor&#34;] = &#34;red&#34;
+    gjson = df.to_crs(epsg=&#34;4326&#34;).to_json()
+
+    closeConnection(conn)
+
+    return gjson</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.get_hogares"><code class="name flex">
+<span>def <span class="ident">get_hogares</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene la capa de hogares de ancianos en Costa Rica, representados como puntos en el mapa, cada uno con su respectivo nombre.</p>
+<h2 id="retorna">Retorna</h2>
+<p>Geojson
+Capa de hogares de ancianos en Costa Rica, representados como puntos en el mapa, cada uno con su respectivo nombre.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_hogares():
+    &#34;&#34;&#34;
+    Obtiene la capa de hogares de ancianos en Costa Rica, representados como puntos en el mapa, cada uno con su respectivo nombre.
+
+    Retorna
+    -------
+    Geojson
+        Capa de hogares de ancianos en Costa Rica, representados como puntos en el mapa, cada uno con su respectivo nombre.
+
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        select wkb_geometry, nombre from hogar
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+
+    df = gpd.GeoDataFrame.from_postgis(query, conn, geom_col=&#34;wkb_geometry&#34;)
+    gjson = df.to_crs(epsg=&#34;4326&#34;).to_json()
+
+    closeConnection(conn)
+
+    return gjson</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.get_indigenas"><code class="name flex">
+<span>def <span class="ident">get_indigenas</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene la capa de asentamientos indígenas de Costa Rica, representados como áreas naranjas en el mapa, cada una con su respectivo nombre.</p>
+<h2 id="retorna">Retorna</h2>
+<p>Geojson
+Capa de asentamientos indígenas de Costa Rica, representados como áreas naranjas en el mapa, cada una con su respectivo nombre.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_indigenas():
+    &#34;&#34;&#34;
+    Obtiene la capa de asentamientos indígenas de Costa Rica, representados como áreas naranjas en el mapa, cada una con su respectivo nombre.
+
+    Retorna
+    -------
+    Geojson
+        Capa de asentamientos indígenas de Costa Rica, representados como áreas naranjas en el mapa, cada una con su respectivo nombre.
+
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        select wkb_geometry, pueblo from terr_indigena
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+
+    df = gpd.GeoDataFrame.from_postgis(query, conn, geom_col=&#34;wkb_geometry&#34;)
+    df.crs = &#34;EPSG:4326&#34;
+    gjson = df.to_crs(epsg=&#34;4326&#34;).to_json()
+
+    closeConnection(conn)
+
+    return gjson</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.get_sedes"><code class="name flex">
+<span>def <span class="ident">get_sedes</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene la capa de sedes de examen de admisión para el proces de 2020-2021, representados como puntos en el mapa, cada uno con su respectivo nombre.</p>
+<h2 id="retorna">Retorna</h2>
+<p>Geojson
+Capa de sedes de examen de admisión para el proces de 2020-2021, representados como puntos en el mapa, con su respectivo nombre.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_sedes():
+    &#34;&#34;&#34;
+    Obtiene la capa de sedes de examen de admisión para el proces de 2020-2021, representados como puntos en el mapa, cada uno con su respectivo nombre.
+
+    Retorna
+    -------
+    Geojson
+        Capa de sedes de examen de admisión para el proces de 2020-2021, representados como puntos en el mapa, con su respectivo nombre.
+
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        select wkb_geometry, nombre, total from sede_examen_adminsion
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+
+    df = gpd.GeoDataFrame.from_postgis(query, conn, geom_col=&#34;wkb_geometry&#34;)
+    gjson = df.to_crs(epsg=&#34;4326&#34;).to_json()
+
+    closeConnection(conn)
+
+    return gjson</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.obtenerDatosPais"><code class="name flex">
+<span>def <span class="ident">obtenerDatosPais</span></span>(<span>fecha)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene los datos a nivel país de hospitalizaciones en salón, hospitalizaciones en UCI e índice de positividad registrados en una fecha dada.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>fecha : str
+Fecha para la cual se desean obtener los datos.</p>
+<h2 id="retorna">Retorna</h2>
+<p>dict
+Diccionario que contiene los datos a nivel país de hospitalizaciones en salón, hospitalizaciones en UCI e índice de positividad registrados en una fecha dada.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def obtenerDatosPais(fecha):
+    &#34;&#34;&#34;
+    Obtiene los datos a nivel país de hospitalizaciones en salón, hospitalizaciones en UCI e índice de positividad registrados en una fecha dada.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desean obtener los datos.
+
+    Retorna
+    -------
+    dict
+        Diccionario que contiene los datos a nivel país de hospitalizaciones en salón, hospitalizaciones en UCI e índice de positividad registrados en una fecha dada.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        select casos_salon, casos_uci, indice_positividad from datos_pais where fecha = &#39;{fecha}&#39;;
+    &#34;&#34;&#34;
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+
+    cursor.execute(query.format(fecha=fecha))
+    records = cursor.fetchall()
+
+    datos = {}
+
+    datos[&#34;casos_salon&#34;] = records[0][0]
+    datos[&#34;casos_uci&#34;] = records[0][1]
+    datos[&#34;indice_positividad&#34;] = str(records[0][2]) + &#34;%&#34;
+    closeConnection(conn)
+    return datos</code></pre>
+</details>
+</dd>
+<dt id="visorcovid19.mapa.databaseQueries.obtenerProyecciones"><code class="name flex">
+<span>def <span class="ident">obtenerProyecciones</span></span>(<span>fecha, muestra)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtiene los datos de proyecciones para muestras determinadas de distritos, para una fecha que caiga en el rango de una proyección registrada en la base de datos.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>fecha : str
+Fecha para la cual se desea obtener los datos de proyecciones para muestras determinadas de distritos.
+muestra : int
+Tamaño predeterminado de la muestra en la base de datos: 15, 20, 40 o 50.</p>
+<h2 id="retorna">Retorna</h2>
+<p>dict
+Diccionario que contiene los datos de proyecciones para muestras determinadas de distritos, para una fecha que caiga en el rango de una proyección registrada en la base de datos.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def obtenerProyecciones(fecha, muestra):
+    &#34;&#34;&#34;
+    Obtiene los datos de proyecciones para muestras determinadas de distritos, para una fecha que caiga en el rango de una proyección registrada en la base de datos.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos de proyecciones para muestras determinadas de distritos.
+    muestra : int
+        Tamaño predeterminado de la muestra en la base de datos: 15, 20, 40 o 50.
+
+    Retorna
+    -------
+    dict
+        Diccionario que contiene los datos de proyecciones para muestras determinadas de distritos, para una fecha que caiga en el rango de una proyección registrada en la base de datos.
+    &#34;&#34;&#34;
+
+    query = &#34;&#34;&#34;
+        SELECT codigo_dta, porcentaje, muestra from proyeccion_distrito WHERE fecha_inicio &lt;= &#39;{fecha}&#39; and fecha_fin &gt; &#39;{fecha}&#39; and muestra = {muestra}
+    &#34;&#34;&#34;
+
+    conn = getAuthConnection()
+    cursor = conn.cursor()
+
+    cursor.execute(query.format(fecha=fecha, muestra=muestra))
+    records = cursor.fetchall()
+
+    datos = {}
+
+    for row in records:
+        tupla = {}
+        tupla[&#34;porcentaje&#34;] = row[1]
+        tupla[&#34;muestra&#34;] = row[2]
+        datos[str(row[0])] = tupla
+    closeConnection(conn)
+    return datos</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="visorcovid19.mapa" href="index.html">visorcovid19.mapa</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="visorcovid19.mapa.databaseQueries.getCantones" href="#visorcovid19.mapa.databaseQueries.getCantones">getCantones</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.getDistritos" href="#visorcovid19.mapa.databaseQueries.getDistritos">getDistritos</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.getFechasValidas" href="#visorcovid19.mapa.databaseQueries.getFechasValidas">getFechasValidas</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.getLastDate" href="#visorcovid19.mapa.databaseQueries.getLastDate">getLastDate</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.getPredicciones" href="#visorcovid19.mapa.databaseQueries.getPredicciones">getPredicciones</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.getQueryNacional" href="#visorcovid19.mapa.databaseQueries.getQueryNacional">getQueryNacional</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.getQueryOrdenesPers" href="#visorcovid19.mapa.databaseQueries.getQueryOrdenesPers">getQueryOrdenesPers</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.getQueryOrdenesPersCanton" href="#visorcovid19.mapa.databaseQueries.getQueryOrdenesPersCanton">getQueryOrdenesPersCanton</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.getQueryOrdenesPersDist" href="#visorcovid19.mapa.databaseQueries.getQueryOrdenesPersDist">getQueryOrdenesPersDist</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.getQueryOrdenesPersProv" href="#visorcovid19.mapa.databaseQueries.getQueryOrdenesPersProv">getQueryOrdenesPersProv</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.getQueryVacunas" href="#visorcovid19.mapa.databaseQueries.getQueryVacunas">getQueryVacunas</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.getQueryVacunasDefault" href="#visorcovid19.mapa.databaseQueries.getQueryVacunasDefault">getQueryVacunasDefault</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.get_dist" href="#visorcovid19.mapa.databaseQueries.get_dist">get_dist</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.get_hogares" href="#visorcovid19.mapa.databaseQueries.get_hogares">get_hogares</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.get_indigenas" href="#visorcovid19.mapa.databaseQueries.get_indigenas">get_indigenas</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.get_sedes" href="#visorcovid19.mapa.databaseQueries.get_sedes">get_sedes</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.obtenerDatosPais" href="#visorcovid19.mapa.databaseQueries.obtenerDatosPais">obtenerDatosPais</a></code></li>
+<li><code><a title="visorcovid19.mapa.databaseQueries.obtenerProyecciones" href="#visorcovid19.mapa.databaseQueries.obtenerProyecciones">obtenerProyecciones</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
