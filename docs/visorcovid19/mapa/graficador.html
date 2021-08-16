@@ -45,6 +45,15 @@ cwd = sysconf.BASE_DIR
 
 
 def nacional():
+    &#34;&#34;&#34;
+    Genera el gráfico de Indicadores nacionales, que contiene los datos de casos activos, nuevos y recuperados, durante toda la pandemia.
+
+    Retorna
+    -------
+    str
+        Gráfico generado en formato html para ser empotrado en la vista.
+    &#34;&#34;&#34;
+
     query = getQueryNacional()
 
     conn = getAuthConnection()
@@ -120,6 +129,21 @@ def nacional():
 
 
 def gauge_vacunas(fecha):
+    &#34;&#34;&#34;
+    Genera los gráficos de tipo Gauge que contienen los datos de vacunas aplicadas hasta la última fecha registrada en la base de datos.
+    Los datos de vacunas aplicadas se obtienen automáticamente de la página de la [CCSS](https://www.ccss.sa.cr/web/coronavirus/vacunacion).
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos en el gráfico.
+
+    Retorna
+    -------
+    str
+        Gráfico de tipo subplots generado en formato html para ser empotrado en la vista.
+    &#34;&#34;&#34;
+
     query = getQueryVacunas(fecha)
 
     conn = getAuthConnection()
@@ -175,6 +199,26 @@ def gauge_vacunas(fecha):
 
 
 def gauge_cuad(fecha, provincia=None, canton=None, distrito=None):
+    &#34;&#34;&#34;
+    Genera los gráficos de órdenes sanitarias que contienen los datos de órdenes sanitarias a personas por fecha, y el crecimiento de las órdenes
+    sanitarias durante toda la pandemia. Ambos cuentan con resolución a nivel nacional, provincial, cantonal y distrital.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos en el gráfico de órdenes sanitarias por fecha (el de tipo Gauge).
+    provincia : str
+        Provincia a la cual se quiere limitar el ámbito de los datos en los gráficos.
+    canton : str
+        Cantón al cual se quiere limitar el ámbito de los datos en los gráficos.
+    distrito : str
+        Distrito al cual se quiere limitar el ámbito de los datos en los gráficos.
+
+    Retorna
+    -------
+    str
+        Gráfico de tipo subplots generado en formato html para ser empotrado en la vista.
+    &#34;&#34;&#34;
 
     fig = make_subplots(
         specs=[[{&#34;type&#34;: &#34;indicator&#34;}], [{&#34;type&#34;: &#34;scatter&#34;}]],
@@ -273,6 +317,18 @@ def gauge_cuad(fecha, provincia=None, canton=None, distrito=None):
 
 
 def grafico_progreso():
+    &#34;&#34;&#34;
+    Genera el gráfico de Dosis estimadas aplicables y efectivas aplicables a partir de los datos de vacunación que se obtengan del archivo
+    vacunas_2.csv, mismo que es generado mediante el script estimacion_vacunas.py teniendo como insumos los archivos efectivas.csv y vacunas.csv.
+    Estos dos archivos son actualizados manualmente obteniendo los datos de la página de vacunación del [CNE](https://www.cne.go.cr/covid/ADQUISICION_VACUNAS.aspx)
+    y del noticiero digital [Delfino.cr](ino.cr/2021/07/ccss-aplico-81-mil-vacunas-la-semana-pasada-y-pais-alcanza-1-7-millones-de-personas-con-al-menos-1-dosis).
+
+    Retorna
+    -------
+    str
+        Gráfico generado en formato html para ser empotrado en la vista.
+    &#34;&#34;&#34;
+
     df = pd.read_csv(cwd + &#34;/vacunacion/vacunas_v2.csv&#34;)
     fig1 = go.Figure()
     fig1 = make_subplots(specs=[[{&#34;secondary_y&#34;: True}]])
@@ -332,16 +388,33 @@ def grafico_progreso():
 
 
 def estimador_semanas(
-    cantidad_vacunas=list,
-    r=0.5,
-    meta=3500000,
-    c=0,  # r grado de aplicación de 0.5-1
-    media_llegada=200000,
-    desviacion_llegada=30000,
+    cantidad_vacunas=list, r=0.5, meta=3500000, c=0  # r grado de aplicación de 0.5-1
 ):
+    &#34;&#34;&#34;
+    Genera la estimación de la cantidad de semanas necesarias para alcanzar la inmunidad de rebaño en Costa Rica (al menos el 75% de la
+    población con la primera dosis de la vacuna), a partir de los datos de dosis llegadas al país.
+
+    Parámetros
+    ----------
+    cantidad_vacunas : list
+        Lista de la cantidad de vacunas llegadas al país en cada entrega realizada.
+    r : float
+        Porcentaje de inmunidad de la población a estimar.
+    c : int
+        Variable de iteración.
+
+    Retorna
+    -------
+    tuple
+        Tupla que contiene la cantidad de semanas de vacunación actuales (como referencia), y la cantidad estimada para alcanzar la inmunidad de rebaño.
+    &#34;&#34;&#34;
+
     primera_dosis = []
     estimadas_llegadas = []
     primera_dosis_estimada = []
+
+    media_llegada = np.mean(cantidad_vacunas)
+    desviacion_llegada = np.std(cantidad_vacunas)
 
     for i in cantidad_vacunas:  # cantidad de primeras dosis
         primera_dosis.append(i * r)
@@ -364,18 +437,28 @@ def estimador_semanas(
 
 
 def grafico_gauge(
-    cantidad_vacunas=list,
-    r=0.5,
-    meta=3500000,  # r grado de aplicación de 0.5-1
-    media_llegada=200000,
-    desviacion_llegada=30000,
+    cantidad_vacunas=list, r=0.5, meta=3500000  # r grado de aplicación de 0.5-1
 ):
+    &#34;&#34;&#34;
+    Genera el gráfico de la estimación de la cantidad de semanas necesarias para alcanzar la inmunidad de rebaño en Costa Rica.
+
+    Parámetros
+    ----------
+    cantidad_vacunas : list
+        Lista de la cantidad de vacunas llegadas al país en cada entrega realizada.
+    r : float
+        Porcentaje de inmunidad de la población a estimar.
+    meta : int
+        Cantidad de población meta a vacunar para alcanzar la inmunidad de rebaño.
+
+    Retorna
+    -------
+    Figure
+        Gráfico Gauge que contiene los datos de la estimación para alcanzar la inmunidad de rebaño.
+    &#34;&#34;&#34;
+
     semanas, estimacion_semanas = estimador_semanas(
-        cantidad_vacunas=cantidad_vacunas,
-        r=r,
-        meta=meta,
-        media_llegada=media_llegada,
-        desviacion_llegada=desviacion_llegada,
+        cantidad_vacunas=cantidad_vacunas, r=r, meta=meta
     )
     fig = go.Indicator(
         mode=&#34;gauge+number+delta&#34;,
@@ -402,6 +485,18 @@ def grafico_gauge(
 
 
 def gauge_estimacion_vacunas():
+    &#34;&#34;&#34;
+    Genera el gráfico de la estimación de la cantidad de semanas necesarias para alcanzar la inmunidad de rebaño en Costa Rica, a partir
+    de los datos de vacunación del archivo vacunas_v2.csv, mismo que es generado mediante el script estimacion_vacunas.py teniendo como
+    insumos los archivos efectivas.csv y vacunas.csv. Estos dos archivos son actualizados manualmente obteniendo los datos de la página de
+    vacunación del [CNE](https://www.cne.go.cr/covid/ADQUISICION_VACUNAS.aspx) y del noticiero digital
+    [Delfino.cr](ino.cr/2021/07/ccss-aplico-81-mil-vacunas-la-semana-pasada-y-pais-alcanza-1-7-millones-de-personas-con-al-menos-1-dosis).
+
+    Retorna
+    -------
+    str
+        Gráfico generado en formato html para ser empotrado en la vista.
+    &#34;&#34;&#34;
     df = pd.read_csv(cwd + &#34;/vacunacion/vacunas_v2.csv&#34;)
 
     llegadas = df[&#34;cantidad&#34;].tolist()
@@ -419,25 +514,53 @@ def gauge_estimacion_vacunas():
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="visorcovid19.mapa.graficador.estimador_semanas"><code class="name flex">
-<span>def <span class="ident">estimador_semanas</span></span>(<span>cantidad_vacunas=builtins.list, r=0.5, meta=3500000, c=0, media_llegada=200000, desviacion_llegada=30000)</span>
+<span>def <span class="ident">estimador_semanas</span></span>(<span>cantidad_vacunas=builtins.list, r=0.5, meta=3500000, c=0)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Genera la estimación de la cantidad de semanas necesarias para alcanzar la inmunidad de rebaño en Costa Rica (al menos el 75% de la
+población con la primera dosis de la vacuna), a partir de los datos de dosis llegadas al país.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>cantidad_vacunas : list
+Lista de la cantidad de vacunas llegadas al país en cada entrega realizada.
+r : float
+Porcentaje de inmunidad de la población a estimar.
+c : int
+Variable de iteración.</p>
+<h2 id="retorna">Retorna</h2>
+<p>tuple
+Tupla que contiene la cantidad de semanas de vacunación actuales (como referencia), y la cantidad estimada para alcanzar la inmunidad de rebaño.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def estimador_semanas(
-    cantidad_vacunas=list,
-    r=0.5,
-    meta=3500000,
-    c=0,  # r grado de aplicación de 0.5-1
-    media_llegada=200000,
-    desviacion_llegada=30000,
+    cantidad_vacunas=list, r=0.5, meta=3500000, c=0  # r grado de aplicación de 0.5-1
 ):
+    &#34;&#34;&#34;
+    Genera la estimación de la cantidad de semanas necesarias para alcanzar la inmunidad de rebaño en Costa Rica (al menos el 75% de la
+    población con la primera dosis de la vacuna), a partir de los datos de dosis llegadas al país.
+
+    Parámetros
+    ----------
+    cantidad_vacunas : list
+        Lista de la cantidad de vacunas llegadas al país en cada entrega realizada.
+    r : float
+        Porcentaje de inmunidad de la población a estimar.
+    c : int
+        Variable de iteración.
+
+    Retorna
+    -------
+    tuple
+        Tupla que contiene la cantidad de semanas de vacunación actuales (como referencia), y la cantidad estimada para alcanzar la inmunidad de rebaño.
+    &#34;&#34;&#34;
+
     primera_dosis = []
     estimadas_llegadas = []
     primera_dosis_estimada = []
+
+    media_llegada = np.mean(cantidad_vacunas)
+    desviacion_llegada = np.std(cantidad_vacunas)
 
     for i in cantidad_vacunas:  # cantidad de primeras dosis
         primera_dosis.append(i * r)
@@ -463,12 +586,45 @@ def gauge_estimacion_vacunas():
 <span>def <span class="ident">gauge_cuad</span></span>(<span>fecha, provincia=None, canton=None, distrito=None)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Genera los gráficos de órdenes sanitarias que contienen los datos de órdenes sanitarias a personas por fecha, y el crecimiento de las órdenes
+sanitarias durante toda la pandemia. Ambos cuentan con resolución a nivel nacional, provincial, cantonal y distrital.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>fecha : str
+Fecha para la cual se desea obtener los datos en el gráfico de órdenes sanitarias por fecha (el de tipo Gauge).
+provincia : str
+Provincia a la cual se quiere limitar el ámbito de los datos en los gráficos.
+canton : str
+Cantón al cual se quiere limitar el ámbito de los datos en los gráficos.
+distrito : str
+Distrito al cual se quiere limitar el ámbito de los datos en los gráficos.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Gráfico de tipo subplots generado en formato html para ser empotrado en la vista.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def gauge_cuad(fecha, provincia=None, canton=None, distrito=None):
+    &#34;&#34;&#34;
+    Genera los gráficos de órdenes sanitarias que contienen los datos de órdenes sanitarias a personas por fecha, y el crecimiento de las órdenes
+    sanitarias durante toda la pandemia. Ambos cuentan con resolución a nivel nacional, provincial, cantonal y distrital.
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos en el gráfico de órdenes sanitarias por fecha (el de tipo Gauge).
+    provincia : str
+        Provincia a la cual se quiere limitar el ámbito de los datos en los gráficos.
+    canton : str
+        Cantón al cual se quiere limitar el ámbito de los datos en los gráficos.
+    distrito : str
+        Distrito al cual se quiere limitar el ámbito de los datos en los gráficos.
+
+    Retorna
+    -------
+    str
+        Gráfico de tipo subplots generado en formato html para ser empotrado en la vista.
+    &#34;&#34;&#34;
 
     fig = make_subplots(
         specs=[[{&#34;type&#34;: &#34;indicator&#34;}], [{&#34;type&#34;: &#34;scatter&#34;}]],
@@ -570,12 +726,31 @@ def gauge_estimacion_vacunas():
 <span>def <span class="ident">gauge_estimacion_vacunas</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Genera el gráfico de la estimación de la cantidad de semanas necesarias para alcanzar la inmunidad de rebaño en Costa Rica, a partir
+de los datos de vacunación del archivo vacunas_v2.csv, mismo que es generado mediante el script estimacion_vacunas.py teniendo como
+insumos los archivos efectivas.csv y vacunas.csv. Estos dos archivos son actualizados manualmente obteniendo los datos de la página de
+vacunación del <a href="https://www.cne.go.cr/covid/ADQUISICION_VACUNAS.aspx">CNE</a> y del noticiero digital
+<a href="ino.cr/2021/07/ccss-aplico-81-mil-vacunas-la-semana-pasada-y-pais-alcanza-1-7-millones-de-personas-con-al-menos-1-dosis">Delfino.cr</a>.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Gráfico generado en formato html para ser empotrado en la vista.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def gauge_estimacion_vacunas():
+    &#34;&#34;&#34;
+    Genera el gráfico de la estimación de la cantidad de semanas necesarias para alcanzar la inmunidad de rebaño en Costa Rica, a partir
+    de los datos de vacunación del archivo vacunas_v2.csv, mismo que es generado mediante el script estimacion_vacunas.py teniendo como
+    insumos los archivos efectivas.csv y vacunas.csv. Estos dos archivos son actualizados manualmente obteniendo los datos de la página de
+    vacunación del [CNE](https://www.cne.go.cr/covid/ADQUISICION_VACUNAS.aspx) y del noticiero digital
+    [Delfino.cr](ino.cr/2021/07/ccss-aplico-81-mil-vacunas-la-semana-pasada-y-pais-alcanza-1-7-millones-de-personas-con-al-menos-1-dosis).
+
+    Retorna
+    -------
+    str
+        Gráfico generado en formato html para ser empotrado en la vista.
+    &#34;&#34;&#34;
     df = pd.read_csv(cwd + &#34;/vacunacion/vacunas_v2.csv&#34;)
 
     llegadas = df[&#34;cantidad&#34;].tolist()
@@ -589,12 +764,34 @@ def gauge_estimacion_vacunas():
 <span>def <span class="ident">gauge_vacunas</span></span>(<span>fecha)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Genera los gráficos de tipo Gauge que contienen los datos de vacunas aplicadas hasta la última fecha registrada en la base de datos.
+Los datos de vacunas aplicadas se obtienen automáticamente de la página de la <a href="https://www.ccss.sa.cr/web/coronavirus/vacunacion">CCSS</a>.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>fecha : str
+Fecha para la cual se desea obtener los datos en el gráfico.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Gráfico de tipo subplots generado en formato html para ser empotrado en la vista.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def gauge_vacunas(fecha):
+    &#34;&#34;&#34;
+    Genera los gráficos de tipo Gauge que contienen los datos de vacunas aplicadas hasta la última fecha registrada en la base de datos.
+    Los datos de vacunas aplicadas se obtienen automáticamente de la página de la [CCSS](https://www.ccss.sa.cr/web/coronavirus/vacunacion).
+
+    Parámetros
+    ----------
+    fecha : str
+        Fecha para la cual se desea obtener los datos en el gráfico.
+
+    Retorna
+    -------
+    str
+        Gráfico de tipo subplots generado en formato html para ser empotrado en la vista.
+    &#34;&#34;&#34;
+
     query = getQueryVacunas(fecha)
 
     conn = getAuthConnection()
@@ -650,27 +847,47 @@ def gauge_estimacion_vacunas():
 </details>
 </dd>
 <dt id="visorcovid19.mapa.graficador.grafico_gauge"><code class="name flex">
-<span>def <span class="ident">grafico_gauge</span></span>(<span>cantidad_vacunas=builtins.list, r=0.5, meta=3500000, media_llegada=200000, desviacion_llegada=30000)</span>
+<span>def <span class="ident">grafico_gauge</span></span>(<span>cantidad_vacunas=builtins.list, r=0.5, meta=3500000)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Genera el gráfico de la estimación de la cantidad de semanas necesarias para alcanzar la inmunidad de rebaño en Costa Rica.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>cantidad_vacunas : list
+Lista de la cantidad de vacunas llegadas al país en cada entrega realizada.
+r : float
+Porcentaje de inmunidad de la población a estimar.
+meta : int
+Cantidad de población meta a vacunar para alcanzar la inmunidad de rebaño.</p>
+<h2 id="retorna">Retorna</h2>
+<p>Figure
+Gráfico Gauge que contiene los datos de la estimación para alcanzar la inmunidad de rebaño.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def grafico_gauge(
-    cantidad_vacunas=list,
-    r=0.5,
-    meta=3500000,  # r grado de aplicación de 0.5-1
-    media_llegada=200000,
-    desviacion_llegada=30000,
+    cantidad_vacunas=list, r=0.5, meta=3500000  # r grado de aplicación de 0.5-1
 ):
+    &#34;&#34;&#34;
+    Genera el gráfico de la estimación de la cantidad de semanas necesarias para alcanzar la inmunidad de rebaño en Costa Rica.
+
+    Parámetros
+    ----------
+    cantidad_vacunas : list
+        Lista de la cantidad de vacunas llegadas al país en cada entrega realizada.
+    r : float
+        Porcentaje de inmunidad de la población a estimar.
+    meta : int
+        Cantidad de población meta a vacunar para alcanzar la inmunidad de rebaño.
+
+    Retorna
+    -------
+    Figure
+        Gráfico Gauge que contiene los datos de la estimación para alcanzar la inmunidad de rebaño.
+    &#34;&#34;&#34;
+
     semanas, estimacion_semanas = estimador_semanas(
-        cantidad_vacunas=cantidad_vacunas,
-        r=r,
-        meta=meta,
-        media_llegada=media_llegada,
-        desviacion_llegada=desviacion_llegada,
+        cantidad_vacunas=cantidad_vacunas, r=r, meta=meta
     )
     fig = go.Indicator(
         mode=&#34;gauge+number+delta&#34;,
@@ -700,12 +917,30 @@ def gauge_estimacion_vacunas():
 <span>def <span class="ident">grafico_progreso</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Genera el gráfico de Dosis estimadas aplicables y efectivas aplicables a partir de los datos de vacunación que se obtengan del archivo
+vacunas_2.csv, mismo que es generado mediante el script estimacion_vacunas.py teniendo como insumos los archivos efectivas.csv y vacunas.csv.
+Estos dos archivos son actualizados manualmente obteniendo los datos de la página de vacunación del <a href="https://www.cne.go.cr/covid/ADQUISICION_VACUNAS.aspx">CNE</a>
+y del noticiero digital <a href="ino.cr/2021/07/ccss-aplico-81-mil-vacunas-la-semana-pasada-y-pais-alcanza-1-7-millones-de-personas-con-al-menos-1-dosis">Delfino.cr</a>.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Gráfico generado en formato html para ser empotrado en la vista.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def grafico_progreso():
+    &#34;&#34;&#34;
+    Genera el gráfico de Dosis estimadas aplicables y efectivas aplicables a partir de los datos de vacunación que se obtengan del archivo
+    vacunas_2.csv, mismo que es generado mediante el script estimacion_vacunas.py teniendo como insumos los archivos efectivas.csv y vacunas.csv.
+    Estos dos archivos son actualizados manualmente obteniendo los datos de la página de vacunación del [CNE](https://www.cne.go.cr/covid/ADQUISICION_VACUNAS.aspx)
+    y del noticiero digital [Delfino.cr](ino.cr/2021/07/ccss-aplico-81-mil-vacunas-la-semana-pasada-y-pais-alcanza-1-7-millones-de-personas-con-al-menos-1-dosis).
+
+    Retorna
+    -------
+    str
+        Gráfico generado en formato html para ser empotrado en la vista.
+    &#34;&#34;&#34;
+
     df = pd.read_csv(cwd + &#34;/vacunacion/vacunas_v2.csv&#34;)
     fig1 = go.Figure()
     fig1 = make_subplots(specs=[[{&#34;secondary_y&#34;: True}]])
@@ -768,12 +1003,24 @@ def gauge_estimacion_vacunas():
 <span>def <span class="ident">nacional</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Genera el gráfico de Indicadores nacionales, que contiene los datos de casos activos, nuevos y recuperados, durante toda la pandemia.</p>
+<h2 id="retorna">Retorna</h2>
+<p>str
+Gráfico generado en formato html para ser empotrado en la vista.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def nacional():
+    &#34;&#34;&#34;
+    Genera el gráfico de Indicadores nacionales, que contiene los datos de casos activos, nuevos y recuperados, durante toda la pandemia.
+
+    Retorna
+    -------
+    str
+        Gráfico generado en formato html para ser empotrado en la vista.
+    &#34;&#34;&#34;
+
     query = getQueryNacional()
 
     conn = getAuthConnection()

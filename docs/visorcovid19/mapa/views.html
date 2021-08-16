@@ -33,20 +33,95 @@ from mapa.databaseQueries import getCantones, get_dist, getLastDate
 
 
 def home(request):
+    &#34;&#34;&#34;
+    Página por defecto al acceder a la plataforma.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene el HTML de la página principal.
+    &#34;&#34;&#34;
+
     return render(request, &#34;mapa/geo3.html&#34;)
 
 
+def analytics(request):
+    &#34;&#34;&#34;
+    Página que contiene los datos de Google Analytics de la plataforma a través de un panel de PowerBI empotrado.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene el HTML de la página de analytics.
+    &#34;&#34;&#34;
+
+    return render(request, &#34;mapa/analytics.html&#34;)
+
+
 def listarCantones(request):
+    &#34;&#34;&#34;
+    Obtiene la lista de cantones de una provincia dada.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo el id (nombre) de provincia.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene los cantones de la provincia solicitada en formato JSON.
+    &#34;&#34;&#34;
+
     datos = {&#34;cantones&#34;: getCantones(request.GET.get(&#34;id&#34;))}
     return JsonResponse(datos)
 
 
 def listarDistritos(request):
+    &#34;&#34;&#34;
+    Obtiene la lista de distritos de un cantón dado.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo el id (nombre) del cantón.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene los distritos del cantón solicitado en formato JSON.
+    &#34;&#34;&#34;
+
     datos = {&#34;distritos&#34;: getDistritos(request.GET.get(&#34;id&#34;))}
     return JsonResponse(datos)
 
 
 def getGaugeChart(request):
+    &#34;&#34;&#34;
+    Obtiene los gráficos de órdenes sanitarias, para una fecha dada (solo el Gauge) y provincia, cantón, distrito, o a nivel nacional.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo la fecha para la cual se solicitan los datos, y opcionalmente los datos de nombre de provincia,
+        nombre de cantón y nombre de distrito al cual se desea limitar el gráfico Gauge.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene el gráfico en formato JSON para empotrar en la vista.
+    &#34;&#34;&#34;
+
     provincia = request.GET.get(&#34;province&#34;)
     canton = request.GET.get(&#34;canton&#34;)
     distrito = request.GET.get(&#34;distrito&#34;)
@@ -57,13 +132,42 @@ def getGaugeChart(request):
 
 
 def getVacunas(request):
+    &#34;&#34;&#34;
+    Obtiene el gráfico tipo Gauge que contiene los datos de la cantidad de vacunas aplicadas en una fecha determinada.
+    El gráfico se construye tanto para una fecha específica, o bien para la última fecha conocida, por defecto.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo la fecha para la cual se solicitan los datos.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene el gráfico en formato JSON para empotrar en la vista.
+    &#34;&#34;&#34;
+
     fecha = request.GET.get(&#34;fecha&#34;)
     response = {}
     response[&#34;chart&#34;] = gauge_vacunas(fecha)
     return JsonResponse(response)
 
 
-def getPlots(number):
+def getPlots(request):
+    &#34;&#34;&#34;
+    Obtiene los gráficos de Indicadores Nacionales y Dosis estimadas aplicables y efectivas aplicadas.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene los gráficos en formato JSON para empotrar en la vista.
+    &#34;&#34;&#34;
+
     response = {}
     response[&#34;plot2&#34;] = nacional()
     response[&#34;graficoVacunas&#34;] = grafico_progreso()
@@ -71,6 +175,20 @@ def getPlots(number):
 
 
 def get_leaflet_dist(request):
+    &#34;&#34;&#34;
+    Obtiene la capa de distritos del mapa, con todos sus metadatos, en una fecha dada.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo la fecha para la cual se solicitan los datos.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la capa de distritos y sus metadatos en formato JSON para empotrar en el mapa.
+    &#34;&#34;&#34;
+
     date = request.GET.get(&#34;date&#34;)
     response = {}
     response[&#34;capas&#34;] = get_dist(date)
@@ -78,28 +196,80 @@ def get_leaflet_dist(request):
 
 
 def get_json_sedes(request):
+    &#34;&#34;&#34;
+    Obtiene la capa de sedes del examen de admisión de universidades públicas y sus respectivos metadatos.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la capa de sedes del examen de admisión y sus metadatos en formato JSON para empotrar en el mapa.
+    &#34;&#34;&#34;
+
     response = {}
     response[&#34;capas&#34;] = get_sedes()
     return JsonResponse(response)
 
 
 def get_json_hogares(request):
+    &#34;&#34;&#34;
+    Obtiene la capa de hogares de ancianos del país y sus respectivos metadatos.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la capa de hogares de ancianos del país y sus metadatos en formato JSON para empotrar en el mapa.
+    &#34;&#34;&#34;
+
     response = {}
     response[&#34;capas&#34;] = get_hogares()
     return JsonResponse(response)
 
 
 def get_json_indigenas(request):
+    &#34;&#34;&#34;
+    Obtiene la capa de asentamientos indígenas del país y sus respectivos metadatos.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la capa de asentamientos indígenas y sus metadatos en formato JSON para empotrar en el mapa.
+    &#34;&#34;&#34;
+
     response = {}
     response[&#34;capas&#34;] = get_indigenas()
     return JsonResponse(response)
 
 
-def analytics(request):
-    return render(request, &#34;mapa/analytics.html&#34;)
-
-
 def getPrediccionesMapa(request):
+    &#34;&#34;&#34;
+    Obtiene los datos de predicciones de casos activos por distrito, para un mes y semana dados.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene los datos de predicciones de casos activos en formato JSON para empotrar en el mapa.
+    &#34;&#34;&#34;
+
     response = {}
     mes = request.GET.get(&#34;mes&#34;)
     semana = request.GET.get(&#34;semana&#34;)
@@ -108,12 +278,41 @@ def getPrediccionesMapa(request):
 
 
 def getUltimaFecha(request):
+    &#34;&#34;&#34;
+    Obtiene la fecha más reciente registrada para la que se conocen datos en la base de datos.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la fecha más reciente disponible en la base de datos en formato JSON.
+    &#34;&#34;&#34;
+
     response = {}
     response[&#34;date&#34;] = getLastDate()
     return JsonResponse(response)
 
 
 def getDatosPais(request):
+    &#34;&#34;&#34;
+    Obtiene los datos a nivel país de hospitalizaciones en salón, en UCI e índice de positividad, en una fecha dada.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo la fecha para la que se solicitan los datos.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene los datos de hospitalizaciones e índice de positividad a nivel país, de la fecha solicitada,
+        en formato JSON para empotrar en la vista.
+    &#34;&#34;&#34;
+
     response = {}
     fecha = request.GET.get(&#34;fecha&#34;)
     response[&#34;datos_pais&#34;] = obtenerDatosPais(fecha)
@@ -121,12 +320,40 @@ def getDatosPais(request):
 
 
 def getValidDates(request):
+    &#34;&#34;&#34;
+    Obtiene todas las fechas registradas en la tabla acumulado_distrito, es decir, son las fechas para las cuales hay datos.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la lista de las fechas válidas en formato JSON.
+    &#34;&#34;&#34;
+
     response = {}
     response[&#34;fechas&#34;] = getFechasValidas()
     return JsonResponse(response)
 
 
 def getProyecciones(request):
+    &#34;&#34;&#34;
+    Obtiene la capa de proyecciones para muestras determinadas de distritos, para una fecha que caiga en el rango de una proyección registrada en la base de datos.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo la fecha y el tamaño de muestra para los cuales se solicitan los datos.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la capa de proyecciones y sus metadatos en formato JSON para empotrar en el mapa.
+    &#34;&#34;&#34;
+
     response = {}
     fecha = request.GET.get(&#34;fecha&#34;)
     muestra = request.GET.get(&#34;muestra&#34;)
@@ -145,12 +372,32 @@ def getProyecciones(request):
 <span>def <span class="ident">analytics</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Página que contiene los datos de Google Analytics de la plataforma a través de un panel de PowerBI empotrado.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene el HTML de la página de analytics.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def analytics(request):
+    &#34;&#34;&#34;
+    Página que contiene los datos de Google Analytics de la plataforma a través de un panel de PowerBI empotrado.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene el HTML de la página de analytics.
+    &#34;&#34;&#34;
+
     return render(request, &#34;mapa/analytics.html&#34;)</code></pre>
 </details>
 </dd>
@@ -158,12 +405,34 @@ def getProyecciones(request):
 <span>def <span class="ident">getDatosPais</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene los datos a nivel país de hospitalizaciones en salón, en UCI e índice de positividad, en una fecha dada.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor, incluyendo la fecha para la que se solicitan los datos.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene los datos de hospitalizaciones e índice de positividad a nivel país, de la fecha solicitada,
+en formato JSON para empotrar en la vista.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def getDatosPais(request):
+    &#34;&#34;&#34;
+    Obtiene los datos a nivel país de hospitalizaciones en salón, en UCI e índice de positividad, en una fecha dada.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo la fecha para la que se solicitan los datos.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene los datos de hospitalizaciones e índice de positividad a nivel país, de la fecha solicitada,
+        en formato JSON para empotrar en la vista.
+    &#34;&#34;&#34;
+
     response = {}
     fecha = request.GET.get(&#34;fecha&#34;)
     response[&#34;datos_pais&#34;] = obtenerDatosPais(fecha)
@@ -174,12 +443,34 @@ def getProyecciones(request):
 <span>def <span class="ident">getGaugeChart</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene los gráficos de órdenes sanitarias, para una fecha dada (solo el Gauge) y provincia, cantón, distrito, o a nivel nacional.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor, incluyendo la fecha para la cual se solicitan los datos, y opcionalmente los datos de nombre de provincia,
+nombre de cantón y nombre de distrito al cual se desea limitar el gráfico Gauge.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene el gráfico en formato JSON para empotrar en la vista.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def getGaugeChart(request):
+    &#34;&#34;&#34;
+    Obtiene los gráficos de órdenes sanitarias, para una fecha dada (solo el Gauge) y provincia, cantón, distrito, o a nivel nacional.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo la fecha para la cual se solicitan los datos, y opcionalmente los datos de nombre de provincia,
+        nombre de cantón y nombre de distrito al cual se desea limitar el gráfico Gauge.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene el gráfico en formato JSON para empotrar en la vista.
+    &#34;&#34;&#34;
+
     provincia = request.GET.get(&#34;province&#34;)
     canton = request.GET.get(&#34;canton&#34;)
     distrito = request.GET.get(&#34;distrito&#34;)
@@ -190,15 +481,35 @@ def getProyecciones(request):
 </details>
 </dd>
 <dt id="visorcovid19.mapa.views.getPlots"><code class="name flex">
-<span>def <span class="ident">getPlots</span></span>(<span>number)</span>
+<span>def <span class="ident">getPlots</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene los gráficos de Indicadores Nacionales y Dosis estimadas aplicables y efectivas aplicadas.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene los gráficos en formato JSON para empotrar en la vista.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def getPlots(number):
+<pre><code class="python">def getPlots(request):
+    &#34;&#34;&#34;
+    Obtiene los gráficos de Indicadores Nacionales y Dosis estimadas aplicables y efectivas aplicadas.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene los gráficos en formato JSON para empotrar en la vista.
+    &#34;&#34;&#34;
+
     response = {}
     response[&#34;plot2&#34;] = nacional()
     response[&#34;graficoVacunas&#34;] = grafico_progreso()
@@ -209,12 +520,32 @@ def getProyecciones(request):
 <span>def <span class="ident">getPrediccionesMapa</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene los datos de predicciones de casos activos por distrito, para un mes y semana dados.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene los datos de predicciones de casos activos en formato JSON para empotrar en el mapa.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def getPrediccionesMapa(request):
+    &#34;&#34;&#34;
+    Obtiene los datos de predicciones de casos activos por distrito, para un mes y semana dados.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene los datos de predicciones de casos activos en formato JSON para empotrar en el mapa.
+    &#34;&#34;&#34;
+
     response = {}
     mes = request.GET.get(&#34;mes&#34;)
     semana = request.GET.get(&#34;semana&#34;)
@@ -226,12 +557,32 @@ def getProyecciones(request):
 <span>def <span class="ident">getProyecciones</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene la capa de proyecciones para muestras determinadas de distritos, para una fecha que caiga en el rango de una proyección registrada en la base de datos.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor, incluyendo la fecha y el tamaño de muestra para los cuales se solicitan los datos.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene la capa de proyecciones y sus metadatos en formato JSON para empotrar en el mapa.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def getProyecciones(request):
+    &#34;&#34;&#34;
+    Obtiene la capa de proyecciones para muestras determinadas de distritos, para una fecha que caiga en el rango de una proyección registrada en la base de datos.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo la fecha y el tamaño de muestra para los cuales se solicitan los datos.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la capa de proyecciones y sus metadatos en formato JSON para empotrar en el mapa.
+    &#34;&#34;&#34;
+
     response = {}
     fecha = request.GET.get(&#34;fecha&#34;)
     muestra = request.GET.get(&#34;muestra&#34;)
@@ -243,12 +594,32 @@ def getProyecciones(request):
 <span>def <span class="ident">getUltimaFecha</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene la fecha más reciente registrada para la que se conocen datos en la base de datos.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene la fecha más reciente disponible en la base de datos en formato JSON.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def getUltimaFecha(request):
+    &#34;&#34;&#34;
+    Obtiene la fecha más reciente registrada para la que se conocen datos en la base de datos.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la fecha más reciente disponible en la base de datos en formato JSON.
+    &#34;&#34;&#34;
+
     response = {}
     response[&#34;date&#34;] = getLastDate()
     return JsonResponse(response)</code></pre>
@@ -258,12 +629,34 @@ def getProyecciones(request):
 <span>def <span class="ident">getVacunas</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene el gráfico tipo Gauge que contiene los datos de la cantidad de vacunas aplicadas en una fecha determinada.
+El gráfico se construye tanto para una fecha específica, o bien para la última fecha conocida, por defecto.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor, incluyendo la fecha para la cual se solicitan los datos.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene el gráfico en formato JSON para empotrar en la vista.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def getVacunas(request):
+    &#34;&#34;&#34;
+    Obtiene el gráfico tipo Gauge que contiene los datos de la cantidad de vacunas aplicadas en una fecha determinada.
+    El gráfico se construye tanto para una fecha específica, o bien para la última fecha conocida, por defecto.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo la fecha para la cual se solicitan los datos.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene el gráfico en formato JSON para empotrar en la vista.
+    &#34;&#34;&#34;
+
     fecha = request.GET.get(&#34;fecha&#34;)
     response = {}
     response[&#34;chart&#34;] = gauge_vacunas(fecha)
@@ -274,12 +667,32 @@ def getProyecciones(request):
 <span>def <span class="ident">getValidDates</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene todas las fechas registradas en la tabla acumulado_distrito, es decir, son las fechas para las cuales hay datos.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene la lista de las fechas válidas en formato JSON.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def getValidDates(request):
+    &#34;&#34;&#34;
+    Obtiene todas las fechas registradas en la tabla acumulado_distrito, es decir, son las fechas para las cuales hay datos.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la lista de las fechas válidas en formato JSON.
+    &#34;&#34;&#34;
+
     response = {}
     response[&#34;fechas&#34;] = getFechasValidas()
     return JsonResponse(response)</code></pre>
@@ -289,12 +702,32 @@ def getProyecciones(request):
 <span>def <span class="ident">get_json_hogares</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene la capa de hogares de ancianos del país y sus respectivos metadatos.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene la capa de hogares de ancianos del país y sus metadatos en formato JSON para empotrar en el mapa.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_json_hogares(request):
+    &#34;&#34;&#34;
+    Obtiene la capa de hogares de ancianos del país y sus respectivos metadatos.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la capa de hogares de ancianos del país y sus metadatos en formato JSON para empotrar en el mapa.
+    &#34;&#34;&#34;
+
     response = {}
     response[&#34;capas&#34;] = get_hogares()
     return JsonResponse(response)</code></pre>
@@ -304,12 +737,32 @@ def getProyecciones(request):
 <span>def <span class="ident">get_json_indigenas</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene la capa de asentamientos indígenas del país y sus respectivos metadatos.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene la capa de asentamientos indígenas y sus metadatos en formato JSON para empotrar en el mapa.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_json_indigenas(request):
+    &#34;&#34;&#34;
+    Obtiene la capa de asentamientos indígenas del país y sus respectivos metadatos.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la capa de asentamientos indígenas y sus metadatos en formato JSON para empotrar en el mapa.
+    &#34;&#34;&#34;
+
     response = {}
     response[&#34;capas&#34;] = get_indigenas()
     return JsonResponse(response)</code></pre>
@@ -319,12 +772,32 @@ def getProyecciones(request):
 <span>def <span class="ident">get_json_sedes</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene la capa de sedes del examen de admisión de universidades públicas y sus respectivos metadatos.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene la capa de sedes del examen de admisión y sus metadatos en formato JSON para empotrar en el mapa.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_json_sedes(request):
+    &#34;&#34;&#34;
+    Obtiene la capa de sedes del examen de admisión de universidades públicas y sus respectivos metadatos.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la capa de sedes del examen de admisión y sus metadatos en formato JSON para empotrar en el mapa.
+    &#34;&#34;&#34;
+
     response = {}
     response[&#34;capas&#34;] = get_sedes()
     return JsonResponse(response)</code></pre>
@@ -334,12 +807,32 @@ def getProyecciones(request):
 <span>def <span class="ident">get_leaflet_dist</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene la capa de distritos del mapa, con todos sus metadatos, en una fecha dada.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor, incluyendo la fecha para la cual se solicitan los datos.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene la capa de distritos y sus metadatos en formato JSON para empotrar en el mapa.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_leaflet_dist(request):
+    &#34;&#34;&#34;
+    Obtiene la capa de distritos del mapa, con todos sus metadatos, en una fecha dada.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo la fecha para la cual se solicitan los datos.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene la capa de distritos y sus metadatos en formato JSON para empotrar en el mapa.
+    &#34;&#34;&#34;
+
     date = request.GET.get(&#34;date&#34;)
     response = {}
     response[&#34;capas&#34;] = get_dist(date)
@@ -350,12 +843,32 @@ def getProyecciones(request):
 <span>def <span class="ident">home</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Página por defecto al acceder a la plataforma.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene el HTML de la página principal.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def home(request):
+    &#34;&#34;&#34;
+    Página por defecto al acceder a la plataforma.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene el HTML de la página principal.
+    &#34;&#34;&#34;
+
     return render(request, &#34;mapa/geo3.html&#34;)</code></pre>
 </details>
 </dd>
@@ -363,12 +876,32 @@ def getProyecciones(request):
 <span>def <span class="ident">listarCantones</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene la lista de cantones de una provincia dada.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor, incluyendo el id (nombre) de provincia.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene los cantones de la provincia solicitada en formato JSON.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def listarCantones(request):
+    &#34;&#34;&#34;
+    Obtiene la lista de cantones de una provincia dada.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo el id (nombre) de provincia.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene los cantones de la provincia solicitada en formato JSON.
+    &#34;&#34;&#34;
+
     datos = {&#34;cantones&#34;: getCantones(request.GET.get(&#34;id&#34;))}
     return JsonResponse(datos)</code></pre>
 </details>
@@ -377,12 +910,32 @@ def getProyecciones(request):
 <span>def <span class="ident">listarDistritos</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Obtiene la lista de distritos de un cantón dado.</p>
+<h2 id="parametros">Parámetros</h2>
+<p>request : HttpRequest
+HTTP request enviada al servidor, incluyendo el id (nombre) del cantón.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HttpResponse
+HTTP Response que contiene los distritos del cantón solicitado en formato JSON.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def listarDistritos(request):
+    &#34;&#34;&#34;
+    Obtiene la lista de distritos de un cantón dado.
+
+    Parámetros
+    ----------
+    request : HttpRequest
+        HTTP request enviada al servidor, incluyendo el id (nombre) del cantón.
+
+    Retorna
+    -------
+    HttpResponse
+        HTTP Response que contiene los distritos del cantón solicitado en formato JSON.
+    &#34;&#34;&#34;
+
     datos = {&#34;distritos&#34;: getDistritos(request.GET.get(&#34;id&#34;))}
     return JsonResponse(datos)</code></pre>
 </details>
