@@ -1,3 +1,10 @@
+# Documentación del sistema
+
+La documentación del código fuente está disponible [aquí](https://sebas3552.github.io/covid19docs.github.io/).
+
+
+# Documentación de base de datos
+
 ## acumulado_distrito
 Se almacenarán los datos referentes a la acumulación de todos la información en general con respecto a cada distrito de nuestro país. En esta tabla se tiene control de datos como los casos diarios, cantidad total de casos acumulados, fallecidos, activos, casos del día, órdenes sanitarias y muchos otros más con cada día en específico.
 
