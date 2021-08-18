@@ -26,4 +26,10 @@ jobs:
         host: ${{ secrets.SONARQUBE_HOST }}
         login: ${{ secrets.SONARQUBE_USER }}
         password: ${{ secrets.SONARQUBE_PASSWORD }}
-      
+  PythonLinting:
+    name: Python linting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Konstruktoid Python linting
+        uses: konstruktoid/action-pylint@master
