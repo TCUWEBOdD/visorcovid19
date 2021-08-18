@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: SonarQube Scan
-      uses: achilleslinux/sonarqube-action@master
+      uses: kitabisa/sonarqube-action@master
       with:
         host: ${{ secrets.SONARQUBE_HOST }}
         login: ${{ secrets.SONARQUBE_USER }}
