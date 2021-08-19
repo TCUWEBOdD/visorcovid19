@@ -96,10 +96,41 @@ toastr.options = {
 }
 
 /**INICIALIZADOR**/
+/**
+ * Realiza todas las peticiones necesarias para el cargado inicial de datos en la vista.
+ * - Configura las columnas ajustables en pantalla ancha.
+ * - Inicializa el mapa.
+ * - Inicializa el calendario con las fechas apropiadas.
+ * - Inicializa los event listeners.
+ * - Inicializa el indicador de fecha y hora actual.
+ * - Inicializa los gráficos.
+ * - Inicializa las burbujas de créditos.
+ */
 window.onload = function () {
   $.noConflict();
 
-  /** Código para hacer las columnas ajustables, solo si el viewport es de 1700px de ancho o más. */
+  initColumns();
+
+  initMap();
+
+  initDates();
+
+  getDatosPais();
+
+  setUpListeners();
+  
+  setInterval(timerDaemon, 1000);  
+
+  ajaxRequestPlots();
+
+  setUpCreditsBubbles();
+};
+
+/**
+ * Configura las columnas ajustables, solo si el ancho del viewport es de 1700px o mayor.
+ * De lo contrario, la vista se muestra en filas en vez de columnas.
+ */
+function initColumns(){
   const GUTTER_SIZE = 2;
 
   if (window.matchMedia("(min-width: 1700px)").matches) {
@@ -123,76 +154,78 @@ window.onload = function () {
   } else {
     _wide_screen = false;
   }
+}
 
-  initMap();
-
-  let url = "get_leaflet_dist";
-
+/**
+ * Inicializa el calendario con las fechas válidas y carga las capas del mapa con la fecha más actualizada de los datos.
+ */
+function initDates(){
   $.get("getValidDates", function(result){
     _fechasValidas = result.fechas;
     $.get("getUltimaFecha", function(result){
       _ultimaFecha = result.date[0];
       _fechaActual = _ultimaFecha;
-      getDatosPais();
-      changeGauge(null, null, null);
-      $.get(url, { date: _ultimaFecha }, function (result) {
-        let datos_json = JSON.parse("[" + result["capas"] + "]");
-        configurar_mapa(map, datos_json);
-        $('input[name="datepicker"]').daterangepicker(
-          {
-            singleDatePicker: true,
-            locale: {
-              format: "DD/MM/YYYY",
-              separator: " - ",
-              applyLabel: "Aceptar",
-              cancelLabel: "Cancelar",
-              fromLabel: "Desde",
-              toLabel: "Hasta",
-              customRangeLabel: "Personalizado",
-              weekLabel: "S",
-              daysOfWeek: ["D", "L", "K", "M", "J", "V", "S"],
-              monthNames: [
-                "Enero",
-                "Febrero",
-                "Marzo",
-                "Abril",
-                "Mayo",
-                "Junio",
-                "Julio",
-                "Agosto",
-                "Septiembre",
-                "Octubre",
-                "Noviembre",
-                "Diciembre",
-              ],
-              firstDay: 1
-            },
-            isInvalidDate: function(ele){
-              /* Se encarga de deshabilitar las fechas en las que no hay datos en la base de datos. */
-              let currDate = moment(ele._d).format('YYYY-MM-DD');
-              return !_fechasValidas.includes(currDate);
-            },
-            startDate: parseDate(_ultimaFecha),
-            minDate: "06/03/2020",
-            maxDate: parseDate(_ultimaFecha),
+      $('input[name="datepicker"]').daterangepicker(
+        {
+          singleDatePicker: true,
+          locale: {
+            format: "DD/MM/YYYY",
+            separator: " - ",
+            applyLabel: "Aceptar",
+            cancelLabel: "Cancelar",
+            fromLabel: "Desde",
+            toLabel: "Hasta",
+            customRangeLabel: "Personalizado",
+            weekLabel: "S",
+            daysOfWeek: ["D", "L", "K", "M", "J", "V", "S"],
+            monthNames: [
+              "Enero",
+              "Febrero",
+              "Marzo",
+              "Abril",
+              "Mayo",
+              "Junio",
+              "Julio",
+              "Agosto",
+              "Septiembre",
+              "Octubre",
+              "Noviembre",
+              "Diciembre",
+            ],
+            firstDay: 1
           },
-          function (start, end, label) {
-            _fechaActual = start.format("YYYY-MM-DD");
-            setDate(_fechaActual);
-            getDatosPais();
-            $("#mapas").multiselect('enable');
-            $("#mapas").multiselect('deselectAll');
-            $("#mapas").multiselect('rebuild');
-            $("#mapas").multiselect('refresh');
-            $("#provincias").removeAttr('disabled');
-            $("#cantones").removeAttr('disabled');
-            $("#distritos").removeAttr('disabled');
-            _selectedLayer = null;
-          }
-        );
-      });
+          isInvalidDate: function(ele){
+            /* Se encarga de deshabilitar las fechas en las que no hay datos en la base de datos. */
+            let currDate = moment(ele._d).format('YYYY-MM-DD');
+            return !_fechasValidas.includes(currDate);
+          },
+          startDate: parseDate(_ultimaFecha),
+          minDate: "06/03/2020",
+          maxDate: parseDate(_ultimaFecha),
+        },
+        function (start, end, label) {
+          _fechaActual = start.format("YYYY-MM-DD");
+          setDate(_fechaActual);
+          $("#mapas").multiselect('enable');
+          $("#mapas").multiselect('deselectAll');
+          $("#mapas").multiselect('rebuild');
+          $("#mapas").multiselect('refresh');
+          $("#provincias").removeAttr('disabled');
+          $("#cantones").removeAttr('disabled');
+          $("#distritos").removeAttr('disabled');
+          _selectedLayer = null;
+        }
+      );
+      
+      setDate(_ultimaFecha);
     });
   });
+}
+
+/**
+ * Configura los event listeners de los selects, radio buttons y multiselect.
+ */
+function setUpListeners(){
 
   /* Para cada valor seleccionado en el multiselect, pinta los colores o elementos de la capa correspondiente */
   $("#mapas").on("change", function () {
@@ -211,14 +244,6 @@ window.onload = function () {
 
   $("#mapas").multiselect({
     includeSelectAllOption: true,
-    optionClass: function (element) {
-      var value = $(element).val();
-      if (value % 2 == 0) {
-        return "odd"; // reversed
-      } else {
-        return "even"; // reversed
-      }
-    },
     buttonContainer: '<div class="" />',
     buttonClass: "form-control",
     nonSelectedText: "Seleccione",
@@ -227,37 +252,12 @@ window.onload = function () {
     nSelectedText: "seleccionadas",
     numberDisplayed: 1,
   });
-
-  /*Coloca la fecha en el formato DD/MM/YYYY HH:MM:SS */
-  function timerDaemon() {
-    var today = new Date();
-    $("#hora").html(
-      today.getDate() +
-        "/" +
-        (today.getMonth() + 1) +
-        "/" +
-        today.getFullYear() +
-        " " +
-        (today.getHours() < 10 ? "0" + today.getHours() : today.getHours()) +
-        ":" +
-        (today.getMinutes() < 10
-          ? "0" + today.getMinutes()
-          : today.getMinutes()) +
-        ":" +
-        (today.getSeconds() < 10
-          ? "0" + today.getSeconds()
-          : today.getSeconds())
-    );
-  }
-  setInterval(timerDaemon, 1000);
-
-  /**
-   * Colorea de azul la provincia seleccionada en el select.
-   * Baja la opacidad de las demás provincias para resaltar la seleccionada.
-   * Limpia los datos de variables globales cuando ya no se van a usar.
-   */
-
-  $("#provincias").on("change", function () {
+  
+  //  Colorea de azul la provincia seleccionada en el select.
+  //  Baja la opacidad de las demás provincias para resaltar la seleccionada.
+  //  Limpia los datos de variables globales cuando ya no se van a usar.
+   
+   $("#provincias").on("change", function () {
     if (_selectedLayer != null && _selectedLayer.length > 0) {
       $(this).val("none");
       toastr.warning("Elimine las vistas del mapa antes de seleccionar una provincia.", "Advertencia");
@@ -382,19 +382,39 @@ window.onload = function () {
     changeGauge(_selectedProvince, _selectedCanton, selectedDistrito);
   });
 
-  ajaxRequestPlots();
+  $("input[data-provide=datepicker]").on("click", function () {
+    $(".datepicker.datepicker-dropdown").css("z-index", "1000");
+  });
+}
 
-  setUpCreditsBubbles();
-}; //FIN INICIALIZADOR
-
-$("input[data-provide=datepicker]").on("click", function () {
-  $(".datepicker.datepicker-dropdown").css("z-index", "1000");
-});
+/** 
+ * Coloca la fecha en el formato DD/MM/YYYY HH:MM:SS.
+ */
+function timerDaemon() {
+  var today = new Date();
+  $("#hora").html(
+    today.getDate() +
+      "/" +
+      (today.getMonth() + 1) +
+      "/" +
+      today.getFullYear() +
+      " " +
+      (today.getHours() < 10 ? "0" + today.getHours() : today.getHours()) +
+      ":" +
+      (today.getMinutes() < 10
+        ? "0" + today.getMinutes()
+        : today.getMinutes()) +
+      ":" +
+      (today.getSeconds() < 10
+        ? "0" + today.getSeconds()
+        : today.getSeconds())
+  );
+}
 
 /**
  * Obtiene las predicciones para todos los cantones en una semana dada, en el mes de la fecha seleccionada en el datepicker,
  * y guarda los datos en un JSON en una variable global.
- * @param {*} semana Semana de predicciones: I, II, III, IV, o V.
+ * @param {string} semana Semana de predicciones: I, II, III, IV, o V.
  */
 function getPredicciones(semana){
   let mes = parseInt($("[name='datepicker']").val().split('/')[1]);
@@ -982,6 +1002,9 @@ function setLayers(selectedLayers){
   }
 }
 
+/**
+ * Inicializa la vista por defecto del mapa, centrado sobre Costa Rica.
+ */
 function initMap(){
   map = new L.map("my_map").setView([9.934739, -84.087502], 8);
   L.tileLayer(urltile[0], {
@@ -995,14 +1018,12 @@ function initMap(){
 }
 
 function getDatosPais(){
-  if(_fechaActual != null && _fechaActual != ""){
-    let url = "getDatosPais";
-    $.get(url, {fecha: _fechaActual}, function(result){
-      $("#hccss .data").html(result.datos_pais.casos_salon);
-      $("#ouci .data").html(result.datos_pais.casos_uci);
-      $("#pms .data").html(result.datos_pais.indice_positividad);
-    });
-  }
+  let url = "getDatosPais";
+  $.get(url, {fecha: _fechaActual}, function(result){
+    $("#hccss .data").html(result.datos_pais.casos_salon);
+    $("#ouci .data").html(result.datos_pais.casos_uci);
+    $("#pms .data").html(result.datos_pais.indice_positividad);
+  });
 }
 
 function removeLayers(layers) {
@@ -1062,6 +1083,7 @@ function setDate(date) {
     _selectedDistrito = null;
     let tipoGrafico = $("input:radio[name=radio-group-1-bg]:checked").val();
     changeGauge(_selectedProvince, _selectedCanton, _selectedDistrito, (tipoGrafico == 'orden'? 1 : 2))
+    getDatosPais();
   });
 }
 

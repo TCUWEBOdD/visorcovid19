@@ -416,14 +416,23 @@ def obtenerDatosPais(fecha):
     dict
         Diccionario que contiene los datos a nivel país de hospitalizaciones en salón, hospitalizaciones en UCI e índice de positividad registrados en una fecha dada.
     """
+    if fecha:
+        query = """
+            select casos_salon, casos_uci, indice_positividad from datos_pais where fecha = '{fecha}';
+        """
+    else:
+        query = """
+            select casos_salon, casos_uci, indice_positividad from datos_pais order by fecha desc limit 1;
+        """
 
-    query = """
-        select casos_salon, casos_uci, indice_positividad from datos_pais where fecha = '{fecha}';
-    """
     conn = getAuthConnection()
     cursor = conn.cursor()
 
-    cursor.execute(query.format(fecha=fecha))
+    if fecha:
+        cursor.execute(query.format(fecha=fecha))
+    else:
+        cursor.execute(query)
+
     records = cursor.fetchall()
 
     datos = {}
