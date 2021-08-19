@@ -230,3 +230,16 @@ fecha_inicio|date|No|Fecha de inicio de proyección
 fecha_fin|date|Sí|Fecha de finalización de proyección
 muestra|numeric|No|Muestra de población
 ---
+
+---
+
+## proyeccion_distrito
+Esta tabla contiene información sobre la proyección a realizar en los diferentes distritos existentes.
+Nombre        | Tipo de Dato | Permite nulos | Descripción
+:-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
+|codigo_dta|numeric |No |Código del distrito
+porcentaje|numeric|Sí|Porcentaje de proyección
+fecha_inicio|date|No|Fecha de inicio de proyección
+fecha_fin|date|Sí|Fecha de finalización de proyección
+muestra|numeric|No|Muestra de población
+---
