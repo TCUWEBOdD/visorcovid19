@@ -82,7 +82,7 @@ toastr.options = {
   "newestOnTop": false,
   "progressBar": false,
   "positionClass": "toast-top-center",
-  "preventDuplicates": false,
+  "preventDuplicates": true,
   "onclick": null,
   "showDuration": "300",
   "hideDuration": "1000",
@@ -94,6 +94,16 @@ toastr.options = {
   "hideMethod": "slideUp",
   "tapToDismiss": true
 }
+
+/* Oculta el overlay de loading y muestra un mensaje de error si ocurre algún error en un request AJAX. */
+$.ajaxSetup({
+  error: function (xhr, status, error) {
+    $.LoadingOverlay("hide");
+    $("#gauge1").LoadingOverlay("hide");
+    $("#Map").LoadingOverlay("hide");
+    toastr.error("Ha ocurrido un error. Intente de nuevo más tarde. Error: " + status, "Error");
+  },
+});
 
 /**INICIALIZADOR**/
 /**
@@ -200,7 +210,7 @@ function initDates(){
             return !_fechasValidas.includes(currDate);
           },
           startDate: parseDate(_ultimaFecha),
-          minDate: "06/03/2020",
+          minDate: "06/03/2020", // Fecha del primer caso reportado en C.R.
           maxDate: parseDate(_ultimaFecha),
         },
         function (start, end, label) {
@@ -223,9 +233,23 @@ function initDates(){
 }
 
 /**
- * Configura los event listeners de los selects, radio buttons y multiselect.
+ * Configura los event listeners de resize(window), los selects, radio buttons y multiselect.
  */
 function setUpListeners(){
+
+  /* Listener sobre el evento de resize de la ventana, para que la página sea responsive dinámicamente. */
+  $(window).resize(function(){
+    if (!window.matchMedia("(min-width: 1700px)").matches) {
+      if(_wide_screen) {
+        _wide_screen = false;
+        window.location.reload();
+      }
+    } else {
+      if(!_wide_screen){
+        window.location.reload();
+      }
+    }
+  });
 
   /* Para cada valor seleccionado en el multiselect, pinta los colores o elementos de la capa correspondiente */
   $("#mapas").on("change", function () {
@@ -378,7 +402,6 @@ function setUpListeners(){
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "");
     _selectedDistrito = selectedDistrito;
-    seleccionarDistrito(_selectedDistrito);
     changeGauge(_selectedProvince, _selectedCanton, selectedDistrito);
   });
 
@@ -424,17 +447,17 @@ function getPredicciones(semana){
   });
 }
 
+/**
+ * Configura la apariencia, metadatos y acciones (event listeners) para la capa de distritos del mapa.
+ * @param {*} feature Objeto de metadatos para cada distrito. Contiene el nombre y todos los datos epidemiológicos obtenidos de
+ * la base de datos para cada distrito.
+ * @param {*} layer Capa correspondiente a cada distrito, asociada a los metadatos (features).
+ */
 function onEachFeature(feature, layer) {
   if (feature.properties && feature.properties.nombre) {
     layer.on("click", function (event) {
       if (feature.properties.nombre == _selectedDistrito) {
-        if (_selectedLayer == LAYER_ALERTA) {
-          analyzeColor(layer);
-        } else if (_selectedLayer == LAYER_MORBILIDAD) {
-          _layer_actual.eachLayer(function (layer) {
-            analyzeColorMorbilidad(layer);
-          });
-        } else if (isProvinceOrCantonSelected()) {
+        if (isProvinceOrCantonSelected()) {
           _layer_actual.eachLayer(function (layer) {
             layer.setStyle({ fillOpacity: 0.8 });
           });
@@ -461,17 +484,7 @@ function onEachFeature(feature, layer) {
           toastr.warning("No puede seleccionar este distrito porque no está dentro del cantón seleccionado.", "Error");
           return;
         }
-        if (_selectedLayer == LAYER_ALERTA) {
-          _layer_actual.eachLayer(function (layer) {
-            analyzeColor(layer);
-          });
-          layer.setStyle({ fillColor: SELECTED_DISTRICT_COLOR });
-        } else if (_selectedLayer == LAYER_MORBILIDAD) {
-          _layer_actual.eachLayer(function (layer) {
-            analyzeColorMorbilidad(layer);
-          });
-          layer.setStyle({ fillColor: SELECTED_DISTRICT_COLOR });
-        } else if (isProvinceOrCantonSelected()) {
+        if (isProvinceOrCantonSelected()) {
           _layer_actual.eachLayer(function (layer) {
             layer.setStyle({ fillOpacity: 0.3 });
           });
@@ -501,7 +514,6 @@ function onEachFeature(feature, layer) {
       }
       setDashboardData(feature);
 
-      // weight: 0.3,
       layer.setStyle({ weight: 2, color: "blue" });
     });
 
@@ -511,10 +523,19 @@ function onEachFeature(feature, layer) {
   }
 }
 
+/**
+ * Verifica si existe un cantón o provincia seleccionados en el mapa (a través de los combo boxes).
+ * @returns True si existe un cantón o provincia seleccionados, false en caso contrario.
+ */
 function isProvinceOrCantonSelected() {
   return _selectedProvince != null || _selectedCanton != null;
 }
 
+/**
+ * Establece los datos del dashboard a partir de los metadatos del feature que se pasa por parámetro.
+ * Coloca placeholders '--' en las casillas si el feature es nulo.
+ * @param {*} feature Objeto de features que contiene los metadatos de la capa asociada (distrito).
+ */
 function setDashboardData(feature) {
   $("#pro_info").html(
     (feature == null || feature.properties.proinfo == null ? "--" : feature.properties.proinfo)
@@ -581,6 +602,10 @@ function setDashboardData(feature) {
   }
 }
 
+/**
+ * Configura los colores de los distritos según el nivel de alerta.
+ * @param {*} layer Layer sobre la cual se colocará el color del distrito de acuerdo al nivel de alerta.
+ */
 function analyzeColor(layer) {
   if (layer.feature.properties.condicion !== undefined) {
     var condi = layer.feature.properties.condicion;
@@ -596,6 +621,10 @@ function analyzeColor(layer) {
   }
 }
 
+/**
+ * Configura los colores de los distritos según el índice socio sanitario.
+ * @param {*} layer Layer sobre la cual se colocará el color del distrito de acuerdo al índice socio sanitario.
+ */
 function analyzeColorSS(layer) {
   if (layer.feature.properties.socio !== undefined) {
     var condi = layer.feature.properties.socio;
@@ -613,7 +642,13 @@ function analyzeColorSS(layer) {
   }
 }
 
+/**
+ * Configura los colores de los distritos según los datos de morbilidad.
+ * @param {*} layer Layer sobre la cual se colocará el color del distrito de acuerdo a los datos de morbilidad.
+ */
 function analyzeColorMorbilidad(layer) {
+  
+  // Configura el color de fondo de los distritos de acuerdo a la cantidad de habitantes.
   if (layer.feature.properties.pobinfo !== undefined) {
     let poblacion = layer.feature.properties.pobinfo;
     switch(true){
@@ -637,6 +672,7 @@ function analyzeColorMorbilidad(layer) {
     layer.setStyle({ fillColor: "rgba(219, 228, 223, 0.4)" });
   }
 
+  // Configura el color y tamaño de los círculos que indican la tasa de morbilidad por distrito.
   if(layer.feature.properties.morbilidad !== undefined){
     let morbilidad = layer.feature.properties.morbilidad;
     let factor = 1.0;
@@ -667,6 +703,7 @@ function analyzeColorMorbilidad(layer) {
         factor = 1.6;
         break;
     }
+    // Coloca los círculos de tasa de morbilidad en el centro geográfico de los distritos.
     if(layer.feature.properties.nombre != undefined && !_datosMorbilidad[layer.feature.properties.nombre]){
       var circulo = L.circle(layer.getBounds().getCenter(), {
         color: colorMorbilidad,
@@ -680,145 +717,89 @@ function analyzeColorMorbilidad(layer) {
   }
 }
 
+/**
+ * Obtiene la capa de sedes de la base de datos y la coloca como una nueva capa sobre el mapa.
+ * @param {*} map Mapa sobre el que se colocará la nueva capa de sedes.
+ */
 function ponerSedes(map) {
-  var circle2 = L.circle([9.8826028, -84.0707764], {
-    color: "red",
-    fillColor: "#f03",
-    fillOpacity: 0.5,
-    radius: 500,
-  }).addTo(map);
-
-
-  var textLatLng = [9.8826028, -84.0707764];
-  var myTextLabel = L.marker(textLatLng, {
-    icon: L.divIcon({
-      className: "text-labels", // Set class for CSS styling
-      html: "CLUSTER",
-    }),
-    zIndexOffset: 1000, // Make appear above other map features
-  }).addTo(map);
-
   let url = "get_json_sedes";
   $.get(url, function (result) {
-    let datos_json = JSON.parse("[" + result["capas"] + "]");
-    poner_sedes_mapa(map, datos_json);
+    let sedesJSON = JSON.parse("[" + result["capas"] + "]");
+    _layerSedes = L.geoJSON(null, {
+      onEachFeature: function(feature, layer){
+        layer.bindPopup(feature.properties.nombre);
+      },
+      pointToLayer: function (feature, latlng) {
+        label = String(
+          "<b>SEDE: </b>" +
+            feature.properties.nombre +
+            "<br/> <b>TOTAL:</b> " +
+            feature.properties.total
+        );
+        return new L.CircleMarker(latlng, {
+          radius: 4,
+          color: "#016E00",
+        }).bindTooltip(label, { permanent: false, opacity: 0.7 });
+      },
+    });
+  
+    if (_layerSedes != null) _layerSedes.addData(sedesJSON);
+    map.addLayer(_layerSedes);
   });
-
 }
 
-
+/**
+ * Obtiene la capa de hogares de ancianos de la base de datos y la coloca como una nueva capa sobre el mapa.
+ * @param {*} map Mapa sobre el que se colocará la nueva capa de hogares de ancianos.
+ */
 function ponerHogares(map) {
   let url = "get_json_hogares";
   $.get(url, function (result) {
-    let datos_json = JSON.parse("[" + result["capas"] + "]");
-    poner_hogares_mapa(map, datos_json);
+    let hogarJSON = JSON.parse("[" + result["capas"] + "]");
+    _layerHogares = L.geoJSON(null, {
+      onEachFeature: function(feature, layer){
+        layer.bindPopup(feature.properties.nombre);
+      },
+      pointToLayer: function (feature, latlng) {
+        label = String(
+          "<b>HOGAR: </b>" +
+            feature.properties.nombre 
+        );
+        return new L.CircleMarker(latlng, {
+          radius: 3,
+          color: "#bd9320",
+        }).bindTooltip(label, { permanent: false, opacity: 0.7 });
+      },
+    });
+   
+    if (_layerHogares != null) _layerHogares.addData(hogarJSON);
+    map.addLayer(_layerHogares);
   });
 }
 
-
+/**
+ * Obtiene la capa de asentamientos indígenas de la base de datos y la coloca como una nueva capa sobre el mapa.
+ * @param {*} map Mapa sobre el que se colocará la nueva capa de asentamientos indígenas.
+ */
 function ponerIndigenas(map) {
   let url = "get_json_indigenas";
   $.get(url, function (result) {
-    let datos_json = JSON.parse("[" + result["capas"] + "]");
-    poner_indigenas_mapa(map, datos_json);
-  });
-}
-
-// function to get value from property "name" to populate for the popup
-function onEachSede(feature, layer) {
-  layer.bindPopup(feature.properties.nombre);
-}
-
-function onEachHogar(feature, layer) {
-  layer.bindPopup(feature.properties.nombre);
-}
-
-function onEachIndigena(feature, layer) {
-  layer.bindPopup(feature.properties.pueblo);
-}
-
-function poner_sedes_mapa(map, sedesJSON) {
-  var myIcon = L.icon({
-    iconUrl:
-      "https://icons.iconarchive.com/icons/ampeross/qetto/16/icon-developer-icon.png",
-    iconSize: [32, 37],
-    iconAnchor: [16, 37],
-    popupAnchor: [0, -28],
-  });
-
-  _layerSedes = L.geoJSON(null, {
-    onEachFeature: onEachSede,
-    pointToLayer: function (feature, latlng) {
-      label = String(
-        "<b>SEDE: </b>" +
-          feature.properties.nombre +
-          "<br/> <b>TOTAL:</b> " +
-          feature.properties.total
-      );
-      return new L.CircleMarker(latlng, {
-        radius: 4,
-        color: "#016E00",
-      }).bindTooltip(label, { permanent: false, opacity: 0.7 });
-    },
-  });
-
-  if (_layerSedes != null) _layerSedes.addData(sedesJSON);
-  map.addLayer(_layerSedes);
-}
-
-function poner_hogares_mapa(map, hogarJSON) {
-  var myIcon = L.icon({
-    iconUrl:
-      "https://icons.iconarchive.com/icons/ampeross/qetto/16/icon-developer-icon.png",
-    iconSize: [32, 37],
-    iconAnchor: [16, 37],
-    popupAnchor: [0, -28],
-  });
-
-  _layerHogares = L.geoJSON(null, {
-    onEachFeature: onEachHogar,
-    pointToLayer: function (feature, latlng) {
-      label = String(
-        "<b>HOGAR: </b>" +
-          feature.properties.nombre 
-      );
-      return new L.CircleMarker(latlng, {
-        radius: 3,
-        color: "#bd9320",
-      }).bindTooltip(label, { permanent: false, opacity: 0.7 });
-    },
-  });
- 
-  if (_layerHogares != null) _layerHogares.addData(hogarJSON);
-  map.addLayer(_layerHogares);
-}
-
-function poner_indigenas_mapa(map, indigenaJSON) {
-  var myIcon = L.icon({
-    iconUrl:
-      "https://icons.iconarchive.com/icons/ampeross/qetto/16/icon-developer-icon.png",
-    iconSize: [32, 37],
-    iconAnchor: [16, 37],
-    popupAnchor: [0, -28],
-  });
-
-  var myStyle = {
-    color: "#ff7800",
-    opacity: 0.65,
-  };
+    let indigenaJSON = JSON.parse("[" + result["capas"] + "]");
+    _layerIndigenas = L.geoJSON(null, {
+      style: {
+        color: "#ff7800",
+        opacity: 0.65,
+      },
+      onEachFeature: function(feature, layer){
+        label = "<b>PUEBLO: </b>" +
+        feature.properties.pueblo;
+        layer.bindTooltip(label);
+      }
+    }).addTo(map);
   
-  _layerIndigenas = L.geoJSON(null, {
-    style: myStyle,
-    onEachFeature: function(feature, layer){
-      label = "<b>PUEBLO: </b>" +
-      feature.properties.pueblo;
-      layer.bindTooltip(label);
-    }
-  }).addTo(map);
-
-  if (_layerIndigenas != null) _layerIndigenas.addData(indigenaJSON);
-	map.addLayer(_layerIndigenas);
-
+    if (_layerIndigenas != null) _layerIndigenas.addData(indigenaJSON);
+    map.addLayer(_layerIndigenas);
+  });
 }
 
 /**
@@ -856,6 +837,11 @@ function ponerProyecciones(muestra){
   });
 }
 
+/**
+ * Configura las capas iniciales del mapa al cargar la página.
+ * @param {*} map Objeto del mapa donde se colocarán las capas.
+ * @param {*} datos_json Capas en formato JSON a ser colocadas en el mapa.
+ */
 function configurar_mapa(map, datos_json) {
   provincias = new L.FeatureGroup();
   if(_layer_actual != null){
@@ -881,20 +867,12 @@ function configurar_mapa(map, datos_json) {
   $.LoadingOverlay("hide");
 }
 
-window.onresize = function() {
-  if (!window.matchMedia("(min-width: 1700px)").matches) {
-    if(_wide_screen) {
-      _wide_screen = false;
-      window.location.reload();
-    }
-  } else {
-    if(!_wide_screen){
-      window.location.reload();
-    }
-  }
-}
-
+/**
+ * Agrega o quita capas del mapa, según la selección de capas que se realice en el multiselect de capas.
+ * @param {*} selectedLayers Lista de capas seleccionadas en el multiselect de capas.
+ */
 function setLayers(selectedLayers){
+  // Obtiene las capas no seleccionadas y las elimina.
   let removedLayers = $(_selectedLayer).not(selectedLayers).get();
   if (removedLayers != null && removedLayers.length > 0)
     removeLayers(removedLayers);
@@ -936,6 +914,7 @@ function setLayers(selectedLayers){
         ponerSedes(map);
       }
   
+      // Carga dinámicamente el script que contiene las paradas en formato GeoJSON, para acelerar la carga inicial de la página.
       if (_selectedLayer[index] == LAYER_PARADAS && _layerParadas == null) {
         if(_paradasCargadas){
           cargarJSONParadas(map);
@@ -954,6 +933,7 @@ function setLayers(selectedLayers){
         ponerIndigenas(map);
       }
 
+      // Carga dinámicamente el script que contiene las fuentes radiactivas en formato GeoJSON, para acelerar la carga inicial de la página.
       if (_selectedLayer[index] == LAYER_FUENTES && _layerFuentes == null){
         if(_fuentesRadiactivasCargadas){
           cargarFuentesRadiactivas(map);
@@ -982,13 +962,7 @@ function setLayers(selectedLayers){
   
     });
   } else {
-    var pos = 0;
-    L.tileLayer(urltile[pos], {
-      attribution: contri,
-      maxZoom: 18,
-      accessToken:
-        "XF87Xv2CrTh3C1C4ApZvDyWQTZoiSaVBGvmI0cG5tXJqXj5AVPxAQSSP20JXrjFw",
-    }).addTo(map);
+    // Coloca el color por defecto en todos los distritos si no hay capas seleccionadas.
     _layer_actual.eachLayer(function (layer) {
       layer.setStyle({ fillColor: "rgba(0, 255, 0, 0)", fillOpacity: 1 });
     });
@@ -1003,30 +977,11 @@ function setLayers(selectedLayers){
 }
 
 /**
- * Inicializa la vista por defecto del mapa, centrado sobre Costa Rica.
+ * Quita capas específicas del mapa.
+ * @param {*} layers Capas no seleccionadas en el multiselect del mapa.
  */
-function initMap(){
-  map = new L.map("my_map").setView([9.934739, -84.087502], 8);
-  L.tileLayer(urltile[0], {
-    attribution: contri,
-    maxZoom: 18,
-    accessToken:
-      "XF87Xv2CrTh3C1C4ApZvDyWQTZoiSaVBGvmI0cG5tXJqXj5AVPxAQSSP20JXrjFw",
-  }).addTo(map);
-
-  L.control.scale().addTo(map);
-}
-
-function getDatosPais(){
-  let url = "getDatosPais";
-  $.get(url, {fecha: _fechaActual}, function(result){
-    $("#hccss .data").html(result.datos_pais.casos_salon);
-    $("#ouci .data").html(result.datos_pais.casos_uci);
-    $("#pms .data").html(result.datos_pais.indice_positividad);
-  });
-}
-
 function removeLayers(layers) {
+  // Quita todos los tooltips
   _layer_actual.eachLayer(function (layer) {
     layer.unbindTooltip();
   });
@@ -1052,18 +1007,33 @@ function removeLayers(layers) {
   }
 }
 
-/* Configuración para notificaciones de error. */
-toastr.options.preventDuplicates = true;
+/**
+ * Inicializa la vista por defecto del mapa, centrado sobre Costa Rica.
+ */
+function initMap(){
+  map = new L.map("my_map").setView([9.934739, -84.087502], 8);
+  L.tileLayer(urltile[0], {
+    attribution: contri,
+    maxZoom: 18,
+    accessToken:
+      "XF87Xv2CrTh3C1C4ApZvDyWQTZoiSaVBGvmI0cG5tXJqXj5AVPxAQSSP20JXrjFw",
+  }).addTo(map);
 
-/* Oculta el overlay de loading y muestra un mensaje de error si ocurre algún error en un request AJAX. */
-$.ajaxSetup({
-  error: function (xhr, status, error) {
-    $.LoadingOverlay("hide");
-    $("#gauge1").LoadingOverlay("hide");
-    $("#Map").LoadingOverlay("hide");
-    toastr.error("Ha ocurrido un error. Intente de nuevo más tarde. Error:" + error, "Error");
-  },
-});
+  L.control.scale().addTo(map);
+}
+
+/**
+ * Obtiene los datos a nivel país (Índice de positivdad, hospitalizaciones (salón) y hospitalizaciones (UCI) de la CCSS), en la fecha seleccionada,
+ * y los coloca en el dashboard de datos país.
+ */
+function getDatosPais(){
+  let url = "getDatosPais";
+  $.get(url, {fecha: _fechaActual}, function(result){
+    $("#hccss .data").html(result.datos_pais.casos_salon);
+    $("#ouci .data").html(result.datos_pais.casos_uci);
+    $("#pms .data").html(result.datos_pais.indice_positividad);
+  });
+}
 
 /**
  * Cambia la fecha del mapa y recarga los datos desde la base de datos.
@@ -1085,106 +1055,6 @@ function setDate(date) {
     changeGauge(_selectedProvince, _selectedCanton, _selectedDistrito, (tipoGrafico == 'orden'? 1 : 2))
     getDatosPais();
   });
-}
-
-function seleccionarDistrito(distrito){
-  if (_selectedDistrito == distrito){
-    return;
-  }
-      if (_selectedProvince != null && _selectedCanton != null) {
-        let tempColor;
-        if ($(this).attr("fill") != SELECTED_DISTRICT_COLOR) {
-          tempColor = _originalDistrictColor;
-          //_originalDistrictColor = originalFill;
-          $(this).attr("fill", SELECTED_DISTRICT_COLOR);
-        }
-        if (_selectedDistrito != null) {
-          let selectedProvinceClass = getClassSelector(_selectedProvince);
-          let color = tempColor != null ? tempColor : originalFill;
-          $(
-            ".svg-menu__path__seleccion__background " +
-              selectedProvinceClass +
-              "[canton='" +
-              _selectedCanton +
-              "']" +
-              "[name_kml='" +
-              _selectedDistrito +
-              "']",
-            "#col-mapa"
-          ).attr("fill", color);
-        }
-        _selectedDistrito = $(this).attr("name_kml");
-        let recuperados = $(this).attr("recuperados");
-        let activos = $(this).attr("activos");
-        let proInfo = $(this).attr("provincia");
-        let cantInfo = $(this).attr("canton");
-        let distInfo = $(this).attr("name_kml");
-        $("#pro_info").html(proInfo);
-        $("#cant_info").html(cantInfo);
-        $("#dis_info").html(distInfo);
-        $("#cases-dashboard #activos .data").html(activos);
-        $("#cases-dashboard #recuperados .data").html(recuperados);
-      }
-}
-
-/**
- * Carga la biblioteca PanZoom para trabajar con el _apa después de que éste se haya cargado.
- */
-function loadPanZoom() {
-  _mapa = svgPanZoom("#my_map", {
-    zoomEnabled: true,
-    controlIconsEnabled: true,
-    fit: true,
-    center: true,
-    contain: "inside",
-  });
-}
-
-/**
- * Coloca un listener sobre el mapa para escalarlo al hacer resize de las columnas.
- */
-function scaleMap() {
-  let element = $("#pais");
-  if (_resizer != null) ResizeSensor.detach(element);
-  _resizer = new ResizeSensor(element, function () {
-    scaleSVG(element.width());
-  });
-}
-
-/**
- * Escala el mapa de forma proporcional al cambiar el tamaño del div que lo contiene.
- * @param {number} size Tamaño en pixeles que tendrá el mapa al recalcular su tamaño.
- */
-function scaleSVG(size) {
-  let svg = $("#pais svg");
-  svg.css("width", size + "px");
-  svg.css("height", size + "px");
-  _mapa.resize();
-  _mapa.updateBBox();
-  _mapa.fit();
-  _mapa.center();
-}
-
-/**
- * Obtiene el selector de clase de html para el valor del select elegido.
- * @param {string} selectedValue Valor del select list elegido.
- */
-function getClassSelector(selectedValue) {
-  if (selectedValue != null) {
-    let classSelector;
-    if (selectedValue.includes(" ")) {
-      classSelector = "";
-      let words = selectedValue.split(" ");
-      for (let i = 0; i < words.length; ++i) {
-        classSelector += "." + words[i];
-      }
-    } else {
-      classSelector = "." + selectedValue;
-    }
-    return classSelector;
-  } else {
-    return null;
-  }
 }
 
 /**
@@ -1229,59 +1099,6 @@ function changeDistritos(canton) {
     }
     $("#distritos").append(options);
   });
-}
-
-/**
- * Resalta la provincia seleccionada oscureciendo las demás del mapa.
- * @param {string} province Nombre de la provincia a resaltar en el mapa.
- */
-function remarkSelectedProvince(province) {
-  let selectedProvinceClass = getClassSelector(province);
-  $("#pais path").css("opacity", PROVINCE_SELECT_OPACITY);
-  $("#pais path").css("pointer-events", "none");
-  $(selectedProvinceClass).css("opacity", "1");
-  $(selectedProvinceClass).css("pointer-events", "auto");
-}
-
-/**
- * Elimina el resaltado de la provincia que había seleccionada.
- */
-function unmarkSelectedProvince() {
-  $("#pais path").css("opacity", "1");
-  $("#pais path").css("pointer-events", "auto");
-}
-
-/**
- * Resalta el cantón seleccionado oscureciendo los demás de la provincia, en menor medida que la opacidad de las demás provincias
- * para que resalte, además de colocar un borde de color rojo y más grueso para este efecto.
- * @param {string} canton Nombre del cantón a resaltar en la provincia seleccionada.
- */
-function remarkSelectedCanton(canton) {
-  let selectedProvinceClass = getClassSelector(_selectedProvince);
-  $(selectedProvinceClass).css("opacity", CANTON_SELECT_OPACITY);
-  $(selectedProvinceClass).css("pointer-events", "none");
-  let distritos = $(selectedProvinceClass + '[canton="' + canton + '"]');
-  $('path[canton="' + canton + '"]').css("stroke", DISTRICT_SELECT_STROKE);
-  $('path[canton="' + canton + '"]').css(
-    "stroke-width",
-    DISTRICT_SELECTED_STROKE_WIDTH
-  );
-  distritos.css("opacity", "1");
-  distritos.css("pointer-events", "auto");
-}
-
-/**
- * Elimina el resaltado del cantón que había sido seleccionado.
- */
-function unmarkSelectedCanton(canton = _selectedCanton) {
-  if (canton != null) {
-    let selectedProvinceClass = getClassSelector(_selectedProvince);
-    $(selectedProvinceClass).css("opacity", "1");
-    $(selectedProvinceClass).css("pointer-events", "auto");
-    let distritos = $(selectedProvinceClass + '[canton="' + canton + '"]');
-    distritos.css("stroke", DISTRICT_DEFAULT_STROKE);
-    distritos.css("stroke-width", DISTRICT_DEFAULT_STROKE_WIDTH);
-  }
 }
 
 /**
@@ -1335,27 +1152,6 @@ function setUpCreditsBubbles() {
 }
 
 /**
- * Restaura el color de un distrito seleccionado al que tenía originalmente en el mapa.
- */
-function restoreColor() {
-  if (_selectedDistrito != null) {
-    let selectedProvinceClass = getClassSelector(_selectedProvince);
-    $(
-      ".svg-menu__path__seleccion__background " +
-        selectedProvinceClass +
-        "[canton='" +
-        _selectedCanton +
-        "']" +
-        "[name_kml='" +
-        _selectedDistrito +
-        "']",
-      "#col-mapa"
-    ).attr("fill", _originalDistrictColor);
-    _originalDistrictColor = null;
-  }
-}
-
-/**
  * Solicita al servidor ciertos gráficos para insertarlos en la página luego de haberse cargado, para aligerar el tiempo de carga inicial y hacer que los gráficos se ajusten bien a los divs padres.
  */
 function ajaxRequestPlots() {
@@ -1368,6 +1164,11 @@ function ajaxRequestPlots() {
   });
 }
 
+/**
+ * Cambia la fecha del formato ISO (YYYY-MM-DD) a formato español con / (DD/MM/YYYY).
+ * @param {*} date Fecha en formato ISO
+ * @returns Fecha en español en formato DD/MM/YYYY. 
+ */
 function parseDate(date){
   let newDate = "";
   let dateParts = date.split('-');
