@@ -230,3 +230,5 @@ fecha_inicio|date|No|Fecha de inicio de proyección
 fecha_fin|date|Sí|Fecha de finalización de proyección
 muestra|numeric|No|Muestra de población
 ---
+
+
