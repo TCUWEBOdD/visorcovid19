@@ -7,11 +7,11 @@ import scrapy
 
 
 class VacunasItem(scrapy.Item):
+    """
+    Objeto que representa los datos a recopilar de la página de vacunación de la [CCSS](https://www.ccss.sa.cr/web/coronavirus/vacunacion).
+    Se recopila la cantidad de primeras dosis aplicadas, segundas dosis aplicadas y la fecha de los datos.
+    """
+
     primera_dosis = scrapy.Field()
     segunda_dosis = scrapy.Field()
     fecha = scrapy.Field()
-
-class VacunasCNEItem(scrapy.Item):
-    fecha = scrapy.Field()
-    dosis = scrapy.Field()
-    laboratorio = scrapy.Field()
