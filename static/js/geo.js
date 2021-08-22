@@ -170,8 +170,8 @@ function initColumns(){
  * Inicializa el calendario con las fechas válidas y carga las capas del mapa con la fecha más actualizada de los datos.
  */
 function initDates(){
-  $.get("getValidDates", function(result){
-    _fechasValidas = result.fechas;
+  $.get("getValidDates", function(dates){
+    _fechasValidas = dates.fechas;
     $.get("getUltimaFecha", function(result){
       _ultimaFecha = result.date[0];
       _fechaActual = _ultimaFecha;
@@ -303,7 +303,7 @@ function setUpListeners(){
     }
     _layer_actual.eachLayer(function (layer) {
       if (layer.feature.properties.proinfo !== undefined) {
-        nombP = layer.feature.properties.proinfo;
+        const nombP = layer.feature.properties.proinfo;
         if (nombP.toUpperCase() == selectedProvince) {
           layer.setStyle({ fillColor: "rgba(0, 0, 255, 0.3)" });
           layer.setStyle({ fillOpacity: 0.8 });
@@ -328,10 +328,8 @@ function setUpListeners(){
   /*check orden o animado*/
   $("input:radio[name=radio-group-1-bg]").change(function () {
     let value = this.value;
-
-    if (value == "orden") {
-      tipo = 1;
-    } else {
+    let tipo = 1;
+    if (value != "orden"){
       tipo = 2;
     }
     changeGauge(_selectedProvince, _selectedCanton, _selectedDistrito, tipo)
@@ -372,8 +370,8 @@ function setUpListeners(){
         layer.feature.properties.proinfo !== undefined &&
         layer.feature.properties.cantinfo !== "--Todos--"
       ) {
-        nombP = layer.feature.properties.proinfo;
-        nombC = layer.feature.properties.cantinfo;
+        const nombP = layer.feature.properties.proinfo;
+        const nombC = layer.feature.properties.cantinfo;
 
         if (nombP.toUpperCase() == _selectedProvince) {
           layer.setStyle({ fillColor: "rgba(0, 0, 255, 0.3)" });

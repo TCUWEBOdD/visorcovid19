@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
 from mapa.graficador import *
 from mapa.databaseQueries import getCantones, get_dist, getLastDate
 
 
+@require_GET
 def home(request):
     """
     Página por defecto al acceder a la plataforma.
@@ -22,6 +24,7 @@ def home(request):
     return render(request, "mapa/geo3.html")
 
 
+@require_GET
 def analytics(request):
     """
     Página que contiene los datos de Google Analytics de la plataforma a través de un panel de PowerBI empotrado.
@@ -40,6 +43,7 @@ def analytics(request):
     return render(request, "mapa/analytics.html")
 
 
+@require_GET
 def listarCantones(request):
     """
     Obtiene la lista de cantones de una provincia dada.
@@ -59,6 +63,7 @@ def listarCantones(request):
     return JsonResponse(datos)
 
 
+@require_GET
 def listarDistritos(request):
     """
     Obtiene la lista de distritos de un cantón dado.
@@ -78,6 +83,7 @@ def listarDistritos(request):
     return JsonResponse(datos)
 
 
+@require_GET
 def getGaugeChart(request):
     """
     Obtiene los gráficos de órdenes sanitarias, para una fecha dada (solo el Gauge) y provincia, cantón, distrito, o a nivel nacional.
@@ -103,6 +109,7 @@ def getGaugeChart(request):
     return JsonResponse(response)
 
 
+@require_GET
 def getVacunas(request):
     """
     Obtiene el gráfico tipo Gauge que contiene los datos de la cantidad de vacunas aplicadas en una fecha determinada.
@@ -125,6 +132,7 @@ def getVacunas(request):
     return JsonResponse(response)
 
 
+@require_GET
 def getPlots(request):
     """
     Obtiene los gráficos de Indicadores Nacionales y Dosis estimadas aplicables y efectivas aplicadas.
@@ -146,6 +154,7 @@ def getPlots(request):
     return JsonResponse(response)
 
 
+@require_GET
 def get_leaflet_dist(request):
     """
     Obtiene la capa de distritos del mapa, con todos sus metadatos, en una fecha dada.
@@ -167,6 +176,7 @@ def get_leaflet_dist(request):
     return JsonResponse(response)
 
 
+@require_GET
 def get_json_sedes(request):
     """
     Obtiene la capa de sedes del examen de admisión de universidades públicas y sus respectivos metadatos.
@@ -187,6 +197,7 @@ def get_json_sedes(request):
     return JsonResponse(response)
 
 
+@require_GET
 def get_json_hogares(request):
     """
     Obtiene la capa de hogares de ancianos del país y sus respectivos metadatos.
@@ -207,6 +218,7 @@ def get_json_hogares(request):
     return JsonResponse(response)
 
 
+@require_GET
 def get_json_indigenas(request):
     """
     Obtiene la capa de asentamientos indígenas del país y sus respectivos metadatos.
@@ -227,6 +239,7 @@ def get_json_indigenas(request):
     return JsonResponse(response)
 
 
+@require_GET
 def getPrediccionesMapa(request):
     """
     Obtiene los datos de predicciones de casos activos por distrito, para un mes y semana dados.
@@ -249,6 +262,7 @@ def getPrediccionesMapa(request):
     return JsonResponse(response)
 
 
+@require_GET
 def getUltimaFecha(request):
     """
     Obtiene la fecha más reciente registrada para la que se conocen datos en la base de datos.
@@ -269,6 +283,7 @@ def getUltimaFecha(request):
     return JsonResponse(response)
 
 
+@require_GET
 def getDatosPais(request):
     """
     Obtiene los datos a nivel país de hospitalizaciones en salón, en UCI e índice de positividad, en una fecha dada.
@@ -291,6 +306,7 @@ def getDatosPais(request):
     return JsonResponse(response)
 
 
+@require_GET
 def getValidDates(request):
     """
     Obtiene todas las fechas registradas en la tabla acumulado_distrito, es decir, son las fechas para las cuales hay datos.
@@ -311,6 +327,7 @@ def getValidDates(request):
     return JsonResponse(response)
 
 
+@require_GET
 def getProyecciones(request):
     """
     Obtiene la capa de proyecciones para muestras determinadas de distritos, para una fecha que caiga en el rango de una proyección registrada en la base de datos.
