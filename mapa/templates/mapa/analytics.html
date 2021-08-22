@@ -33,31 +33,10 @@
     <body>
 		<div class="completo">
 			<div class="container-fluid">
-				<div class="row fila1">
-					<div class="col-4">
-						<div class="d-flex justify-content-start align-items-center h-100 flex-wrap">
-							<img alt="Logo MS" src="{% static 'mapa/images/salud.png' %}" width="139" height="60" class="mx-1 my-1">
-							<img alt="Logo CCSS" src="{% static 'mapa/images/ccss.png' %}" width="55" height="55" class="mx-1 my-1">
-							<img alt="Logo OPS" src="{% static 'mapa/images/ops.png' %}" width="90" height="38" class="mx-1 my-1">
-							<img alt="Logo Mideplan" src="{% static 'mapa/images/mideplan.png' %}" width="130" height="49" class="mx-1 my-1">
-							<img alt="Logo 911" src="{% static 'mapa/images/emergencias.png' %}" width="45" height="54" class="mx-1 my-1">
-						</div>
-					</div>
-					<div class="col-4 text-center">
-						
-					  <h2>PANEL CONTROL SALA SITUACION</h2>
-					  </br>
-					  <h5>Plataforma Nacional | Situación COVID-19</h5>
-					</div>
-					<div class="col-4">
-						<div class="d-flex justify-content-end align-items-center h-100">
-							<img alt="Logo UCR" src="{% static 'mapa/images/UCR_h.png' %}" width="200" height="75px">
-						</div>
-					</div>
-				  </div>
-			  <div class="d-block">
-			  	<iframe title="Dashboard Power BI" class="mx-auto d-flex" width="1500" height="800" src="https://app.powerbi.com/view?r=eyJrIjoiYTQwY2RiMjktMzBiYi00NDdhLTliMmEtOWI3Yjk2NTQ2NWEzIiwidCI6ImU3OTg0Y2FjLTI1NDMtNGY4OC04Zjk3LTk1MjQzMzVlNmJjNCIsImMiOjR9&pageName=ReportSectiona12781773a0250ecd2b0" frameborder="0" allowFullScreen="true"></iframe>
-			  </div>
+				{% include "mapa/header.html" %}
+			<div class="d-block">
+				<iframe title="Dashboard Power BI" class="mx-auto d-flex" width="1500" height="800" src="https://app.powerbi.com/view?r=eyJrIjoiYTQwY2RiMjktMzBiYi00NDdhLTliMmEtOWI3Yjk2NTQ2NWEzIiwidCI6ImU3OTg0Y2FjLTI1NDMtNGY4OC04Zjk3LTk1MjQzMzVlNmJjNCIsImMiOjR9&pageName=ReportSectiona12781773a0250ecd2b0" frameborder="0" allowFullScreen="true"></iframe>
+			</div>
 			<div id="hora"> </div>
 			
 			<div id="creditos"> Desarrollado por
@@ -65,29 +44,7 @@
 				<a id="od-credits"  data-bubbleid="od-bubble"  href="">Observatorio del Desarrollo</a>
 			</div>
 		</div>
-
-		<div id="ucr-bubble" class="BubbleDiv" style="display:none;z-index:99999">
-			<div class="BubbleShadow">
-			  <div class="Bubble">
-				<div class="BubbleHeader">
-				  <div class="BubbleTitle">Colaboradores</div>
-				  <div class="BubbleCloseBtn"></div>
-				</div>
-				<div class="BubbleContent">
-				  <p>Diego Quirós M. </br><a href="mailto:diegodavid.quiros@ucr.ac.cr" target="blank">Docente UCR </a>/
-							<a href="mailto:diego123cr@gmail.com" target="blank">Consultor ANT</a></p>
-				  <p>Sebastián Cruz Ch.</br><a href="mailto:sebastian.cruzchavarria@ucr.ac.cr" target="blank">Ingeniero de software</a></p>
-				  <p>Ricardo Huapaya R.</br><a href="mailto:ricardo.huapaya@ucr.ac.cr" target="blank">Estudiante UCR</a></p>
-				</div>
-				<div class="bottomLeftArrow"></div>
-				<div class="bottomRightArrow"></div>
-				<div class="topLeftArrow"></div>
-				<div class="topRightArrow"></div>
-			  </div>
-			</div>
-		  </div>
-		
-
+		{% include "mapa/credits.html" %}
     {% bootstrap_javascript jquery='full' %}
     </body>
 </html>

@@ -12,31 +12,7 @@
 		{% load bootstrap4 %}
 		{# CSS Bootstrap #}
 		{% bootstrap_css %}
-		{% load static %}
-
-		<link rel="shortcut icon" href="{% static 'mapa/images/favicon.ico' %}" />
-		<link rel='stylesheet' href="{% static 'mapa/style.css'%}" type='text/css'>
-		<link rel='stylesheet' href="{% static 'mapa/bubble.css'%}" type='text/css'>
-		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="  crossorigin=""/>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
-		<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Roboto&display=swap'>
-		<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css'>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.css" integrity="sha512-rBi1cGvEdd3NmSAQhPWId5Nd6QxE8To4ADjM2a6n0BrqQdisZ/RPUlm0YycDzvNL1HHAh1nKZqI0kSbif+5upQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-		<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css" type="text/css" >
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" type="text/css"/>
-
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.2/split.min.js"></script>
-		<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-		<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js" integrity="sha512-mh+AjlD3nxImTUGisMpHXW03gE6F4WdQyvuFRkjecwuWLwD2yCijw4tKA3NsEFpA1C3neiKhGXPSIGSfCYPMlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-loading-overlay/2.1.7/loadingoverlay.min.js" integrity="sha512-hktawXAt9BdIaDoaO9DlLp6LYhbHMi5A36LcXQeHgVKUH6kJMOQsAtIw2kmQ9RERDpnSTlafajo6USh9JUXckw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>		
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
-		<script src="{% static 'mapa/bubble.js' %}"></script>
-		<script src="{% static 'js/geo.js'%}"></script>
+		{% include "mapa/resources.html" %}
 		
         <title>Sala Situación COVID-19</title>	
 		<style>
@@ -46,28 +22,7 @@
     <body>
 		<div class="completo">
 			<div class="container-fluid">
-			  <div class="row fila1">
-				<div class="col-4">
-					<div class="d-flex justify-content-start align-items-center h-100 flex-wrap">
-						<img alt="Logo MS" src="{% static 'mapa/images/salud.png' %}" width="139" height="60" class="mx-1 my-1">
-						<img alt="Logo CCSS" src="{% static 'mapa/images/ccss.png' %}" width="55" height="55" class="mx-1 my-1">
-						<img alt="Logo OPS" src="{% static 'mapa/images/ops.png' %}" width="90" height="38" class="mx-1 my-1">
-						<img alt="Logo Mideplan" src="{% static 'mapa/images/mideplan.png' %}" width="130" height="49" class="mx-1 my-1">
-						<img alt="Logo 911" src="{% static 'mapa/images/emergencias.png' %}" width="45" height="54" class="mx-1 my-1">
-					</div>
-				</div>
-				<div class="col-4 text-center">
-					
-				  <h2>PANEL CONTROL SALA SITUACION</h2>
-				  </br>
-				  <h5>Plataforma Nacional | Situación COVID-19</h5>
-				</div>
-				<div class="col-4">
-					<div class="d-flex justify-content-end align-items-center h-100">
-						<img alt="Logo UCR" src="{% static 'mapa/images/UCR_h.png' %}" width="200" height="75px">
-					</div>
-				</div>
-			  </div>
+			  {% include "mapa/header.html" %}
 			  <div class="row fila2">
 				<!-----------------------FILA 2 COL 1 MAPA------------------------>
 				<div id="col-mapa" class="col-12 pb-5 pb-lg-0">
@@ -304,26 +259,7 @@
 				<a id="od-credits"  data-bubbleid="od-bubble"  href="">Observatorio del Desarrollo</a>
 			</div>
 		</div>
-		<div id="ucr-bubble" class="BubbleDiv" style="display:none;z-index:99999">
-			<div class="BubbleShadow">
-			  <div class="Bubble">
-				<div class="BubbleHeader">
-				  <div class="BubbleTitle">Colaboradores</div>
-				  <div class="BubbleCloseBtn"></div>
-				</div>
-				<div class="BubbleContent">
-				  <p>Diego Quirós M. </br><a href="mailto:diegodavid.quiros@ucr.ac.cr" target="blank">Docente UCR </a>/
-							<a href="mailto:diego123cr@gmail.com" target="blank">Consultor ANT</a></p>
-				  <p>Sebastián Cruz Ch.</br><a href="mailto:sebastian.cruzchavarria@ucr.ac.cr" target="blank">Ingeniero de software</a></p>
-				  <p>Ricardo Huapaya R.</br><a href="mailto:ricardo.huapaya@ucr.ac.cr" target="blank">Estudiante UCR</a></p>
-				</div>
-				<div class="bottomLeftArrow"></div>
-				<div class="bottomRightArrow"></div>
-				<div class="topLeftArrow"></div>
-				<div class="topRightArrow"></div>
-			  </div>
-			</div>
-		  </div>
+		{% include "mapa/credits.html" %}
     {% bootstrap_javascript jquery='full' %}
     </body>
 </html>

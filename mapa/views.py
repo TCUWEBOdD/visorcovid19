@@ -21,7 +21,7 @@ def home(request):
         HTTP Response que contiene el HTML de la página principal.
     """
 
-    return render(request, "mapa/geo3.html")
+    return render(request, "mapa/index.html")
 
 
 @require_GET
