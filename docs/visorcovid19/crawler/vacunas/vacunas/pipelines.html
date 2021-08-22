@@ -38,15 +38,31 @@ from mapa.libreria.bd import getAuthConnection, closeConnection
 
 
 class VacunasPipeline:
+    &#34;&#34;&#34;
+    Modela el pipeline de procesamiento de los datos recopilados de la página de la [CCSS](https://www.ccss.sa.cr/web/coronavirus/vacunacion).
+    &#34;&#34;&#34;
+
     def open_spider(self, spider):
+        &#34;&#34;&#34;
+        Inicia el spider abriendo la conexión a la base de datos.
+        &#34;&#34;&#34;
+
         self.connection = getAuthConnection()
         self.cur = self.connection.cursor()
 
     def close_spider(self, spider):
+        &#34;&#34;&#34;
+        Cierra el spider y cierra la conexión a la base de datos.
+        &#34;&#34;&#34;
+
         self.cur.close()
         closeConnection(self.connection)
 
     def process_item(self, item, spider):
+        &#34;&#34;&#34;
+        Procesa el item recopilado, guardando los datos en la base de datos.
+        &#34;&#34;&#34;
+
         query = &#34;&#34;&#34;
             UPDATE datos_pais
             SET vacunas_primera_dosis = {primera_dosis},
@@ -77,21 +93,37 @@ class VacunasPipeline:
 <span>class <span class="ident">VacunasPipeline</span></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Modela el pipeline de procesamiento de los datos recopilados de la página de la <a href="https://www.ccss.sa.cr/web/coronavirus/vacunacion">CCSS</a>.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class VacunasPipeline:
+    &#34;&#34;&#34;
+    Modela el pipeline de procesamiento de los datos recopilados de la página de la [CCSS](https://www.ccss.sa.cr/web/coronavirus/vacunacion).
+    &#34;&#34;&#34;
+
     def open_spider(self, spider):
+        &#34;&#34;&#34;
+        Inicia el spider abriendo la conexión a la base de datos.
+        &#34;&#34;&#34;
+
         self.connection = getAuthConnection()
         self.cur = self.connection.cursor()
 
     def close_spider(self, spider):
+        &#34;&#34;&#34;
+        Cierra el spider y cierra la conexión a la base de datos.
+        &#34;&#34;&#34;
+
         self.cur.close()
         closeConnection(self.connection)
 
     def process_item(self, item, spider):
+        &#34;&#34;&#34;
+        Procesa el item recopilado, guardando los datos en la base de datos.
+        &#34;&#34;&#34;
+
         query = &#34;&#34;&#34;
             UPDATE datos_pais
             SET vacunas_primera_dosis = {primera_dosis},
@@ -114,12 +146,16 @@ class VacunasPipeline:
 <span>def <span class="ident">close_spider</span></span>(<span>self, spider)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Cierra el spider y cierra la conexión a la base de datos.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def close_spider(self, spider):
+    &#34;&#34;&#34;
+    Cierra el spider y cierra la conexión a la base de datos.
+    &#34;&#34;&#34;
+
     self.cur.close()
     closeConnection(self.connection)</code></pre>
 </details>
@@ -128,12 +164,16 @@ class VacunasPipeline:
 <span>def <span class="ident">open_spider</span></span>(<span>self, spider)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Inicia el spider abriendo la conexión a la base de datos.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def open_spider(self, spider):
+    &#34;&#34;&#34;
+    Inicia el spider abriendo la conexión a la base de datos.
+    &#34;&#34;&#34;
+
     self.connection = getAuthConnection()
     self.cur = self.connection.cursor()</code></pre>
 </details>
@@ -142,12 +182,16 @@ class VacunasPipeline:
 <span>def <span class="ident">process_item</span></span>(<span>self, item, spider)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Procesa el item recopilado, guardando los datos en la base de datos.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def process_item(self, item, spider):
+    &#34;&#34;&#34;
+    Procesa el item recopilado, guardando los datos en la base de datos.
+    &#34;&#34;&#34;
+
     query = &#34;&#34;&#34;
         UPDATE datos_pais
         SET vacunas_primera_dosis = {primera_dosis},

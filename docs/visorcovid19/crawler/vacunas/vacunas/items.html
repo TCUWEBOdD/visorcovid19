@@ -35,14 +35,14 @@ import scrapy
 
 
 class VacunasItem(scrapy.Item):
+    &#34;&#34;&#34;
+    Objeto que representa los datos a recopilar de la página de vacunación de la [CCSS](https://www.ccss.sa.cr/web/coronavirus/vacunacion).
+    Se recopila la cantidad de primeras dosis aplicadas, segundas dosis aplicadas y la fecha de los datos.
+    &#34;&#34;&#34;
+
     primera_dosis = scrapy.Field()
     segunda_dosis = scrapy.Field()
-    fecha = scrapy.Field()
-
-class VacunasCNEItem(scrapy.Item):
-    fecha = scrapy.Field()
-    dosis = scrapy.Field()
-    laboratorio = scrapy.Field()</code></pre>
+    fecha = scrapy.Field()</code></pre>
 </details>
 </section>
 <section>
@@ -54,82 +54,23 @@ class VacunasCNEItem(scrapy.Item):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="visorcovid19.crawler.vacunas.vacunas.items.VacunasCNEItem"><code class="flex name class">
-<span>class <span class="ident">VacunasCNEItem</span></span>
-<span>(</span><span>*args, **kwargs)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Base class for scraped items.</p>
-<p>In Scrapy, an object is considered an <code>item</code> if it is an instance of either
-:class:<code>Item</code> or :class:<code>dict</code>, or any subclass. For example, when the output of a
-spider callback is evaluated, only instances of :class:<code>Item</code> or
-:class:<code>dict</code> are passed to :ref:<code>item pipelines &lt;topics-item-pipeline&gt;</code>.</p>
-<p>If you need instances of a custom class to be considered items by Scrapy,
-you must inherit from either :class:<code>Item</code> or :class:<code>dict</code>.</p>
-<p>Items must declare :class:<code>Field</code> attributes, which are processed and stored
-in the <code>fields</code> attribute. This restricts the set of allowed field names
-and prevents typos, raising <code>KeyError</code> when referring to undefined fields.
-Additionally, fields can be used to define metadata and control the way
-data is processed internally. Please refer to the :ref:<code>documentation
-about fields &lt;topics-items-fields&gt;</code> for additional information.</p>
-<p>Unlike instances of :class:<code>dict</code>, instances of :class:<code>Item</code> may be
-:ref:<code>tracked &lt;topics-leaks-trackrefs&gt;</code> to debug memory leaks.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class VacunasCNEItem(scrapy.Item):
-    fecha = scrapy.Field()
-    dosis = scrapy.Field()
-    laboratorio = scrapy.Field()</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>scrapy.item.Item</li>
-<li>scrapy.item.DictItem</li>
-<li>collections.abc.MutableMapping</li>
-<li>collections.abc.Mapping</li>
-<li>collections.abc.Collection</li>
-<li>collections.abc.Sized</li>
-<li>collections.abc.Iterable</li>
-<li>collections.abc.Container</li>
-<li>scrapy.item.BaseItem</li>
-<li>scrapy.item._BaseItem</li>
-<li>scrapy.utils.trackref.object_ref</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="visorcovid19.crawler.vacunas.vacunas.items.VacunasCNEItem.fields"><code class="name">var <span class="ident">fields</span> : Dict[str, scrapy.item.Field]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
 <dt id="visorcovid19.crawler.vacunas.vacunas.items.VacunasItem"><code class="flex name class">
 <span>class <span class="ident">VacunasItem</span></span>
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Base class for scraped items.</p>
-<p>In Scrapy, an object is considered an <code>item</code> if it is an instance of either
-:class:<code>Item</code> or :class:<code>dict</code>, or any subclass. For example, when the output of a
-spider callback is evaluated, only instances of :class:<code>Item</code> or
-:class:<code>dict</code> are passed to :ref:<code>item pipelines &lt;topics-item-pipeline&gt;</code>.</p>
-<p>If you need instances of a custom class to be considered items by Scrapy,
-you must inherit from either :class:<code>Item</code> or :class:<code>dict</code>.</p>
-<p>Items must declare :class:<code>Field</code> attributes, which are processed and stored
-in the <code>fields</code> attribute. This restricts the set of allowed field names
-and prevents typos, raising <code>KeyError</code> when referring to undefined fields.
-Additionally, fields can be used to define metadata and control the way
-data is processed internally. Please refer to the :ref:<code>documentation
-about fields &lt;topics-items-fields&gt;</code> for additional information.</p>
-<p>Unlike instances of :class:<code>dict</code>, instances of :class:<code>Item</code> may be
-:ref:<code>tracked &lt;topics-leaks-trackrefs&gt;</code> to debug memory leaks.</p></div>
+<div class="desc"><p>Objeto que representa los datos a recopilar de la página de vacunación de la <a href="https://www.ccss.sa.cr/web/coronavirus/vacunacion">CCSS</a>.
+Se recopila la cantidad de primeras dosis aplicadas, segundas dosis aplicadas y la fecha de los datos.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class VacunasItem(scrapy.Item):
+    &#34;&#34;&#34;
+    Objeto que representa los datos a recopilar de la página de vacunación de la [CCSS](https://www.ccss.sa.cr/web/coronavirus/vacunacion).
+    Se recopila la cantidad de primeras dosis aplicadas, segundas dosis aplicadas y la fecha de los datos.
+    &#34;&#34;&#34;
+
     primera_dosis = scrapy.Field()
     segunda_dosis = scrapy.Field()
     fecha = scrapy.Field()</code></pre>
@@ -172,12 +113,6 @@ about fields &lt;topics-items-fields&gt;</code> for additional information.</p>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li>
-<h4><code><a title="visorcovid19.crawler.vacunas.vacunas.items.VacunasCNEItem" href="#visorcovid19.crawler.vacunas.vacunas.items.VacunasCNEItem">VacunasCNEItem</a></code></h4>
-<ul class="">
-<li><code><a title="visorcovid19.crawler.vacunas.vacunas.items.VacunasCNEItem.fields" href="#visorcovid19.crawler.vacunas.vacunas.items.VacunasCNEItem.fields">fields</a></code></li>
-</ul>
-</li>
 <li>
 <h4><code><a title="visorcovid19.crawler.vacunas.vacunas.items.VacunasItem" href="#visorcovid19.crawler.vacunas.vacunas.items.VacunasItem">VacunasItem</a></code></h4>
 <ul class="">

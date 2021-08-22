@@ -444,14 +444,23 @@ def obtenerDatosPais(fecha):
     dict
         Diccionario que contiene los datos a nivel país de hospitalizaciones en salón, hospitalizaciones en UCI e índice de positividad registrados en una fecha dada.
     &#34;&#34;&#34;
+    if fecha:
+        query = &#34;&#34;&#34;
+            select casos_salon, casos_uci, indice_positividad from datos_pais where fecha = &#39;{fecha}&#39;;
+        &#34;&#34;&#34;
+    else:
+        query = &#34;&#34;&#34;
+            select casos_salon, casos_uci, indice_positividad from datos_pais order by fecha desc limit 1;
+        &#34;&#34;&#34;
 
-    query = &#34;&#34;&#34;
-        select casos_salon, casos_uci, indice_positividad from datos_pais where fecha = &#39;{fecha}&#39;;
-    &#34;&#34;&#34;
     conn = getAuthConnection()
     cursor = conn.cursor()
 
-    cursor.execute(query.format(fecha=fecha))
+    if fecha:
+        cursor.execute(query.format(fecha=fecha))
+    else:
+        cursor.execute(query)
+
     records = cursor.fetchall()
 
     datos = {}
@@ -1328,14 +1337,23 @@ Diccionario que contiene los datos a nivel país de hospitalizaciones en salón,
     dict
         Diccionario que contiene los datos a nivel país de hospitalizaciones en salón, hospitalizaciones en UCI e índice de positividad registrados en una fecha dada.
     &#34;&#34;&#34;
+    if fecha:
+        query = &#34;&#34;&#34;
+            select casos_salon, casos_uci, indice_positividad from datos_pais where fecha = &#39;{fecha}&#39;;
+        &#34;&#34;&#34;
+    else:
+        query = &#34;&#34;&#34;
+            select casos_salon, casos_uci, indice_positividad from datos_pais order by fecha desc limit 1;
+        &#34;&#34;&#34;
 
-    query = &#34;&#34;&#34;
-        select casos_salon, casos_uci, indice_positividad from datos_pais where fecha = &#39;{fecha}&#39;;
-    &#34;&#34;&#34;
     conn = getAuthConnection()
     cursor = conn.cursor()
 
-    cursor.execute(query.format(fecha=fecha))
+    if fecha:
+        cursor.execute(query.format(fecha=fecha))
+    else:
+        cursor.execute(query)
+
     records = cursor.fetchall()
 
     datos = {}

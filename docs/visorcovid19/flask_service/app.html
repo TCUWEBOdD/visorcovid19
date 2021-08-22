@@ -57,9 +57,26 @@ app.config[&#34;SQLALCHEMY_DATABASE_URI&#34;] = (
 db = SQLAlchemy(app)
 
 TOKEN_DEFINED = &#34;F91D3F51E49063C170D0528A567221498A0BC1E68CE06ADDE4D81C28AD9396DC&#34;
+&#34;&#34;&#34;Token de autenticación para utilizar el API.&#34;&#34;&#34;
 
 
 class denuncia_911(db.Model):
+    &#34;&#34;&#34;
+    Clase utilizada para modelar el API de carga de datos de denuncias al 911.
+    Posee las rutas / y /denuncia 911.
+
+    Atributos
+    ---------
+    consecutivo
+        Columna del número de consecutivo de la denuncia en la base de datos.
+    cod_dist
+        Columna del código de distrito asociado a la denuncia en la base de datos.
+    direccion
+        Columna de la dirección fisica en la que se reportó la denuncia en la base de datos.
+    fecha
+        Columna de la fecha en la que se reportó la denuncia en la base de datos.
+    &#34;&#34;&#34;
+
     consecutivo = db.Column(db.Integer, primary_key=True)
     cod_dist = db.Column(db.Integer)
     direccion = db.Column(db.String)
@@ -74,24 +91,58 @@ class denuncia_911(db.Model):
 
 @app.errorhandler(Exception)
 def server_error(err):
+    &#34;&#34;&#34;
+    Maneja los errores que puedan ocurrir en el servidor y retorna error 500.
+
+    Retorna
+    -------
+    tuple
+        Tupla que contiene el mensaje de error y el código de error 500.
+    &#34;&#34;&#34;
+
     app.logger.exception(err)
     return err, 500
 
 
 @app.route(&#34;/&#34;, methods=[&#34;GET&#34;])
 def home():
+    &#34;&#34;&#34;
+    Método de prueba para verificar que el servicio esté levantado.
+    Ruta: /
+
+    Retorna
+    -------
+    HTTP Response
+        Respuesta que contiene el status 200 y un mensaje de éxito.
+    &#34;&#34;&#34;
+
     return Response(&#34;Servicio web funcionando correctamente.&#34;, status=200)
 
 
 @app.route(&#34;/denuncia911&#34;, methods=[&#34;POST&#34;])
 def agregar_datos_911():
+    &#34;&#34;&#34;
+    Carga los datos de las denuncias en la base de datos a partir de los parámetros suministrados.
+    Espera un arreglo de denuncias en el formato {&#34;consecutivo&#34;: A, &#34;cod_dist&#34;: B, &#34;direccion&#34;: C, &#34;fecha&#34;: D},
+    donde los valores para los parámetros son:
+        - A: Entero, mayor que 0, único.
+        - B: Entero, de acuerdo a la lista oficial de distritos del [INEC](https://www.inec.cr/sites/default/files/documentos/inec_institucional/metodologias/documentos_metodologicos/3_clasificacion_codigos_geograficos.pdf).
+        - C: Hilera, máximo 500 caracteres.
+        - D: Hilera, fecha en formato YYYY-MM-DD.
+    Las denuncias se muestran por distrito y por fecha, agrupadas por cantidad, en el dashboard del mapa en el recuadro &#34;Denuncias&#34;.
+
+    En caso de ocurrir un error en el procesamiento, enviará un correo al administrador notificando el error, y guardará el registro de eventos en el servidor.
+
+    Retorna
+    -------
+    HTTP Response
+        Respuesta que contiene el status 200 y un mensaje de éxito en caso de no haber problemas, o el status 401 y un mensaje de error si la petición no fue autorizada.
+    &#34;&#34;&#34;
+
     try:
         token = request.headers[&#34;Authorization&#34;]
-        print(&#34;Received request!&#34;)
         if token == TOKEN_DEFINED:
             request_data = request.json
-            print(&#34;Authenticated&#34;)
-            print(request_data)
             for i in request_data:
                 denuncia = denuncia_911(
                     i[&#34;consecutivo&#34;], i[&#34;cod_dist&#34;], i[&#34;direccion&#34;], i[&#34;fecha&#34;]
@@ -100,8 +151,8 @@ def agregar_datos_911():
                 db.session.commit()
 
             return Response(&#34;Datos insertados correctamente&#34;, status=200)
-
         return Response(&#34;Incorrect Token&#34;, status=401)
+
     except Exception as err:
         noti = Notificador()
         noti.notificar(str(err))
@@ -114,6 +165,13 @@ if __name__ == &#34;__main__&#34;:
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="visorcovid19.flask_service.app.TOKEN_DEFINED"><code class="name">var <span class="ident">TOKEN_DEFINED</span></code></dt>
+<dd>
+<div class="desc"><p>Token de autenticación para utilizar el API.</p></div>
+</dd>
+</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
@@ -122,20 +180,46 @@ if __name__ == &#34;__main__&#34;:
 <span>def <span class="ident">agregar_datos_911</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Carga los datos de las denuncias en la base de datos a partir de los parámetros suministrados.
+Espera un arreglo de denuncias en el formato {"consecutivo": A, "cod_dist": B, "direccion": C, "fecha": D},
+donde los valores para los parámetros son:
+- A: Entero, mayor que 0, único.
+- B: Entero, de acuerdo a la lista oficial de distritos del <a href="https://www.inec.cr/sites/default/files/documentos/inec_institucional/metodologias/documentos_metodologicos/3_clasificacion_codigos_geograficos.pdf">INEC</a>.
+- C: Hilera, máximo 500 caracteres.
+- D: Hilera, fecha en formato YYYY-MM-DD.
+Las denuncias se muestran por distrito y por fecha, agrupadas por cantidad, en el dashboard del mapa en el recuadro "Denuncias".</p>
+<p>En caso de ocurrir un error en el procesamiento, enviará un correo al administrador notificando el error, y guardará el registro de eventos en el servidor.</p>
+<h2 id="retorna">Retorna</h2>
+<p>HTTP Response
+Respuesta que contiene el status 200 y un mensaje de éxito en caso de no haber problemas, o el status 401 y un mensaje de error si la petición no fue autorizada.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.route(&#34;/denuncia911&#34;, methods=[&#34;POST&#34;])
 def agregar_datos_911():
+    &#34;&#34;&#34;
+    Carga los datos de las denuncias en la base de datos a partir de los parámetros suministrados.
+    Espera un arreglo de denuncias en el formato {&#34;consecutivo&#34;: A, &#34;cod_dist&#34;: B, &#34;direccion&#34;: C, &#34;fecha&#34;: D},
+    donde los valores para los parámetros son:
+        - A: Entero, mayor que 0, único.
+        - B: Entero, de acuerdo a la lista oficial de distritos del [INEC](https://www.inec.cr/sites/default/files/documentos/inec_institucional/metodologias/documentos_metodologicos/3_clasificacion_codigos_geograficos.pdf).
+        - C: Hilera, máximo 500 caracteres.
+        - D: Hilera, fecha en formato YYYY-MM-DD.
+    Las denuncias se muestran por distrito y por fecha, agrupadas por cantidad, en el dashboard del mapa en el recuadro &#34;Denuncias&#34;.
+
+    En caso de ocurrir un error en el procesamiento, enviará un correo al administrador notificando el error, y guardará el registro de eventos en el servidor.
+
+    Retorna
+    -------
+    HTTP Response
+        Respuesta que contiene el status 200 y un mensaje de éxito en caso de no haber problemas, o el status 401 y un mensaje de error si la petición no fue autorizada.
+    &#34;&#34;&#34;
+
     try:
         token = request.headers[&#34;Authorization&#34;]
-        print(&#34;Received request!&#34;)
         if token == TOKEN_DEFINED:
             request_data = request.json
-            print(&#34;Authenticated&#34;)
-            print(request_data)
             for i in request_data:
                 denuncia = denuncia_911(
                     i[&#34;consecutivo&#34;], i[&#34;cod_dist&#34;], i[&#34;direccion&#34;], i[&#34;fecha&#34;]
@@ -144,8 +228,8 @@ def agregar_datos_911():
                 db.session.commit()
 
             return Response(&#34;Datos insertados correctamente&#34;, status=200)
-
         return Response(&#34;Incorrect Token&#34;, status=401)
+
     except Exception as err:
         noti = Notificador()
         noti.notificar(str(err))</code></pre>
@@ -155,13 +239,27 @@ def agregar_datos_911():
 <span>def <span class="ident">home</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Método de prueba para verificar que el servicio esté levantado.
+Ruta: /</p>
+<h2 id="retorna">Retorna</h2>
+<p>HTTP Response
+Respuesta que contiene el status 200 y un mensaje de éxito.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.route(&#34;/&#34;, methods=[&#34;GET&#34;])
 def home():
+    &#34;&#34;&#34;
+    Método de prueba para verificar que el servicio esté levantado.
+    Ruta: /
+
+    Retorna
+    -------
+    HTTP Response
+        Respuesta que contiene el status 200 y un mensaje de éxito.
+    &#34;&#34;&#34;
+
     return Response(&#34;Servicio web funcionando correctamente.&#34;, status=200)</code></pre>
 </details>
 </dd>
@@ -169,13 +267,25 @@ def home():
 <span>def <span class="ident">server_error</span></span>(<span>err)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Maneja los errores que puedan ocurrir en el servidor y retorna error 500.</p>
+<h2 id="retorna">Retorna</h2>
+<p>tuple
+Tupla que contiene el mensaje de error y el código de error 500.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.errorhandler(Exception)
 def server_error(err):
+    &#34;&#34;&#34;
+    Maneja los errores que puedan ocurrir en el servidor y retorna error 500.
+
+    Retorna
+    -------
+    tuple
+        Tupla que contiene el mensaje de error y el código de error 500.
+    &#34;&#34;&#34;
+
     app.logger.exception(err)
     return err, 500</code></pre>
 </details>
@@ -190,15 +300,38 @@ def server_error(err):
 <span>(</span><span>consecutivo, cod_dist, direccion, fecha)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Base class for SQLAlchemy declarative base model.</p>
-<p>To define models, subclass :attr:<code>db.Model &lt;SQLAlchemy.Model&gt;</code>, not this
-class. To customize <code>db.Model</code>, subclass this and pass it as
-<code>model_class</code> to :class:<code>SQLAlchemy</code>.</p></div>
+<div class="desc"><p>Clase utilizada para modelar el API de carga de datos de denuncias al 911.
+Posee las rutas / y /denuncia 911.</p>
+<h2 id="atributos">Atributos</h2>
+<p>consecutivo
+Columna del número de consecutivo de la denuncia en la base de datos.
+cod_dist
+Columna del código de distrito asociado a la denuncia en la base de datos.
+direccion
+Columna de la dirección fisica en la que se reportó la denuncia en la base de datos.
+fecha
+Columna de la fecha en la que se reportó la denuncia en la base de datos.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class denuncia_911(db.Model):
+    &#34;&#34;&#34;
+    Clase utilizada para modelar el API de carga de datos de denuncias al 911.
+    Posee las rutas / y /denuncia 911.
+
+    Atributos
+    ---------
+    consecutivo
+        Columna del número de consecutivo de la denuncia en la base de datos.
+    cod_dist
+        Columna del código de distrito asociado a la denuncia en la base de datos.
+    direccion
+        Columna de la dirección fisica en la que se reportó la denuncia en la base de datos.
+    fecha
+        Columna de la fecha en la que se reportó la denuncia en la base de datos.
+    &#34;&#34;&#34;
+
     consecutivo = db.Column(db.Integer, primary_key=True)
     cod_dist = db.Column(db.Integer)
     direccion = db.Column(db.String)
@@ -331,6 +464,11 @@ class. To customize <code>db.Model</code>, subclass this and pass it as
 <li><h3>Super-module</h3>
 <ul>
 <li><code><a title="visorcovid19.flask_service" href="index.html">visorcovid19.flask_service</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="">
+<li><code><a title="visorcovid19.flask_service.app.TOKEN_DEFINED" href="#visorcovid19.flask_service.app.TOKEN_DEFINED">TOKEN_DEFINED</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
