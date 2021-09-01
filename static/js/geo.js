@@ -19,7 +19,7 @@ const LAYER_PROY_DIST_15 = 11;
 const LAYER_PROY_DIST_20 = 12;
 const LAYER_PROY_DIST_40 = 13;
 const LAYER_PROY_DIST_50 = 14;
-const URL_SCRIPT_PARADAS = '/static/js/paradas.js';
+const URL_JSON_PARADAS = '/static/js/Paradas.json';
 const URL_SCRIPT_FUENTES_RADIACTIVAS = '/static/js/fuentesRadiactivas.js';
 
 /* Variables globales */
@@ -716,6 +716,32 @@ function analyzeColorMorbilidad(layer) {
 }
 
 /**
+ * Determina el color RGB de una determinada parada de autobús según su densidad y la leyenda dada
+ * en la historia COV-47.
+ * @param {string} densidad String que indica la densidad de rutas por parada.
+ * @returns String que contiene el código RGB del color correspondiente a la parada analizada.
+ */
+function analyzeColorParadas(densidad){
+  let color = "#000000"
+  if(densidad.length > 0){
+    switch(parseInt(densidad[0])){
+      case 1:
+        color = "#FFFF00";
+        break;
+      case 3:
+        color = "#FDBF6F";
+        break;
+      case 5:
+        color = "#E31A1C";
+        break;
+      default:
+        color = "#A82147";
+    }
+  }
+  return color;
+}
+
+/**
  * Obtiene la capa de sedes de la base de datos y la coloca como una nueva capa sobre el mapa.
  * @param {*} map Mapa sobre el que se colocará la nueva capa de sedes.
  */
@@ -744,6 +770,30 @@ function ponerSedes(map) {
     if (_layerSedes != null) _layerSedes.addData(sedesJSON);
     map.addLayer(_layerSedes);
   });
+}
+
+/**
+ * Obtiene la capa de sedes de un archivo JSON y la coloca como una nueva capa sobre el mapa.
+ * @param {*} map Mapa sobre el que se colocará la nueva capa de sedes.
+ */
+ function ponerParadas(map) {
+   if(_layerParadas == null){
+      $.getJSON(URL_JSON_PARADAS, function (result) {
+        let paradasJSON = result;
+        let color = null;
+        _layerParadas = L.geoJSON(null, {
+          onEachFeature: function(feature, layer){
+            color = analyzeColorParadas(feature.properties.Densidad);
+            layer.bindPopup(feature.properties.Densidad);
+            layer.setStyle({ fillColor: color, color: color, fillOpacity: 1 });
+          },
+        });
+      _layerParadas.addData(paradasJSON);
+      map.addLayer(_layerParadas);
+    });
+  } else {
+    map.addLayer(_layerParadas);
+  }
 }
 
 /**
@@ -914,13 +964,7 @@ function setLayers(selectedLayers){
   
       // Carga dinámicamente el script que contiene las paradas en formato GeoJSON, para acelerar la carga inicial de la página.
       if (_selectedLayer[index] == LAYER_PARADAS && _layerParadas == null) {
-        if(_paradasCargadas){
-          cargarJSONParadas(map);
-        } else {
-          $.getScript(URL_SCRIPT_PARADAS, function(){
-            cargarJSONParadas(map);
-          });
-        }
+        ponerParadas(map);
       }
   
       if (_selectedLayer[index] == LAYER_HOGARES && _layerHogares == null) {
@@ -938,6 +982,7 @@ function setLayers(selectedLayers){
         } else {
           $.getScript(URL_SCRIPT_FUENTES_RADIACTIVAS, function(){
             cargarFuentesRadiactivas(map);
+            _fuentesRadiactivasCargadas = true;
           });
         }
       }
