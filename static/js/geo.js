@@ -747,7 +747,9 @@ function analyzeColorParadas(densidad){
  */
 function ponerSedes(map) {
   let url = "get_json_sedes";
+  $("#my_map").LoadingOverlay("show");
   $.get(url, function (result) {
+    $("#my_map").LoadingOverlay("hide");
     let sedesJSON = JSON.parse("[" + result["capas"] + "]");
     _layerSedes = L.geoJSON(null, {
       onEachFeature: function(feature, layer){
@@ -778,7 +780,9 @@ function ponerSedes(map) {
  */
  function ponerParadas(map) {
    if(_layerParadas == null){
+    $("#my_map").LoadingOverlay("show");
       $.getJSON(URL_JSON_PARADAS, function (result) {
+        $("#my_map").LoadingOverlay("hide");
         let paradasJSON = result;
         let color = null;
         _layerParadas = L.geoJSON(null, {
@@ -802,7 +806,9 @@ function ponerSedes(map) {
  */
 function ponerHogares(map) {
   let url = "get_json_hogares";
+  $("#my_map").LoadingOverlay("show");
   $.get(url, function (result) {
+    $("#my_map").LoadingOverlay("hide");
     let hogarJSON = JSON.parse("[" + result["capas"] + "]");
     _layerHogares = L.geoJSON(null, {
       onEachFeature: function(feature, layer){
@@ -831,7 +837,9 @@ function ponerHogares(map) {
  */
 function ponerIndigenas(map) {
   let url = "get_json_indigenas";
+  $("#my_map").LoadingOverlay("show");
   $.get(url, function (result) {
+    $("#my_map").LoadingOverlay("hide");
     let indigenaJSON = JSON.parse("[" + result["capas"] + "]");
     _layerIndigenas = L.geoJSON(null, {
       style: {
@@ -980,7 +988,9 @@ function setLayers(selectedLayers){
         if(_fuentesRadiactivasCargadas){
           cargarFuentesRadiactivas(map);
         } else {
+          $("#my_map").LoadingOverlay("show");
           $.getScript(URL_SCRIPT_FUENTES_RADIACTIVAS, function(){
+            $("#my_map").LoadingOverlay("hide");
             cargarFuentesRadiactivas(map);
             _fuentesRadiactivasCargadas = true;
           });
