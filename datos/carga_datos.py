@@ -124,7 +124,11 @@ def cargarCasos(archivo, ultimaFecha):
         # para cada fila sin contar encabezado
         for row in range(1, df.shape[0]):
             fecha = str(df.iloc[row, 1]).split(" ")[0]
-            if fecha > ultimaFecha or DEBUG == True:
+            if (
+                (fecha > ultimaFecha or DEBUG == True)
+                and not pd.isnull(df.iloc[row, 0])
+                and not str(df.iloc[row, 0]).endswith("99")
+            ):
                 q = """
                         INSERT INTO acumulado_distrito (fecha, codigo_distrito, recuperados, cantidad, fallecidos, activos)
                         VALUES ('{fecha}', {codigo}, {recuperados}, {cantidad}, {fallecidos}, {activos}) ON CONFLICT DO NOTHING;"""
@@ -142,7 +146,7 @@ def cargarCasos(archivo, ultimaFecha):
                 consoleLog("-----------------------")
                 conn.commit()
     except (Exception, psql.Error) as error:
-        consoleLog("Error en cargarCasos(): " + error)
+        consoleLog("Error en cargarCasos(): " + str(error))
         raise
     finally:
         closeConnection(conn)
