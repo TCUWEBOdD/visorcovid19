@@ -1,0 +1,11 @@
+[Unit]
+Description=flask python service for 911 requests
+After=multi-user.target
+
+[Service]
+WorkingDirectory=/home/odd/plataformacovid19/flask_service
+Type=simple
+ExecStart=/home/odd/plataformacovid19/flask_service/script.sh
+
+[Install]
+WantedBy=multi-user.target
