@@ -360,20 +360,16 @@ def grafico_progreso():
 
 
 def estimador_semanas(
-    cantidad_vacunas=list, r=0.5, meta=3500000, c=0  # r grado de aplicación de 0.5-1
+    cantidad_vacunas=list,
 ):
     """
     Genera la estimación de la cantidad de semanas necesarias para alcanzar la inmunidad de rebaño en Costa Rica (al menos el 75% de la
-    población con la primera dosis de la vacuna), a partir de los datos de dosis llegadas al país.
+    población con las dos dosis).
 
     Parámetros
     ----------
     cantidad_vacunas : list
-        Lista de la cantidad de vacunas llegadas al país en cada entrega realizada.
-    r : float
-        Porcentaje de inmunidad de la población a estimar.
-    c : int
-        Variable de iteración.
+        Lista de la cantidad de vacunas aplicadas en el país por semana.
 
     Retorna
     -------
@@ -381,36 +377,17 @@ def estimador_semanas(
         Tupla que contiene la cantidad de semanas de vacunación actuales (como referencia), y la cantidad estimada para alcanzar la inmunidad de rebaño.
     """
 
-    primera_dosis = []
-    estimadas_llegadas = []
-    primera_dosis_estimada = []
-
-    media_llegada = np.mean(cantidad_vacunas)
-    desviacion_llegada = np.std(cantidad_vacunas)
-
-    for i in cantidad_vacunas:  # cantidad de primeras dosis
-        primera_dosis.append(i * r)
-
-    if sum(primera_dosis) < meta:  # calcula las llegadas restantes
-        while sum(estimadas_llegadas) < ((meta * 2) - sum(cantidad_vacunas)):
-            t = int(random.gauss(media_llegada, desviacion_llegada))
-            estimadas_llegadas.append(t)
-
-    while sum(primera_dosis) < (
-        meta - sum(primera_dosis_estimada)
-    ):  # calcula las primeras dosis restantes
-        primera_dosis_estimada.append(estimadas_llegadas[c] * r)
-        c = c + 1
-
-    total_aplicadas = sum(primera_dosis) + sum(primera_dosis_estimada)
-    total_semanas = len(primera_dosis) + len(primera_dosis_estimada)
-    total_real = len(primera_dosis)
-    return total_real, total_semanas
+    meta = 7600000  # meta de vacunación con 2 dosis al 75% de la población de C.R.
+    aplicadas = sum(cantidad_vacunas)
+    semanas = len(cantidad_vacunas)
+    promedio_aplicadas = np.mean(cantidad_vacunas[-4:])
+    poblacion_restante = meta - aplicadas
+    semanas_restantes = int(poblacion_restante / promedio_aplicadas) + 1
+    semanas_totales = semanas + semanas_restantes
+    return semanas_totales, semanas_restantes
 
 
-def grafico_gauge(
-    cantidad_vacunas=list, r=0.5, meta=3500000  # r grado de aplicación de 0.5-1
-):
+def grafico_gauge(cantidad_vacunas=list):  # r grado de aplicación de 0.5-1
     """
     Genera el gráfico de la estimación de la cantidad de semanas necesarias para alcanzar la inmunidad de rebaño en Costa Rica.
 
@@ -418,10 +395,6 @@ def grafico_gauge(
     ----------
     cantidad_vacunas : list
         Lista de la cantidad de vacunas llegadas al país en cada entrega realizada.
-    r : float
-        Porcentaje de inmunidad de la población a estimar.
-    meta : int
-        Cantidad de población meta a vacunar para alcanzar la inmunidad de rebaño.
 
     Retorna
     -------
@@ -429,23 +402,21 @@ def grafico_gauge(
         Gráfico Gauge que contiene los datos de la estimación para alcanzar la inmunidad de rebaño.
     """
 
-    semanas, estimacion_semanas = estimador_semanas(
-        cantidad_vacunas=cantidad_vacunas, r=r, meta=meta
-    )
+    semanas, estimacion_semanas = estimador_semanas(cantidad_vacunas=cantidad_vacunas)
     fig = go.Indicator(
         mode="gauge+number+delta",
-        value=estimacion_semanas,
+        value=semanas - estimacion_semanas,
         domain={"x": [0, 1], "y": [0, 1]},
         delta={
             "reference": semanas
         },  # se puede colocar como referencia el total de vacunas de la fecha anterior
-        title={"text": "Semanas para inmunidad al " + str(r * 100) + "%"},
+        title={"text": "Semanas para inmunidad al 75%"},
         gauge={
-            "axis": {"range": [None, 120]},
+            "axis": {"range": [None, semanas]},
             "threshold": {
                 "line": {"color": "red", "width": 4},
                 "thickness": 0.75,
-                "value": 50,
+                "value": semanas,
             },
         },
         number={
@@ -471,8 +442,6 @@ def gauge_estimacion_vacunas():
     """
     df = pd.read_csv(cwd + "/vacunacion/vacunas_v2.csv")
 
-    llegadas = df["cantidad"].tolist()
+    aplicadas = df["efect"].tolist()
 
-    return grafico_gauge(
-        cantidad_vacunas=llegadas, r=0.75
-    )  # aplicando el 75% de lo que llegue a primera dosis
+    return grafico_gauge(cantidad_vacunas=aplicadas)
