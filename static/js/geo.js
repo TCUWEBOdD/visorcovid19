@@ -439,8 +439,9 @@ function timerDaemon() {
  */
 function getPredicciones(semana){
   let mes = parseInt($("[name='datepicker']").val().split('/')[1]);
+  let ano = parseInt($("[name='datepicker']").val().split('/')[2]);
   let url = 'getPrediccionesMapa';
-  $.get(url, {mes: mes, semana: semana}, function(result){
+  $.get(url, {mes: mes, semana: semana, ano: ano}, function(result){
     _prediccionesMapa = result.predicciones;
   });
 }

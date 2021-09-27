@@ -270,7 +270,7 @@ def get_json_indigenas(request):
 @require_GET
 def getPrediccionesMapa(request):
     &#34;&#34;&#34;
-    Obtiene los datos de predicciones de casos activos por distrito, para un mes y semana dados.
+    Obtiene los datos de predicciones de casos activos por distrito, para un mes, semana y año dados.
 
     Parámetros
     ----------
@@ -286,7 +286,8 @@ def getPrediccionesMapa(request):
     response = {}
     mes = request.GET.get(&#34;mes&#34;)
     semana = request.GET.get(&#34;semana&#34;)
-    response[&#34;predicciones&#34;] = getPredicciones(mes, semana)
+    ano = request.GET.get(&#34;ano&#34;)
+    response[&#34;predicciones&#34;] = getPredicciones(mes, semana, ano)
     return JsonResponse(response)
 
 
@@ -541,7 +542,7 @@ def getPlots(request):
 <span>def <span class="ident">getPrediccionesMapa</span></span>(<span>request)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Obtiene los datos de predicciones de casos activos por distrito, para un mes y semana dados.</p>
+<div class="desc"><p>Obtiene los datos de predicciones de casos activos por distrito, para un mes, semana y año dados.</p>
 <h2 id="parametros">Parámetros</h2>
 <p>request : HttpRequest
 HTTP request enviada al servidor.</p>
@@ -555,7 +556,7 @@ HTTP Response que contiene los datos de predicciones de casos activos en formato
 <pre><code class="python">@require_GET
 def getPrediccionesMapa(request):
     &#34;&#34;&#34;
-    Obtiene los datos de predicciones de casos activos por distrito, para un mes y semana dados.
+    Obtiene los datos de predicciones de casos activos por distrito, para un mes, semana y año dados.
 
     Parámetros
     ----------
@@ -571,7 +572,8 @@ def getPrediccionesMapa(request):
     response = {}
     mes = request.GET.get(&#34;mes&#34;)
     semana = request.GET.get(&#34;semana&#34;)
-    response[&#34;predicciones&#34;] = getPredicciones(mes, semana)
+    ano = request.GET.get(&#34;ano&#34;)
+    response[&#34;predicciones&#34;] = getPredicciones(mes, semana, ano)
     return JsonResponse(response)</code></pre>
 </details>
 </dd>

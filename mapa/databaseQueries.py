@@ -444,7 +444,7 @@ def obtenerDatosPais(fecha):
     return datos
 
 
-def getPredicciones(mes, semana):
+def getPredicciones(mes, semana, ano):
     """
     Obtiene las predicciones de casos activos por distrito para un mes y semana de predicción dados.
 
@@ -454,6 +454,8 @@ def getPredicciones(mes, semana):
         Número de mes de 1 a 12 para el cual se desea obtener las predicciones.
     semana : str
         Semana (I, II, III, IV, V) para la cual se desea obtener las predicciones según el mes dado.
+    ano : int
+        Año para el cual se desea obtener las predicciones.
 
     Retorna
     -------
@@ -462,13 +464,13 @@ def getPredicciones(mes, semana):
     """
 
     query = """
-        SELECT codigo_distrito, activos, grupo as socio from prediccion_distrito WHERE mes = {mes} and semana = '{semana}'
+        SELECT codigo_distrito, activos, grupo as socio from prediccion_distrito WHERE mes = {mes} and semana = '{semana}' and ano = {ano}
     """
 
     conn = getAuthConnection()
     cursor = conn.cursor()
 
-    cursor.execute(query.format(mes=mes, semana=semana))
+    cursor.execute(query.format(mes=mes, semana=semana, ano=ano))
     records = cursor.fetchall()
 
     datos = {}

@@ -380,7 +380,9 @@ def estimador_semanas(
     meta = 7600000  # meta de vacunación con 2 dosis al 75% de la población de C.R.
     aplicadas = sum(cantidad_vacunas)
     semanas = len(cantidad_vacunas)
-    promedio_aplicadas = np.mean(cantidad_vacunas[-4:])
+    promedio_aplicadas = np.mean(
+        cantidad_vacunas[-4:]
+    )  # toma el promedio de vacunas aplicadas de las últimas 4 semanas para estimar
     poblacion_restante = meta - aplicadas
     semanas_restantes = int(poblacion_restante / promedio_aplicadas) + 1
     semanas_totales = semanas + semanas_restantes
