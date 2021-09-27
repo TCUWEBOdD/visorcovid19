@@ -5,6 +5,16 @@
 
 La documentación del código fuente está disponible [aquí](https://sebas3552.github.io/covid19docs.github.io/).
 
+# Python docstings
+
+Para autogenerar la documentación del sistema, instale la herramienta PDOC con pip:
+
+```pip install pdoc3```
+
+Luego, en la carpeta raíz del proyecto ejecute el siguiente comando para generar o actualizar la documentación:
+
+```pdoc -o docs --html --skip-errors --force .```
+
 
 # Documentación de base de datos
 
@@ -188,6 +198,7 @@ acumulado|int|Sí|Casos acumulados en el momento específico
 inv_acum|int|Sí| vacío
 grupo|varchar|Sí|Índice socio sanitario: muy bajo, bajo, medio, alto, muy alto.
 escenario|varchar|Sí|Comportamiento que siguen los casos de COVID-19: positivo, negativo, tendencial.
+ano|int|Sí|Año correspondiente a la predicción.
 ---
 
 ---
