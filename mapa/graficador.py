@@ -152,7 +152,7 @@ def gauge_vacunas(fecha):
             },
         },
         number={
-            "valueformat": "," + str(2) + "f",
+            "valueformat": ",.7r",
         },
     )
 
@@ -226,7 +226,7 @@ def gauge_cuad(fecha, provincia=None, canton=None, distrito=None):
         domain={"x": [0, 1], "y": [0, 1]},
         title={"text": "Órdenes sanitarias a personas"},
         number={
-            "valueformat": "," + str(2) + "f",
+            "valueformat": ",.7r",
         },
         gauge={
             "axis": {"range": [None, ordenesPersonas * 1.2]},
@@ -407,7 +407,7 @@ def grafico_gauge(cantidad_vacunas=list):  # r grado de aplicación de 0.5-1
     semanas, estimacion_semanas = estimador_semanas(cantidad_vacunas=cantidad_vacunas)
     fig = go.Indicator(
         mode="gauge+number+delta",
-        value=semanas - estimacion_semanas,
+        value=estimacion_semanas,
         domain={"x": [0, 1], "y": [0, 1]},
         delta={
             "reference": semanas
@@ -420,9 +420,6 @@ def grafico_gauge(cantidad_vacunas=list):  # r grado de aplicación de 0.5-1
                 "thickness": 0.75,
                 "value": semanas,
             },
-        },
-        number={
-            "valueformat": "," + str(2) + "f",
         },
     )
 
