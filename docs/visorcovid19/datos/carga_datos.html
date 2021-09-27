@@ -152,7 +152,11 @@ def cargarCasos(archivo, ultimaFecha):
         # para cada fila sin contar encabezado
         for row in range(1, df.shape[0]):
             fecha = str(df.iloc[row, 1]).split(&#34; &#34;)[0]
-            if fecha &gt; ultimaFecha or DEBUG == True:
+            if (
+                (fecha &gt; ultimaFecha or DEBUG == True)
+                and not pd.isnull(df.iloc[row, 0])
+                and not str(df.iloc[row, 0]).endswith(&#34;99&#34;)
+            ):
                 q = &#34;&#34;&#34;
                         INSERT INTO acumulado_distrito (fecha, codigo_distrito, recuperados, cantidad, fallecidos, activos)
                         VALUES (&#39;{fecha}&#39;, {codigo}, {recuperados}, {cantidad}, {fallecidos}, {activos}) ON CONFLICT DO NOTHING;&#34;&#34;&#34;
@@ -170,7 +174,7 @@ def cargarCasos(archivo, ultimaFecha):
                 consoleLog(&#34;-----------------------&#34;)
                 conn.commit()
     except (Exception, psql.Error) as error:
-        consoleLog(&#34;Error en cargarCasos(): &#34; + error)
+        consoleLog(&#34;Error en cargarCasos(): &#34; + str(error))
         raise
     finally:
         closeConnection(conn)
@@ -514,7 +518,8 @@ def cargarEscenarios(filename):
                 activos,
                 prevalencia,
                 acumulado,
-                inv_acum
+                inv_acum,
+                ano
             )
             VALUES (
                 &#39;{codigo_distrito}&#39;,
@@ -524,7 +529,8 @@ def cargarEscenarios(filename):
                 {activos},
                 {prevalencia},
                 {acumulado},
-                {inv_acum}
+                {inv_acum},
+                {ano_actual}
             ) ON CONFLICT DO NOTHING;
                 &#34;&#34;&#34;
 
@@ -532,6 +538,7 @@ def cargarEscenarios(filename):
         prevalencia = df.iloc[row, 3]
         acumulado = df.iloc[row, 4]
         inv_acum = df.iloc[row, 5]
+        ano_actual = date.today().year
 
         if np.isnan(activos):
             activos = 0
@@ -552,6 +559,7 @@ def cargarEscenarios(filename):
                 prevalencia=prevalencia,
                 acumulado=acumulado,
                 inv_acum=inv_acum,
+                ano=ano_actual,
             )
         )
         consoleLog(&#34;-----------------------&#34;)
@@ -744,7 +752,7 @@ def getNumeroMes(mes):
         return 7
     elif mes == &#34;Ago&#34; or mes == &#34;Agosto&#34;:
         return 8
-    elif mes == &#34;Sep&#34; or mes == &#34;Septiembre&#34;:
+    elif mes == &#34;Set&#34; or mes == &#34;Setiembre&#34;:
         return 9
     elif mes == &#34;Oct&#34; or mes == &#34;Octubre&#34;:
         return 10
@@ -1226,7 +1234,11 @@ Si ocurre un error de base de datos.</p></div>
         # para cada fila sin contar encabezado
         for row in range(1, df.shape[0]):
             fecha = str(df.iloc[row, 1]).split(&#34; &#34;)[0]
-            if fecha &gt; ultimaFecha or DEBUG == True:
+            if (
+                (fecha &gt; ultimaFecha or DEBUG == True)
+                and not pd.isnull(df.iloc[row, 0])
+                and not str(df.iloc[row, 0]).endswith(&#34;99&#34;)
+            ):
                 q = &#34;&#34;&#34;
                         INSERT INTO acumulado_distrito (fecha, codigo_distrito, recuperados, cantidad, fallecidos, activos)
                         VALUES (&#39;{fecha}&#39;, {codigo}, {recuperados}, {cantidad}, {fallecidos}, {activos}) ON CONFLICT DO NOTHING;&#34;&#34;&#34;
@@ -1244,7 +1256,7 @@ Si ocurre un error de base de datos.</p></div>
                 consoleLog(&#34;-----------------------&#34;)
                 conn.commit()
     except (Exception, psql.Error) as error:
-        consoleLog(&#34;Error en cargarCasos(): &#34; + error)
+        consoleLog(&#34;Error en cargarCasos(): &#34; + str(error))
         raise
     finally:
         closeConnection(conn)</code></pre>
@@ -1578,7 +1590,8 @@ Nombre del archivo a leer para cargar los datos.</p></div>
                 activos,
                 prevalencia,
                 acumulado,
-                inv_acum
+                inv_acum,
+                ano
             )
             VALUES (
                 &#39;{codigo_distrito}&#39;,
@@ -1588,7 +1601,8 @@ Nombre del archivo a leer para cargar los datos.</p></div>
                 {activos},
                 {prevalencia},
                 {acumulado},
-                {inv_acum}
+                {inv_acum},
+                {ano_actual}
             ) ON CONFLICT DO NOTHING;
                 &#34;&#34;&#34;
 
@@ -1596,6 +1610,7 @@ Nombre del archivo a leer para cargar los datos.</p></div>
         prevalencia = df.iloc[row, 3]
         acumulado = df.iloc[row, 4]
         inv_acum = df.iloc[row, 5]
+        ano_actual = date.today().year
 
         if np.isnan(activos):
             activos = 0
@@ -1616,6 +1631,7 @@ Nombre del archivo a leer para cargar los datos.</p></div>
                 prevalencia=prevalencia,
                 acumulado=acumulado,
                 inv_acum=inv_acum,
+                ano=ano_actual,
             )
         )
         consoleLog(&#34;-----------------------&#34;)
@@ -1929,7 +1945,7 @@ Número del mes de 1 a 12 identificado en la hilera, o -1 si la hilera no es un 
         return 7
     elif mes == &#34;Ago&#34; or mes == &#34;Agosto&#34;:
         return 8
-    elif mes == &#34;Sep&#34; or mes == &#34;Septiembre&#34;:
+    elif mes == &#34;Set&#34; or mes == &#34;Setiembre&#34;:
         return 9
     elif mes == &#34;Oct&#34; or mes == &#34;Octubre&#34;:
         return 10

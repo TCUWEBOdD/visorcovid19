@@ -472,7 +472,7 @@ def obtenerDatosPais(fecha):
     return datos
 
 
-def getPredicciones(mes, semana):
+def getPredicciones(mes, semana, ano):
     &#34;&#34;&#34;
     Obtiene las predicciones de casos activos por distrito para un mes y semana de predicción dados.
 
@@ -482,6 +482,8 @@ def getPredicciones(mes, semana):
         Número de mes de 1 a 12 para el cual se desea obtener las predicciones.
     semana : str
         Semana (I, II, III, IV, V) para la cual se desea obtener las predicciones según el mes dado.
+    ano : int
+        Año para el cual se desea obtener las predicciones.
 
     Retorna
     -------
@@ -490,13 +492,13 @@ def getPredicciones(mes, semana):
     &#34;&#34;&#34;
 
     query = &#34;&#34;&#34;
-        SELECT codigo_distrito, activos, grupo as socio from prediccion_distrito WHERE mes = {mes} and semana = &#39;{semana}&#39;
+        SELECT codigo_distrito, activos, grupo as socio from prediccion_distrito WHERE mes = {mes} and semana = &#39;{semana}&#39; and ano = {ano}
     &#34;&#34;&#34;
 
     conn = getAuthConnection()
     cursor = conn.cursor()
 
-    cursor.execute(query.format(mes=mes, semana=semana))
+    cursor.execute(query.format(mes=mes, semana=semana, ano=ano))
     records = cursor.fetchall()
 
     datos = {}
@@ -766,7 +768,7 @@ Fecha más reciente registrada en la tabla acumulado_distrito, en el formato YYY
 </details>
 </dd>
 <dt id="visorcovid19.mapa.databaseQueries.getPredicciones"><code class="name flex">
-<span>def <span class="ident">getPredicciones</span></span>(<span>mes, semana)</span>
+<span>def <span class="ident">getPredicciones</span></span>(<span>mes, semana, ano)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Obtiene las predicciones de casos activos por distrito para un mes y semana de predicción dados.</p>
@@ -774,7 +776,9 @@ Fecha más reciente registrada en la tabla acumulado_distrito, en el formato YYY
 <p>mes : int
 Número de mes de 1 a 12 para el cual se desea obtener las predicciones.
 semana : str
-Semana (I, II, III, IV, V) para la cual se desea obtener las predicciones según el mes dado.</p>
+Semana (I, II, III, IV, V) para la cual se desea obtener las predicciones según el mes dado.
+ano : int
+Año para el cual se desea obtener las predicciones.</p>
 <h2 id="retorna">Retorna</h2>
 <p>dict
 Diccionario que contiene las predicciones consultadas para el mes y semana dados.</p></div>
@@ -782,7 +786,7 @@ Diccionario que contiene las predicciones consultadas para el mes y semana dados
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def getPredicciones(mes, semana):
+<pre><code class="python">def getPredicciones(mes, semana, ano):
     &#34;&#34;&#34;
     Obtiene las predicciones de casos activos por distrito para un mes y semana de predicción dados.
 
@@ -792,6 +796,8 @@ Diccionario que contiene las predicciones consultadas para el mes y semana dados
         Número de mes de 1 a 12 para el cual se desea obtener las predicciones.
     semana : str
         Semana (I, II, III, IV, V) para la cual se desea obtener las predicciones según el mes dado.
+    ano : int
+        Año para el cual se desea obtener las predicciones.
 
     Retorna
     -------
@@ -800,13 +806,13 @@ Diccionario que contiene las predicciones consultadas para el mes y semana dados
     &#34;&#34;&#34;
 
     query = &#34;&#34;&#34;
-        SELECT codigo_distrito, activos, grupo as socio from prediccion_distrito WHERE mes = {mes} and semana = &#39;{semana}&#39;
+        SELECT codigo_distrito, activos, grupo as socio from prediccion_distrito WHERE mes = {mes} and semana = &#39;{semana}&#39; and ano = {ano}
     &#34;&#34;&#34;
 
     conn = getAuthConnection()
     cursor = conn.cursor()
 
-    cursor.execute(query.format(mes=mes, semana=semana))
+    cursor.execute(query.format(mes=mes, semana=semana, ano=ano))
     records = cursor.fetchall()
 
     datos = {}

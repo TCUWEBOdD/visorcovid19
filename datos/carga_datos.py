@@ -433,6 +433,7 @@ def cargarEscenarios(filename):
     df = pd.read_excel(filename, header=0, sheet_name="PCD Escenarios")
     conn = getAuthConnection()
     cursor = conn.cursor()
+    ano_actual = date.today().year
     for row in range(1, df.shape[0]):
         prediccion = df.iloc[row, 7]
         semana = prediccion.split(" ")[0]
@@ -451,7 +452,7 @@ def cargarEscenarios(filename):
                     SET condicion = '{condicion}'
                     WHERE codigo_distrito = '{distrito}'
                     AND date_part('month', fecha) = {mesActual}
-                    AND fecha > '2020-12-31'
+                    AND date_part('year', fecha) = {ano}
                 """
 
                 cursor.execute(
@@ -459,6 +460,7 @@ def cargarEscenarios(filename):
                         distrito=df.iloc[row, 0],
                         condicion=df.iloc[row, 8],
                         mesActual=getNumeroMes(mes),
+                        ano=ano_actual,
                     )
                 )
 
@@ -469,7 +471,7 @@ def cargarEscenarios(filename):
                     condicion = '{condicion}'
                     WHERE codigo_distrito = '{distrito}'
                     AND date_part('month', fecha) = {mesActual}
-                    AND fecha > '2020-12-31'
+                    AND date_part('year', fecha) = {ano}
                 """
 
                 cursor.execute(
@@ -478,6 +480,7 @@ def cargarEscenarios(filename):
                         grupo=df.iloc[row, 6],
                         condicion=df.iloc[row, 8],
                         mesActual=getNumeroMes(mes),
+                        ano=ano_actual,
                     )
                 )
 
@@ -490,7 +493,8 @@ def cargarEscenarios(filename):
                 activos,
                 prevalencia,
                 acumulado,
-                inv_acum
+                inv_acum,
+                ano
             )
             VALUES (
                 '{codigo_distrito}',
@@ -500,7 +504,8 @@ def cargarEscenarios(filename):
                 {activos},
                 {prevalencia},
                 {acumulado},
-                {inv_acum}
+                {inv_acum},
+                {ano}
             ) ON CONFLICT DO NOTHING;
                 """
 
@@ -528,6 +533,7 @@ def cargarEscenarios(filename):
                 prevalencia=prevalencia,
                 acumulado=acumulado,
                 inv_acum=inv_acum,
+                ano=ano_actual,
             )
         )
         consoleLog("-----------------------")
@@ -720,7 +726,7 @@ def getNumeroMes(mes):
         return 7
     elif mes == "Ago" or mes == "Agosto":
         return 8
-    elif mes == "Sep" or mes == "Septiembre":
+    elif mes == "Set" or mes == "Setiembre":
         return 9
     elif mes == "Oct" or mes == "Octubre":
         return 10
@@ -784,7 +790,7 @@ def cargarDatos(archivoCovid, archivoEscenarios):
         consoleLog("Ultima fecha en la BD: " + str(ultimaFecha))
         cargarCasos(archivoCovid, ultimaFecha)
         archivoCasosDiarios = pd.read_excel(
-            archivoCovid, header=None, sheet_name="DistritosNuevos"
+           archivoCovid, header=None, sheet_name="DistritosNuevos"
         )
         cargarCasosDiarios(archivoCasosDiarios, ultimaFecha)
         cargarDatosPais(archivoCovid, ultimaFecha)

@@ -242,7 +242,7 @@ def get_json_indigenas(request):
 @require_GET
 def getPrediccionesMapa(request):
     """
-    Obtiene los datos de predicciones de casos activos por distrito, para un mes y semana dados.
+    Obtiene los datos de predicciones de casos activos por distrito, para un mes, semana y año dados.
 
     Parámetros
     ----------
@@ -258,7 +258,8 @@ def getPrediccionesMapa(request):
     response = {}
     mes = request.GET.get("mes")
     semana = request.GET.get("semana")
-    response["predicciones"] = getPredicciones(mes, semana)
+    ano = request.GET.get("ano")
+    response["predicciones"] = getPredicciones(mes, semana, ano)
     return JsonResponse(response)
 
 
