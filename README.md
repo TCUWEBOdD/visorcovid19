@@ -19,148 +19,125 @@ Luego, en la carpeta raíz del proyecto ejecute el siguiente comando para genera
 # Documentación de base de datos
 
 ## acumulado_distrito
-Se almacenarán los datos referentes a la acumulación de todos la información en general con respecto a cada distrito de nuestro país. En esta tabla se tiene control de datos como los casos diarios, cantidad total de casos acumulados, fallecidos, activos, casos del día, órdenes sanitarias y muchos otros más con cada día en específico.
-
+Tabla principal donde se almacenan los datos epidemiológicos por día, desde el inicio de la pandemia en Costa Rica.
+Clasifica los datos por fecha y cantón: cantidad de casos acumulados, activos, recuperados, fallecidos y nuevos de COVID-19 reportados por día, así como el cálculo del coeficiente de variación, tasa de ataque, pendiente, y datos como el nivel de alerta del distrito y el índice socio sanitario.
 Nombre|Tipo de Dato|Permite nulos|Descripción
 :-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
-fecha | date | No | Día en el cual se reportan los datos|
+fecha | date | No | Fecha de los datos|
 codigo_distrito|int|No|Código del distrito|
 cantidad|int|Sí|Casos acumulados|
 recuperados|int|Sí|Casos recuperados|
 fallecidos|int|Sí|Casos de personas fallecidas|
 activos|int|Sí|Casos activos|
 caso_dia|int|Sí|Casos nuevos|
-cant_ord_pers|int|Sí|Cantidad de órdenes sanitarias a personas|
-cant_den_pers|int|Sí|Cantidad de denuncias a personas|
-cant_ord_est|int|Sí|Cantidad de órdenes sanitarias a locales o establecimientos|
-cant_den_est|int|Sí|Cantidad de denuncias a locales o establecimientos|
-coef_var|float|Sí|Indica el porcentaje de variación de los casos activos en un distrito por semana, e indica si el distrito presenta variaciones importantes en el tiempo|
+coef_var|float|Sí|Coeficiente de variación|
 ta|int|Sí|Tasa de ataque|
-pendiente|int|Sí|Indica el comportamiento de la pendiente de casos activos por covid 19 en el distrito, expresado en un porcentaje|
-condicion|varchar|Sí|Nivel de alerta del distrito como amarillo o  naranja|
+pendiente|int|Sí|Pendiente|
+condicion|varchar|Sí|Nivel de alerta del distrito: amarillo, naranja|
 grupo|varchar|Sí|Índice socio sanitario: muy bajo, bajo, medio, alto, muy alto|
-poblacion|int|Sí|Población de un distrito|
 ---
 
 ---
 
 ## canton
-Esta tabla contiene información sobre territorios indígenas, su cantidad de habitantes, el nombre del pueblo, su representación legal y área.
+Contiene datos sobre los cantones de Costa Rica: geometría, código y nombre de provincia a la que pertenece, y código y nombre de cantón.
 Nombre        | Tipo de Dato | Permite nulos | Descripción
 :-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
 ogc_fid |int |Sí |Identificador de objeto geoespacial
 wkb_geometry|geometry|No|Serie de puntos geométricos que conforman la figura del cantón en el mapa.
 objectid|int|No|Identificador de objeto geoespacial
-cod_prov|varchar|No|Código de la  provincia
+cod_prov|varchar|No|Código de la provincia a la que pertenece
 cod_cant|varchar|No|Código del cantón
-nom_prov|varchar|No|El nombre de la provincia
-nom_cant_1|varchar|No|El nombre del cantón 
+nom_prov|varchar|No|Nombre de la provincia a la que pertenece
+nom_cant_1|varchar|No|Nombre del cantón 
 ---
 
 ---
 
 ## datos_distrito
-Esta tabla contiene datos socioeconómicos de los habitantes del distrito actual.
+Contiene datos socioeconómicos de los distritos de Costa Rica: cantidad de habitantes, población adulta mayor y población en pobreza.
 Nombre|Tipo de Dato| Permite nulos | Descripción
 :-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
-codigo_distrito|numeric|Sí|Código del distrito actual|
-poblacion|int|No|Número de habitantes|
-pob_am|float|No|Población adulta mayor|
-pob_pobre|float|No|Población en pobreza|
+codigo_distrito|numeric|No|Código del distrito|
+poblacion|int|Sí|Cantidad de habitantes|
+pob_am|float|Sí|Población adulta mayor|
+pob_pobre|float|Sí|Población en pobreza|
 ---
 
 ---
 
 ## datos_pais
-Se almacenarán los datos referentes a cada día en específico con respecto a la cantidad de personas hospitalizadas en nuestro país. En la tabla se diferencian los hospitalizados en “salón” a los que se encuentran en Unidad de Cuidados Intensivos y además agrega el índice de positividad.
+Contiene datos epidemiológicos a nivel país: cantidad de hospitalizaciones en salón, cantidad de hospitalizaciones en UCI, cálculo del índice de positividad, y cantidad de vacunas por primeras y segundas dosis.
 Nombre        | Tipo de Dato | Permite nulos | Descripción
 :-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
-|fecha|date | No|Día en el cual se reportan los datos.
+|fecha|date|No|Fecha de los datos.
 casos_salon|int|Sí|Cantidad de personas hospitalizadas en salón.
 casos_uci|int|Sí|Cantidad de personas hospitalizadas en una Unidad de Cuidados Intensivos.
 indice_positividad|float|Sí|Porcentaje de personas que dan positivo en la prueba de COVID-19 entre todas las personas que se hicieron la prueba
-vacunas_primera_dosis|int|Sí|Cantidad de primeras dosis de vacunas contra el COVID-19 aplicada en la población.
-vacunas_segunda_dosis|int|Sí|Cantidad de seguundas dosis de vacunas contra el COVID-19 aplicada en la población.
+vacunas_primera_dosis|int|Sí|Cantidad de primeras dosis de vacunas contra el COVID-19 aplicadas en la población.
+vacunas_segunda_dosis|int|Sí|Cantidad de seguundas dosis de vacunas contra el COVID-19 aplicadas en la población.
 ---
 
 ---
 
 ## denuncia_911
-Esta tabla contiene datos sobre las denuncias de Covid 19 en cada distrito
+Contiene datos sobre las denuncias reportadas al 911 por temas relacionados al COVID-19 en cada distrito.
 Nombre        | Tipo de Dato | Permite nulos | Descripción
 :-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
-consecutivo|int|Sí|Denuncias consecutivas en un distrito|
-cod_dist|numeric|No|Código del distrito actual|
-direccion|varchar|No|Dirección de donde se realizó la denuncia|
-fecha|date|No|Fecha en que se hizo la denuncia|
-cantidad|int|No|Cantidad de denuncias en el distrito|
+consecutivo|int|No|Identificador de denuncias.|
+cod_dist|numeric|Sí|Código de distrito|
+direccion|varchar|Sí|Dirección de donde se realizó la denuncia|
+fecha|date|Sí|Fecha en que se reportó la denuncia|
 ---
 
 ---
 
 ## distrito
-Se almacenarán los datos referentes a cada distrito de nuestro país en específico. Dentro de esta tabla se ubican diferentes datos como lo son los de ubicación del distrito, códigos y nombres de provincia - cantón - distrito al que le pertenecen y un ID.
+Contiene datos de los distritos de Costa Rica: geometría, código de provincia, código de cantón, código de distrito, nombre de provincia, nombre de cantón y nombre de distrito.
 Nombre        | Tipo de Dato | Permite nulos | Descripción
 :-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
 |ogc_fid |int |No |Identificador de objeto geoespacial
-wkb_geometry|geometry|Sí|Serie de puntos geométricos que conforman la figura del cantón en el mapa.
+wkb_geometry|geometry|Sí|Serie de puntos geométricos que conforman la figura del distrito en el mapa.
 objectid|int|Sí|Identificador de objeto geoespacial
-cod_prov|varchar|Sí|Código de la provincia
-cod_cant|varchar|Sí|Código del cantón
-cod_dist|varchar|Sí|Código del distrito (solo distrito, sin prefijo de cantón y provincia).
+cod_prov|varchar|Sí|Código de provincia
+cod_cant|varchar|Sí|Código de cantón
+cod_dist|varchar|Sí|Código de distrito (solo distrito, sin prefijo de cantón y provincia).
 codigo|varchar|Sí|Código de distrito completo en formato de hilera
-nom_prov|varchar|Sí|Nombre de la provincia 
-nom_cant|varchar|Sí|Nombre del cantón
-nom_dist|varchar|Sí|Nombre del distrito
+nom_prov|varchar|Sí|Nombre de provincia 
+nom_cant|varchar|Sí|Nombre de cantón
+nom_dist|varchar|Sí|Nombre de distrito
 id|int|Sí|Id del distrito.
-codigo_distr|int|Sí|Código del distrito completo en formato numérico.
----
-
----
-
-## escenario
-Esta tabla ilustra las predicciones o proyecciones de casos activos de covid 19 en una fecha específica.
-Nombre        | Tipo de Dato | Permite nulos | Descripción
-:-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
-fecha|date|Sí|Fecha en el que se lleva a cabo los escenarios|
-optimista|float|No|Predicción del menor número de contagios para la fecha|
-pesimista|float|No|Predicción del mayor número de contagios para la fecha|
+codigo_distr|int|Sí|Código de distrito completo en formato numérico.
 ---
 
 ---
 
 ## hogar
-Se almacenarán los datos referentes a un lugar en específico. Dentro de esta tabla se ubican diferentes datos como lo son la provincia, cantón, distrito y la dirección exacta donde se ubica el lugar. Además de esto, se almacenará la latitud y longitud para conocer la ubicación exacta. 
+Contiene datos de los hogares de ancianos en Costa Rica: nombre y geometría (coordenadas de ubicación).
 Nombre| Tipo de Dato | Permite nulos | Descripción
 :-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
-provincia|varchar |Sí |Nombre de la provincia
-canton|varchar|Sí|Nombre del cantón
-distrito|varchar|Sí|Nombre del distrito
-direccion|varchar|Sí|Dirección exacta de la vivienda. 
 nombre|varchar|Sí|Nombre del lugar
-lat|int|Sí|Latitud del lugar
-long|int|Sí|Longitud del lugar
 wkb_geometry|geometry|Sí|Coordenadas del lugar.
 ---
 
 ---
 
 ## morbilidad_distrito
-Esta tabla contiene la tasa de morbilidad del distrito actual
+Contiene el cálculo de la tasa de morbilidad por cada distrito.
 Nombre        | Tipo de Dato | Permite nulos | Descripción
 :-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
 codigo_distrito|numeric|No|Código del distrito|
-morbilidad|float|No|Cantidad de personas que se enferman en el distrito en relación a la población total|
+morbilidad|float|No|Cantidad de personas que se enferman en el distrito en relación a la población total del mismo|
 ---
 
 ---
 
 ## ordenes_fecha
-Se almacenarán los datos referentes a las órdenes realizadas en una fecha en específico, además se enlazará los datos a un distrito.
+Contiene la cantidad de órdenes sanitarias a personas reportadas por distrito y por fecha.
 Nombre        | Tipo de Dato | Permite nulos | Descripción
 :-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
-fecha |date |No |Día en el cual se reportan los datos.
-cod_distrito|varchar|No|Distrito al que pertenece la orden
+fecha |date |No|Fecha de las órdenes.
+cod_distrito|varchar|No|Distrito de las órdenes.
 denuncias_personas|int|Sí|Cantidad de personas denunciadas
 ---
 
