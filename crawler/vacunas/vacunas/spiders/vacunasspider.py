@@ -23,10 +23,10 @@ class VacunasSpider(scrapy.Spider):
         """
 
         item_primera_dosis = (
-            response.css(".cifra1.bg3.counter::text").getall()[0].replace(",", "")
+            response.css(".cifra1.bg3::text").getall()[0].replace(".", "")
         )
         item_segunda_dosis = (
-            response.css(".cifra1.bg4.counter::text").getall()[0].replace(",", "")
+            response.css(".cifra1.bg4::text").getall()[0].replace(".", "")
         )
         item_fecha = (
             response.css(
