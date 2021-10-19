@@ -143,32 +143,14 @@ denuncias_personas|int|Sí|Cantidad de personas denunciadas
 
 ---
 
-## poblado
-Esta tabla contiene la cantidad de habitantes de un pueblo, cantón y provincia específico; así como sus coordenadas.
-Nombre        | Tipo de Dato | Permite nulos | Descripción
-:-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
-ogc_fid|int|Sí|Identificador de objeto geoespacial|
-wkb_geometry|geometry|No|Serie de puntos geométricos que conforman la figura del poblado en el mapa|
-objectid|int|No|Identificador de objeto geoespacial|
-poblac_|int|No|Identificador de poblado|
-provincia|varchar|No|Provincia actual|
-canton|varchar|No|Cantón actual|
-pueblo|varchar|No|Pueblo actual|
-poblac_id|int|No|Identificador de poblado|
-x|float|No|Coordenada x|
-y|float|No|Coordenada y|
----
-
----
-
 ## prediccion_distrito
-Se almacenarán los datos referentes a las predicciones que se realizarán para cada distrito de nuestro país según los cálculos realizados a partir de los datos suministrados anteriormente en esta base de datos.
+Contiene datos relacionados a las predicciones de indicadores cuantitativos y cualitativos por semana epidemiológica para cada distrito, en un mes y año específicos.
 Nombre        | Tipo de Dato | Permite nulos | Descripción
 :-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
 |codigo_distrito |int |No |Código del distrito
 nombre_distrito|varchar|Sí|Nombre del distrito
-mes|int|No|Número del mes al que pertenecen los datos
-semana|varchar|No|Semana a la que pertenecen los datos
+mes|int|No|Mes de los datos
+semana|varchar|No|Semana de los datos
 activos|int|Sí|Casos activos en el momento específico
 prevalencia|int|Sí|Tasa de prevalencia de los casos
 acumulado|int|Sí|Casos acumulados en el momento específico
@@ -181,7 +163,7 @@ ano|int|Sí|Año correspondiente a la predicción.
 ---
 
 ## provincia
-Esta tabla contiene información de la provincia actual y sus dimensiones en el mapa de Costa Rica.
+Contiene datos sobre las provincias de Costa Rica: geometría, nombre, id, código y área.
 Nombre        | Tipo de Dato | Permite nulos | Descripción
 :-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
 ogc_fid|int|Sí|Identificador de objeto geoespacial|
@@ -197,26 +179,26 @@ shape_area|float|No|Área de la figura|
 ---
 
 ## terr_indigena
-Esta tabla contiene información sobre territorios indígenas, su cantidad de habitantes, el nombre del pueblo, su representación legal y área.
+Contiene datos sobre territorios indígenas: cantidad de habitantes, el nombre del pueblo, su representación legal y área.
 Nombre        | Tipo de Dato | Permite nulos | Descripción
 :-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
 |area_ofi|numeric |No |Área del territorio indígena
-pueblo|varchar|No|El pueblo actual
+pueblo|varchar|No|Nombre del asentamiento indígena
 poblacion|numeric|No|Cantidad de habitantes
-repre_legal|varchar|No|Nombre oficial del territorio indígena
-wbk_geometry|geometry|No|Permite la localización de un lugar en el mapa
+repre_legal|varchar|No|Representación legal del territorio indígena
+wbk_geometry|geometry|No|Geometría del territorio indígena en el mapa
 ---
 
 ---
 ## proyeccion_distrito
-Esta tabla contiene información sobre la proyección a realizar en los diferentes distritos existentes.
+Contiene datos sobre la proyección del porcentaje de casos, por tamaño de muestra en distritos seleccionados.
 Nombre        | Tipo de Dato | Permite nulos | Descripción
 :-----------------------:|:-----------------------:|:-----------------------:|:-----------------------:
 |codigo_dta|numeric |No |Código del distrito
 porcentaje|numeric|Sí|Porcentaje de proyección
 fecha_inicio|date|No|Fecha de inicio de proyección
 fecha_fin|date|Sí|Fecha de finalización de proyección
-muestra|numeric|No|Muestra de población
+muestra|numeric|No|Cantidad de distritos en la muestra
 ---
 
 
