@@ -595,7 +595,7 @@ def cargarOrdenesSanitarias(fecha):
         closeConnection(conn)
 
 
-def cargarDatosPais(archivo, ultimaFecha):
+def cargarDatosPais(archivo):
     """
     Carga los datos de hospitalizaciones en salón y UCI, y el índice de positividad, a nivel país, a partir del archivo COVID19.xlsx.
 
@@ -603,8 +603,6 @@ def cargarDatosPais(archivo, ultimaFecha):
     ----------
     archivo : str
         Nombre del archivo a leer.
-    ultimaFecha : str
-        Fecha a partir de la cual se deben procesar los datos del archivo.
 
     Levanta
     -------
@@ -618,35 +616,34 @@ def cargarDatosPais(archivo, ultimaFecha):
         cursor = conn.cursor()
         for row in range(1, df.shape[0]):
             fecha = str(df.iloc[row, 0]).split(" ")[0]
-            if fecha > ultimaFecha or DEBUG == True:
-                consoleLog("Cargando datos país para la fecha: " + str(fecha))
-                acumulados = df.iloc[row, 1]
-                casos_salon = df.iloc[row, 2]
-                casos_uci = df.iloc[row, 3]
-                muestras = df.iloc[row, 4]
-                indice_positividad = 0
-                try:
-                    indice_positividad = (acumulados / muestras) * 100
-                except Exception as e:
-                    consoleLog(str(e))
-                if np.isnan(indice_positividad):
-                    indice_positividad = "null"
-                else:
-                    indice_positividad = round(indice_positividad, 2)
-                q = """
-                        INSERT INTO datos_pais (fecha, casos_salon, casos_uci, indice_positividad)
-                        VALUES ('{fecha}', {casos_salon}, {casos_uci}, {indice_positividad}) 
-                        ON CONFLICT (fecha) DO UPDATE SET casos_salon={casos_salon}, casos_uci={casos_uci}, indice_positividad={indice_positividad};"""
-                if not np.isnan(casos_salon) and not np.isnan(casos_uci):
-                    query = q.format(
-                        fecha=fecha,
-                        casos_salon=casos_salon,
-                        casos_uci=casos_uci,
-                        indice_positividad=indice_positividad,
-                    )
-                    cursor.execute(query)
-                    consoleLog("-----------------------")
-                    conn.commit()
+            consoleLog("Cargando datos país para la fecha: " + str(fecha))
+            acumulados = df.iloc[row, 1]
+            casos_salon = df.iloc[row, 2]
+            casos_uci = df.iloc[row, 3]
+            muestras = df.iloc[row, 4]
+            indice_positividad = 0
+            try:
+                indice_positividad = (acumulados / muestras) * 100
+            except Exception as e:
+                consoleLog(str(e))
+            if np.isnan(indice_positividad):
+                indice_positividad = "null"
+            else:
+                indice_positividad = round(indice_positividad, 2)
+            q = """
+                    INSERT INTO datos_pais (fecha, casos_salon, casos_uci, indice_positividad)
+                    VALUES ('{fecha}', {casos_salon}, {casos_uci}, {indice_positividad}) 
+                    ON CONFLICT (fecha) DO UPDATE SET casos_salon={casos_salon}, casos_uci={casos_uci}, indice_positividad={indice_positividad};"""
+            if not np.isnan(casos_salon) and not np.isnan(casos_uci):
+                query = q.format(
+                    fecha=fecha,
+                    casos_salon=casos_salon,
+                    casos_uci=casos_uci,
+                    indice_positividad=indice_positividad,
+                )
+                cursor.execute(query)
+                consoleLog("-----------------------")
+                conn.commit()
     except (Exception, psql.Error) as error:
         consoleLog("Error cargando los datos país: " + str(error))
         raise
@@ -790,10 +787,10 @@ def cargarDatos(archivoCovid, archivoEscenarios):
         consoleLog("Ultima fecha en la BD: " + str(ultimaFecha))
         cargarCasos(archivoCovid, ultimaFecha)
         archivoCasosDiarios = pd.read_excel(
-           archivoCovid, header=None, sheet_name="DistritosNuevos"
+            archivoCovid, header=None, sheet_name="DistritosNuevos"
         )
         cargarCasosDiarios(archivoCasosDiarios, ultimaFecha)
-        cargarDatosPais(archivoCovid, ultimaFecha)
+        cargarDatosPais(archivoCovid)
         cargarIndicadores(archivoCovid, ultimaFecha)
         cargarEscenarios(archivoEscenarios)
     except Exception as e:
