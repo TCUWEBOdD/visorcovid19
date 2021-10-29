@@ -51,10 +51,10 @@ class VacunasSpider(scrapy.Spider):
         &#34;&#34;&#34;
 
         item_primera_dosis = (
-            response.css(&#34;.cifra1.bg3.counter::text&#34;).getall()[0].replace(&#34;,&#34;, &#34;&#34;)
+            response.css(&#34;.cifra1.bg3::text&#34;).getall()[0].replace(&#34;.&#34;, &#34;&#34;)
         )
         item_segunda_dosis = (
-            response.css(&#34;.cifra1.bg4.counter::text&#34;).getall()[0].replace(&#34;,&#34;, &#34;&#34;)
+            response.css(&#34;.cifra1.bg4::text&#34;).getall()[0].replace(&#34;.&#34;, &#34;&#34;)
         )
         item_fecha = (
             response.css(
@@ -112,10 +112,10 @@ en el proceso diario de carga de datos.</p></div>
         &#34;&#34;&#34;
 
         item_primera_dosis = (
-            response.css(&#34;.cifra1.bg3.counter::text&#34;).getall()[0].replace(&#34;,&#34;, &#34;&#34;)
+            response.css(&#34;.cifra1.bg3::text&#34;).getall()[0].replace(&#34;.&#34;, &#34;&#34;)
         )
         item_segunda_dosis = (
-            response.css(&#34;.cifra1.bg4.counter::text&#34;).getall()[0].replace(&#34;,&#34;, &#34;&#34;)
+            response.css(&#34;.cifra1.bg4::text&#34;).getall()[0].replace(&#34;.&#34;, &#34;&#34;)
         )
         item_fecha = (
             response.css(
@@ -178,10 +178,10 @@ Respuesta que carga el contenido de la página web según la URL dada en la conf
     &#34;&#34;&#34;
 
     item_primera_dosis = (
-        response.css(&#34;.cifra1.bg3.counter::text&#34;).getall()[0].replace(&#34;,&#34;, &#34;&#34;)
+        response.css(&#34;.cifra1.bg3::text&#34;).getall()[0].replace(&#34;.&#34;, &#34;&#34;)
     )
     item_segunda_dosis = (
-        response.css(&#34;.cifra1.bg4.counter::text&#34;).getall()[0].replace(&#34;,&#34;, &#34;&#34;)
+        response.css(&#34;.cifra1.bg4::text&#34;).getall()[0].replace(&#34;.&#34;, &#34;&#34;)
     )
     item_fecha = (
         response.css(
