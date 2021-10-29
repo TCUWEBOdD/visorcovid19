@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "d&fiofof3y)$@=lu0bs@-md%23oqf(u9=17cjl+_9=$+zd9vg("
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # ALLOWED_HOSTS = ['plataformacovid19.odd.ucr.ac.cr','localhost', '163.178.101.94']
 ALLOWED_HOSTS = ["*"]
