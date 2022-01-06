@@ -10,7 +10,7 @@ from mapa.libreria.notificador.notificador import Notificador
 
 
 # Establecer en True para cargar todos los datos desde cero, e imprimir logs.
-DEBUG = False
+DEBUG = True
 
 
 def consoleLog(text):
@@ -554,7 +554,7 @@ def cargarOrdenesSanitarias(fecha):
     """
 
     url = (
-        "https://apicovid.estuve-aqui.com/integrations/v1/ucr/sanitaryorders/details?limitDate="
+        "https://apicovid.ministeriodesalud.go.cr/integrations/v1/ucr/sanitaryorders/details?limitDate="
         + str(fecha)
     )
     head = {
@@ -756,6 +756,8 @@ def main(argv):
         return False
     else:
         if len(argv) >= 1:
+            if len(argv) >= 2 and argv[2] is "-t":
+                DEBUG = True
             try:
                 archivoCovid = argv[0]
                 archivoEscenarios = argv[1]
