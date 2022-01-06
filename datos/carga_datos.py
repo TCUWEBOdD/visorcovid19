@@ -10,7 +10,7 @@ from mapa.libreria.notificador.notificador import Notificador
 
 
 # Establecer en True para cargar todos los datos desde cero, e imprimir logs.
-DEBUG = True
+DEBUG = False
 
 
 def consoleLog(text):
